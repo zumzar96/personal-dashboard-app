@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { useState, useMemo, useEffect } from "react";
-import { render } from "react-dom";
 import Box from "@mui/material/Box";
 import Button from "../root/components/common/button";
 import { Grid } from "@mui/material";
@@ -14,15 +13,9 @@ import Typography from "@mui/material/Typography";
 import * as sxProps from './styles/styles.ts'
 import { Formik, Form, Field } from "formik";
 import {
-  Autocomplete,
   TextField,
-  Select,
-  Switch,
-  ToggleButtonGroup,
 } from "formik-mui";
 import * as Yup from "yup";
-import * as actions from "./actions";
-// import { useSelector, useDispatch } from "react-redux";
 import { usersApi } from "./loginApi";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
