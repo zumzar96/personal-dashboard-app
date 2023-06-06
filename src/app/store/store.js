@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loginApi from "../login/loginApi";
+import loginApi from "../login/loginApiSlice";
 import loginReducer from "../login/loginSlice";
 
 export const store = configureStore({
@@ -9,6 +9,7 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(loginApi.middleware),
+    devTools: true
 });
 
 export default store;

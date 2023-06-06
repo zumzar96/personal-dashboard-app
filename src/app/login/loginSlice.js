@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import loginApi from "./loginApi";
+import loginApi from "./loginApiSlice";
 
 const loginSlice = createSlice({
   name: "login",
@@ -18,10 +18,9 @@ const loginSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      loginApi.endpoints.setLogin.matchFulfilled,
+      loginApi.endpoints.login.matchFulfilled,
       (state, { payload }) => {
-        console.log("token", payload);
-        state.token = payload.idToken;
+        state.token = payload;
         state.user = payload.user;
         localStorage.setItem("token", JSON.stringify(state.token));
       }
@@ -33,5 +32,3 @@ export const { logout } = loginSlice.actions
 
 
 export default loginSlice.reducer;
-
-// export const selectCurrentUser = (state) => state.auth.user;
