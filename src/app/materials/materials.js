@@ -6,9 +6,10 @@ import MaterialsTable from "./materialsTable";
 import { useGetProductsQuery } from "./materialsApiSlice";
 import BreadcrumbPath from "../root/components/common/breadcrumb";
 import { mdiTableAccount, mdiLandPlots } from "@mdi/js";
+import SearchInput from "../root/components/common/input";
 
 export default function Materials() {
-  const [keyword, setKeyword] = useState("");//TODO adjust keyword param handling
+  const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
   const [paginationModel, setPaginationModel] = useState({
     page: 1,
     pageSize: 2,
@@ -20,7 +21,8 @@ export default function Materials() {
   });
 
   return (
-    <Grid container item={true} xs={10} sm={10} md={10} lg={12} xl={12}>//TODO refactor grid layout code
+    //TODO refactor grid layout code
+    <Grid container item={true} xs={10} sm={10} md={10} lg={12} xl={12}>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
         <Box
           sx={{
@@ -68,7 +70,11 @@ export default function Materials() {
               width: "82%",
             }}
           >
-            <span>Filter</span>
+            {/* TODO add separate filter component including search' */}
+            <SearchInput
+              onChange={(e) => setKeyword(e.target.value)}
+              label={"Search"}
+            />
           </Box>
           <Box sx={{ display: "flex", height: "30rem", width: "82%" }}>
             <MaterialsTable
