@@ -99,7 +99,7 @@ const Login = (props) => {
                       component={TextField}
                       name="email"
                       type="email"
-                      label="Email"
+                      placeholder='Email'
                     />
                     {loginError && (
                       <Alert severity="error">User data is not correct!</Alert>
@@ -108,7 +108,7 @@ const Login = (props) => {
                       component={TextField}
                       name="password"
                       type="password"
-                      label="Password"
+                      placeholder='Password'
                     ></Field>
                     {loginError && (
                       <Alert severity="error">User data is not correct!</Alert>

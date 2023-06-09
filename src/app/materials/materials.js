@@ -7,6 +7,7 @@ import { useGetProductsQuery } from "./materialsApiSlice";
 import BreadcrumbPath from "../root/components/common/breadcrumb";
 import { mdiTableAccount, mdiLandPlots } from "@mdi/js";
 import SearchInput from "../root/components/common/input";
+import CreateButton from "../root/components/common/button";
 
 export default function Materials() {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
@@ -61,7 +62,7 @@ export default function Materials() {
               width: "82%",
             }}
           >
-            <span>Button</span>
+            <CreateButton variant="contained">Create</CreateButton>
           </Box>
           <Box
             sx={{
@@ -72,6 +73,12 @@ export default function Materials() {
           >
             {/* TODO add separate filter component including search' */}
             <SearchInput
+              sx={{
+                input: {
+                  height: "0.7rem",
+                },
+              }}
+              id={"search_input"}
               onChange={(e) => setKeyword(e.target.value)}
               label={"Search"}
             />
