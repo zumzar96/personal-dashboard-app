@@ -5,7 +5,7 @@ export const loginApi = rootApiSlice.injectEndpoints({
     getPokemonByName: builder.query({
       query(params) {
         return {
-          url: `/profile`,
+          url: `users/profile`,
           method: "GET",
           headers: {
             Authorization: `Bearer ${params.token}`,
@@ -16,7 +16,7 @@ export const loginApi = rootApiSlice.injectEndpoints({
     login: builder.mutation({
       query(params) {
         return {
-          url: `/login`,
+          url: `users/login`,
           method: "POST",
           body: {
             email: params.email,

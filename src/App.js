@@ -11,6 +11,7 @@ import { Routes, Route } from "react-router-dom";
 import Dashboard from "./app/dashboard/dashboard";
 import Root from "./app/root/root";
 import Typography from "../src/app/root/components/common/typography";
+import Materials from '../src/app/materials/materials'
 
 function App() {
   function ErrorBoundary() {
@@ -18,7 +19,7 @@ function App() {
     return <Typography variant="h3" color={'grey'}>Error 404 Page not found</Typography>;
   }
   return (
-    <Grid container>
+    <>
       <CssBaseline />
       <ThemeProvider theme={rootTheme}>
         <Root>
@@ -28,11 +29,12 @@ function App() {
               element={<Login />}
             />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/materials" element={<Materials />} />
             <Route path="*" element={<ErrorBoundary />} />
           </Routes>
         </Root>
       </ThemeProvider>
-    </Grid>
+    </>
   );
 }
 

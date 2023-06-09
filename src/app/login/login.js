@@ -25,14 +25,14 @@ const Login = (props) => {
       password: "",
     };
   }, []);
-  const token = useSelector((state) => state.login.token);
-  const isLoggedIn = token !== null;
+  const user_info = useSelector((state) => state.login.user_info);
+  const isLoggedIn = user_info !== null;
   const [
     login,
     { isLoading: loginLoading, isError: loginError, isSuccess: loginSuccess },
   ] = loginApi.useLoginMutation();
 
-    // const { data } = loginApi.useGetPokemonByNameQuery({token:token.token, id:token._id});
+    // const { data } = loginApi.useGetPokemonByNameQuery({token:user_info.token, id:user_info._id});
 
   const [registData, setRegistData] = useState(initialRegistData);
 
@@ -41,13 +41,13 @@ const Login = (props) => {
 
   const SignupSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
-    // password: Yup.string()
-    //   .max(50, "Password is too Long!")
-    //   .required("Password is required")
-    //   .matches(
-    //     passRegex,
-    //     "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
-    //   ),
+    password: Yup.string()
+      .max(50, "Password is too Long!")
+      .required("Password is required")
+      .matches(
+        passRegex,
+        "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+      ),
   });
 
   const loginFormHandler = (em, pswd) => {
@@ -59,6 +59,7 @@ const Login = (props) => {
       {loginSuccess || isLoggedIn ? (
         <Navigate to="/dashboard" replace={true} />
       ) : null}
+      <Grid container>
       <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
         <Box sx={sxProps.svgLayout}>
           <img src={svgBackground} />
@@ -127,6 +128,7 @@ const Login = (props) => {
             </Form>
           )}
         </Formik>
+      </Grid>
       </Grid>
     </Fragment>
   );
