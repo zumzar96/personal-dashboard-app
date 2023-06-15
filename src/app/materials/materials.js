@@ -2,24 +2,30 @@ import * as React from "react";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import { Grid } from "@mui/material";
-import MaterialsTable from "./materialsTable";
-import { useGetProductsQuery } from "./materialsApiSlice";
+import MaterialsTable from "./components/materialsTable";
+import { useGetMaterialsQuery } from "./materialsApiSlice";
 import BreadcrumbPath from "../root/components/common/breadcrumb";
 import { mdiTableAccount, mdiLandPlots } from "@mdi/js";
 import SearchInput from "../root/components/common/input";
 import CreateButton from "../root/components/common/button";
+import MaterialDialog from "./components/materialDialog";
 
-export default function Materials() {
+const Materials = () => {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
+  const [open, setOpen] = useState(false);
   const [paginationModel, setPaginationModel] = useState({
     page: 1,
     pageSize: 2,
   });
 
-  const { data, isLoading, isError, isFetching } = useGetProductsQuery({
+  const { data, isLoading, isError, isFetching } = useGetMaterialsQuery({
     keyword,
     pageNumber: paginationModel.page,
   });
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
   return (
     //TODO refactor grid layout code
@@ -62,7 +68,9 @@ export default function Materials() {
               width: "82%",
             }}
           >
-            <CreateButton variant="contained">Create</CreateButton>
+            <CreateButton variant="contained" onClick={handleClickOpen}>
+              Create
+            </CreateButton>
           </Box>
           <Box
             sx={{
@@ -83,7 +91,13 @@ export default function Materials() {
               label={"Search"}
             />
           </Box>
-          <Box sx={{ display: "flex", height: "30rem", width: "82%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              height: "30rem",
+              width: "82%",
+            }}
+          >
             <MaterialsTable
               data={data}
               paginationModel={paginationModel}
@@ -94,6 +108,9 @@ export default function Materials() {
           </Box>
         </Box>
       </Grid>
+      <MaterialDialog open={open} setOpen={setOpen}></MaterialDialog>
     </Grid>
   );
-}
+};
+
+export default Materials;

@@ -35,3 +35,8 @@ export const loginApi = rootApiSlice.injectEndpoints({
 });
 
 export default loginApi;
+
+export const {
+  useLoginMutation
+} = loginApi;
+

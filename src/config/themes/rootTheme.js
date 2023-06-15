@@ -12,13 +12,13 @@ const rootTheme = createTheme({
     },
   },
   components: {
-    // MuiInputBase: {
-    //   styleOverrides: {
-    //     input: {
-    //       height: "0.7rem",
-    //     },
-    //   },
-    // },
+    MuiInputBase: {
+      styleOverrides: {
+        input: {
+          height: "0.7rem",
+        },
+      },
+    },
     MuiInputLabel: {
       styleOverrides: {
         root: {

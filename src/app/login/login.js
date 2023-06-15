@@ -12,11 +12,12 @@ import svgBackground from "../../assets/svg/undraw_remotely_2j6y.svg";
 import Typography from "@mui/material/Typography";
 import * as sxProps from "./styles/styles.ts";
 import { Formik, Form, Field } from "formik";
-import { TextField } from "formik-mui";
+// import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import { loginApi } from "./loginApiSlice";
+import { useLoginMutation } from "./loginApiSlice";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import TextField from "@mui/material/TextField";
 
 const Login = (props) => {
   const initialRegistData = useMemo(() => {
@@ -30,9 +31,8 @@ const Login = (props) => {
   const [
     login,
     { isLoading: loginLoading, isError: loginError, isSuccess: loginSuccess },
-  ] = loginApi.useLoginMutation();
+  ] = useLoginMutation();
 
-    // const { data } = loginApi.useGetPokemonByNameQuery({token:user_info.token, id:user_info._id});
 
   const [registData, setRegistData] = useState(initialRegistData);
 
@@ -60,75 +60,89 @@ const Login = (props) => {
         <Navigate to="/dashboard" replace={true} />
       ) : null}
       <Grid container>
-      <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
-        <Box sx={sxProps.svgLayout}>
-          <img src={svgBackground} />
-        </Box>
-      </Grid>
-      <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
-        <Formik
-          initialValues={registData}
-          validationSchema={SignupSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            loginFormHandler(values.email, values.password);
-            setSubmitting(false);
-          }}
-        >
-          {({
-            values,
-            submitForm,
-            resetForm,
-            isSubmitting,
-            touched,
-            errors,
-          }) => (
-            <Form>
-              <Box sx={sxProps.loginFormLayout}>
-                {loginLoading ? (
-                  <Loader />
-                ) : (
-                  <>
-                    <Typography variant="h4">Sign in</Typography>
-                    <Typography sx={sxProps.typograhyColor}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nulla porttitor metus leo, ut ullamcorper diam aliquam
-                      quis. Ut accumsan lorem ligula, aliquet placerat ipsum
-                      laoreet id
-                    </Typography>
-                    <Field
-                      component={TextField}
-                      name="email"
-                      type="email"
-                      placeholder='Email'
-                    />
-                    {loginError && (
-                      <Alert severity="error">User data is not correct!</Alert>
-                    )}
-                    <Field
-                      component={TextField}
-                      name="password"
-                      type="password"
-                      placeholder='Password'
-                    ></Field>
-                    {loginError && (
-                      <Alert severity="error">User data is not correct!</Alert>
-                    )}
-                    <Checkbox sx={sxProps.checkBoxColor}></Checkbox>
-                    <Link sx={sxProps.linkColor}>Forgot password?</Link>
-                    <Button
-                      variant="contained"
-                      disabled={isSubmitting}
-                      onClick={submitForm}
-                    >
-                      Login
-                    </Button>
-                  </>
-                )}
-              </Box>
-            </Form>
-          )}
-        </Formik>
-      </Grid>
+        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+          <Box sx={sxProps.svgLayout}>
+            <img src={svgBackground} />
+          </Box>
+        </Grid>
+        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+          <Formik
+            initialValues={registData}
+            validationSchema={SignupSchema}
+            onSubmit={(values, { setSubmitting }) => {
+              loginFormHandler(values.email, values.password);
+              setSubmitting(false);
+            }}
+          >
+            {({
+              values,
+              submitForm,
+              resetForm,
+              isSubmitting,
+              touched,
+              errors,
+              handleChange,
+              handleBlur,
+              handleSubmit
+            }) => (
+              <Form>
+                <Box sx={sxProps.loginFormLayout}>
+                  {loginLoading ? (
+                    <Loader />
+                  ) : (
+                    <>
+                      <Typography variant="h4">Sign in</Typography>
+                      <Typography sx={sxProps.typograhyColor}>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nulla porttitor metus leo, ut ullamcorper diam aliquam
+                        quis. Ut accumsan lorem ligula, aliquet placerat ipsum
+                        laoreet id
+                      </Typography>
+                      <TextField
+                        name="email"
+                        type="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.email}
+                        error={errors.email}
+                        helperText={errors.email}
+                      />
+                      
+                      {loginError && (
+                        <Alert severity="error">
+                          User data is not correct!
+                        </Alert>
+                      )}
+                      <TextField
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.password}
+                      ></TextField>
+                      {loginError && (
+                        <Alert severity="error">
+                          User data is not correct!
+                        </Alert>
+                      )}
+                      <Checkbox sx={sxProps.checkBoxColor}></Checkbox>
+                      <Link sx={sxProps.linkColor}>Forgot password?</Link>
+                      <Button
+                        variant="contained"
+                        disabled={isSubmitting}
+                        onClick={handleSubmit}
+                      >
+                        Login
+                      </Button>
+                    </>
+                  )}
+                </Box>
+              </Form>
+            )}
+          </Formik>
+        </Grid>
       </Grid>
     </Fragment>
   );

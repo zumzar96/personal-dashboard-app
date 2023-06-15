@@ -3,7 +3,7 @@ const baseQuery = fetchBaseQuery({ baseUrl: 'http://localhost:5000/api/' });
 
 export const rootApiSlice = createApi({
   baseQuery,
-  tagTypes: ['Product', 'Order', 'User'],//TODO adjust root api slice after finishing with routes
+  tagTypes: ['Materials', 'Login', 'User'],//TODO adjust root api slice after finishing with routes
   endpoints: (builder) => ({}),
   prepareHeaders: (headers) => {
     const accessToken = localStorage.getItem("token");

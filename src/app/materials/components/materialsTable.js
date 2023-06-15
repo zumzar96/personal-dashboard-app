@@ -1,7 +1,8 @@
 import * as React from "react";
 import { DataGrid, GridValueGetterParams } from "@mui/x-data-grid";
 
-const columns = [//TODO adjust column names 
+const columns = [
+  //TODO adjust column names
   {
     field: "brand",
     headerName: "First name",
@@ -73,12 +74,22 @@ export default function MaterialsTable({
   paginationModel,
   setPaginationModel,
   loading,
-  error
+  error,
 }) {
   return (
     <DataGrid
+      sx={{
+        "& .MuiDataGrid-columnHeaders": {
+          backgroundColor: "#8b888f",
+          color:'#ffffff',
+          borderBottom: "none",
+        },
+        "& .MuiCheckbox-root": {
+          color: `#666464 !important`,
+        },
+      }}
       loading={loading}
-      rows={data === undefined || error ? [] : data.products}//TODO improve error handling & implement custom no data overlay
+      rows={data === undefined || error ? [] : data.products} //TODO improve error handling & implement custom no data overlay
       getRowId={(row) => row._id}
       rowCount={10}
       columns={columns}

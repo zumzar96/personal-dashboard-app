@@ -11,19 +11,33 @@ const commonInput = ({
   sx,
   label,
   onChange,
-  id
+  id,
+  error,
+  helperText,
+  name,
+  onBlur,
+  endAdornment,
+  InputProps,
+  type,
+  value,
 }) => {
   return (
-    <FormControl variant="filled">
-      <InputLabel htmlFor="component-filled">{children}</InputLabel>
-      <TextField
-        sx={sx}
-        onChange={onChange}
-        id={id}
-        label={label}
-        variant="outlined"
-      />
-    </FormControl>
+    <TextField
+      value={value}
+      disabled={disabled}
+      name={name}
+      sx={sx}
+      onChange={onChange}
+      onBlur={onBlur}
+      id={id}
+      label={label}
+      variant="outlined"
+      error={error}
+      helperText={helperText}
+      endAdornment={endAdornment}
+      InputProps={InputProps}
+      type={type}
+    />
   );
 };
 
