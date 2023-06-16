@@ -2,6 +2,15 @@ import * as React from "react";
 import { DataGrid, GridValueGetterParams } from "@mui/x-data-grid";
 
 const columns = [
+  {
+    field: "name",
+    headerName: "Name",
+    type: "number",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
   //TODO adjust column names
   {
     field: "brand",
@@ -22,15 +31,6 @@ const columns = [
   {
     field: "description",
     headerName: "Age",
-    type: "number",
-    flex: 1,
-    minWidth: 150,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "name",
-    headerName: "Aae",
     type: "number",
     flex: 1,
     minWidth: 150,
@@ -75,13 +75,14 @@ export default function MaterialsTable({
   setPaginationModel,
   loading,
   error,
+  onRowsSelectionHandler
 }) {
   return (
     <DataGrid
       sx={{
         "& .MuiDataGrid-columnHeaders": {
           backgroundColor: "#8b888f",
-          color:'#ffffff',
+          color: "#ffffff",
           borderBottom: "none",
         },
         "& .MuiCheckbox-root": {
@@ -101,11 +102,11 @@ export default function MaterialsTable({
           },
         },
       }}
+      onRowClick={(material) => onRowsSelectionHandler(material.row._id)}
       paginationMode="server"
       onPaginationModelChange={setPaginationModel}
       pageSizeOptions={[2]}
       checkboxSelection
-      disableRowSelectionOnClick
     />
   );
 }

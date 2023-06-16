@@ -3,7 +3,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import { Grid } from "@mui/material";
 import MaterialsTable from "./components/materialsTable";
-import { useGetMaterialsQuery } from "./materialsApiSlice";
+import { useGetMaterialsQuery, useLazyGetMaterialByIdQuery } from "./materialsApiSlice";
 import BreadcrumbPath from "../root/components/common/breadcrumb";
 import { mdiTableAccount, mdiLandPlots } from "@mdi/js";
 import SearchInput from "../root/components/common/input";
@@ -13,6 +13,7 @@ import MaterialDialog from "./components/materialDialog";
 const Materials = () => {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
   const [open, setOpen] = useState(false);
+  const [viewMaterialMode, setViewMaterialMode] = useState(false);
   const [paginationModel, setPaginationModel] = useState({
     page: 1,
     pageSize: 2,
@@ -23,9 +24,22 @@ const Materials = () => {
     pageNumber: paginationModel.page,
   });
 
+  const [getMaterialById, result] = useLazyGetMaterialByIdQuery();
+
+
   const handleClickOpen = () => {
     setOpen(true);
+    setViewMaterialMode(false);
+
   };
+
+  const onRowsSelectionHandler = (materialId) => {
+    getMaterialById({ productId: materialId })
+    setViewMaterialMode(true);
+    setOpen(true);
+  };
+
+  // console.log("selectedRow material comp", selectedMaterialId);
 
   return (
     //TODO refactor grid layout code
@@ -104,11 +118,18 @@ const Materials = () => {
               setPaginationModel={setPaginationModel}
               error={isError}
               loading={isFetching}
+              onRowsSelectionHandler={onRowsSelectionHandler}
             />
           </Box>
         </Box>
       </Grid>
-      <MaterialDialog open={open} setOpen={setOpen}></MaterialDialog>
+      <MaterialDialog
+        setViewMaterialMode={setViewMaterialMode}
+        viewMaterialMode={viewMaterialMode}
+        open={open}
+        setOpen={setOpen}//TODO wrape it in separate handler function 
+        materialById={result}
+      ></MaterialDialog>
     </Grid>
   );
 };

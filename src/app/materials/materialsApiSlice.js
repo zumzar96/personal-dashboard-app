@@ -27,6 +27,28 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
       },
       invalidatesTags: ["Materials"],
     }),
+    getMaterialById: builder.query({
+      query: ({productId}) => ({
+        url: `/products/${productId}`,//TODO adjust endpoints after finishing with routes
+      }),
+      keepUnusedDataFor: 5,
+      providesTags: ["Materials"],
+    }),
+    editMaterial: builder.mutation({
+      query(params) {
+        return {
+          url: `/products/${params.id}`,
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${params.token}`,//TODO place in interceptors 
+          },
+          body: {
+            ...params
+          },
+        };
+      },
+      invalidatesTags: ["Materials"],
+    }),
     uploadMaterialImage: builder.mutation({
       query: (data) => ({
         url: `/upload`,
@@ -39,6 +61,8 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
 
 export const {
   useGetMaterialsQuery,
+  useLazyGetMaterialByIdQuery,
   useCreateMaterialMutation,
+  useEditMaterialMutation,
   useUploadMaterialImageMutation
 } = productsApiSlice;

@@ -17,36 +17,53 @@ import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import {
   useCreateMaterialMutation,
   useUploadMaterialImageMutation,
+  useEditMaterialMutation,
 } from "../materialsApiSlice";
 import { useSelector } from "react-redux";
 import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
 
-const MaterialDialog = ({ open, setOpen }) => {
+const MaterialDialog = ({
+  open,
+  setOpen,
+  viewMaterialMode,
+  setViewMaterialMode,
+  materialById,
+}) => {
   const user_info = useSelector((state) => state.login.user_info);
   const initialRegistData = useMemo(() => {
     return {
       token: user_info.token,
       name: "",
-      price: "",
+      price: 0,
       image: "",
       brand: "",
-      count: "",
+      countInStock: 0,
       category: "",
       description: "",
     };
   }, []);
   const [registData, setRegistData] = useState(initialRegistData);
   const [filename, setFilename] = useState("");
+  const [editMaterialMode, setEditMaterialMode] = useState(false);
   const [
     createMaterial,
     {
       isLoading: createMaterialLoading,
       isError: createMaterialError,
       isSuccess: createMaterialSuccess,
-      reset: materialResetMuatation,
+      reset: materialCreateResetMuatation,
     },
   ] = useCreateMaterialMutation();
+  const [
+    editMaterial,
+    {
+      isLoading: editMaterialLoading,
+      isError: editMaterialError,
+      isSuccess: editMaterialSuccess,
+      reset: materialEditResetMuatation,
+    },
+  ] = useEditMaterialMutation();
   const [
     uploadMaterialImage,
     {
@@ -63,13 +80,14 @@ const MaterialDialog = ({ open, setOpen }) => {
     name: Yup.string().max(20).required("Field is required"),
     price: Yup.number().max(20).required("Field is required"),
     category: Yup.string().max(20).required("Field is required"),
-    count: Yup.number().max(20).required("Field is required"),
+    countInStock: Yup.number().max(20).required("Field is required"),
     brand: Yup.string().max(20).required("Field is required"),
     image: Yup.string().required("Field is required"),
     description: Yup.string().max(50).required("Field is required"),
   });
 
-  const fileUploadHandler = async (e, setFieldValue) => {//TODO refactor 
+  const fileUploadHandler = async (e, setFieldValue) => {
+    //TODO refactor
     if (!e.target.files) {
       return;
     }
@@ -86,20 +104,39 @@ const MaterialDialog = ({ open, setOpen }) => {
     }
   };
 
-  const createProductHandler = (params) => {
-    createMaterial(params);
+  const submmitMaterialHandler = (params) => {
+    if (editMaterialMode) {
+      editMaterial(params);
+      materialEditResetMuatation();
+      setOpen(false);
+    } else {
+      createMaterial(params);
+    }
+    materialCreateResetMuatation();
+    setEditMaterialMode(false)
+    setViewMaterialMode(false)
+    setRegistData(initialRegistData);
+    setFilename(initialRegistData.image);
   };
 
   const removeFileHandler = (data, setFieldValue) => {
     setFilename(initialRegistData.image);
     setFieldValue("image", initialRegistData.image);
   };
-  const closeDialogHandler = (data, resetForm, resetMutation) => {
+
+  const editHandler = () => {
+    setViewMaterialMode(false);
+    setEditMaterialMode(true);
+  };
+
+  const closeDialogHandler = () => {
     setOpen(false);
-    resetForm();
+    // resetForm();TODO implement reset form function
     setFilename(initialRegistData.image);
-    resetMutation(); //TODO adjust mutation reset
+    materialCreateResetMuatation();
+    setRegistData(initialRegistData); //TODO adjust mutation reset
     // dispatch(rootApiSlice.util.resetApiState());TODO adjust mutatuon cache flow
+    setEditMaterialMode(false);
   };
 
   useEffect(() => {
@@ -109,16 +146,38 @@ const MaterialDialog = ({ open, setOpen }) => {
     }
   }, [createMaterialLoading]);
 
+  useEffect(() => {
+    //TODO setting initial state
+    if (materialById.data) {
+      if (editMaterialMode || viewMaterialMode) {
+        console.log("materialById", materialById);
+        setRegistData((registData) => ({
+          ...registData,
+          id: materialById.data._id,
+          name: materialById.data.name,
+          price: materialById.data.price,
+          image: materialById.data.image,
+          brand: materialById.data.brand,
+          countInStock: materialById.data.countInStock,
+          category: materialById.data.category,
+          description: materialById.data?.description,
+        }));
+        setFilename(materialById.data.image);
+      }
+    }
+  }, [materialById]);
+
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={open} onClose={closeDialogHandler}>
       <DialogTitle sx={sxProps.dialogTitleContainer}>Create</DialogTitle>
       <DialogContent>
         <Box sx={sxProps.dialogContainer}>
           <Formik
             initialValues={registData}
             validationSchema={SignupSchema}
+            enableReinitialize
             onSubmit={(values, { setSubmitting }) => {
-              createProductHandler(values);
+              submmitMaterialHandler(values);
               setSubmitting(false);
             }}
           >
@@ -145,6 +204,7 @@ const MaterialDialog = ({ open, setOpen }) => {
                   helperText={touched.name && errors.name}
                   id="name"
                   label="Name"
+                  disabled={viewMaterialMode}
                 ></FormInput>
                 <FormInput
                   sx={sxProps.formInputContainer}
@@ -157,6 +217,7 @@ const MaterialDialog = ({ open, setOpen }) => {
                   id="price"
                   label="Price"
                   type="number"
+                  disabled={viewMaterialMode}
                 ></FormInput>
                 <FormInput
                   sx={sxProps.fullWdithFormInputContainer}
@@ -168,6 +229,7 @@ const MaterialDialog = ({ open, setOpen }) => {
                   helperText={touched.image && errors.image}
                   id="image"
                   label="Image"
+                  disabled={viewMaterialMode}
                   InputProps={{
                     readOnly: true,
                     startAdornment:
@@ -175,6 +237,7 @@ const MaterialDialog = ({ open, setOpen }) => {
                         <InputAdornment position="start">
                           {filename}
                           <IconButton
+                            disabled={viewMaterialMode}
                             onClick={(e) => removeFileHandler(e, setFieldValue)}
                             sx={{ marginTop: "0.3rem" }}
                             aria-label="delete"
@@ -236,18 +299,20 @@ const MaterialDialog = ({ open, setOpen }) => {
                   helperText={touched.brand && errors.brand}
                   id="brand"
                   label="Brand"
+                  disabled={viewMaterialMode}
                 ></FormInput>
                 <FormInput
                   sx={sxProps.formInputContainer}
-                  name="count"
-                  value={values.count}
-                  error={touched.count && errors.count}
+                  name="countInStock"
+                  value={values.countInStock}
+                  error={touched.countInStock && errors.countInStock}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  helperText={touched.count && errors.count}
-                  id="count"
+                  helperText={touched.countInStock && errors.countInStock}
+                  id="countInStock"
                   label="Count"
                   type="number"
+                  disabled={viewMaterialMode}
                 ></FormInput>
                 <FormInput
                   sx={sxProps.formInputContainer}
@@ -259,6 +324,7 @@ const MaterialDialog = ({ open, setOpen }) => {
                   helperText={touched.category && errors.category}
                   id="category"
                   label="Category"
+                  disabled={viewMaterialMode}
                 ></FormInput>
                 <FormInput
                   sx={sxProps.fullWdithFormInputContainer}
@@ -270,6 +336,7 @@ const MaterialDialog = ({ open, setOpen }) => {
                   helperText={touched.description && errors.description}
                   id="description"
                   label="Description"
+                  disabled={viewMaterialMode}
                 ></FormInput>
                 {createMaterialError ? (
                   <Alert
@@ -283,14 +350,19 @@ const MaterialDialog = ({ open, setOpen }) => {
                   {createMaterialLoading ? (
                     <Loader sx={{ marginRight: "1rem" }} size="2rem"></Loader>
                   ) : null}
-                  <Button variant={"contained"} onClick={handleSubmit}>
-                    Save
-                  </Button>
+                  {viewMaterialMode ? (
+                    <Button variant={"contained"} onClick={editHandler}>
+                      Edit
+                    </Button>
+                  ) : (
+                    <Button variant={"contained"} onClick={handleSubmit}>
+                      Save
+                    </Button>
+                  )}
+
                   <Button
                     variant={"contained"}
-                    onClick={(e) =>
-                      closeDialogHandler(e, resetForm, materialResetMuatation)
-                    }
+                    onClick={(e) => closeDialogHandler(e, resetForm)}
                   >
                     Cancel
                   </Button>
