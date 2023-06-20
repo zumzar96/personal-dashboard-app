@@ -20,9 +20,13 @@ const commonInput = ({
   InputProps,
   type,
   value,
+  multiline,
+  rows,
 }) => {
   return (
     <TextField
+      rows={rows}
+      multiline={multiline}
       value={value}
       disabled={disabled}
       name={name}

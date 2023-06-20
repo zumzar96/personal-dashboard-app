@@ -22,6 +22,7 @@ import {
 import { useSelector } from "react-redux";
 import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
+import Paper from "@mui/material/Paper";
 
 const MaterialDialog = ({
   open,
@@ -93,12 +94,12 @@ const MaterialDialog = ({
     }
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("image", e.target.files[0]);
+    formData.append("file", e.target.files[0]);
 
     try {
       const res = await uploadMaterialImage(formData).unwrap();
-      setFilename(file.name);
-      setFieldValue("image", res.imagePath);
+      setFilename(res.downloadURL);
+      setFieldValue("image", res.downloadURL);
     } catch (err) {
       console.log("error", err);
     }
@@ -149,6 +150,7 @@ const MaterialDialog = ({
 
   useEffect(() => {
     //TODO setting initial state
+    console.log("materialById.data.image", materialById.data);
     if (materialById.data) {
       if (editMaterialMode || viewMaterialMode) {
         setRegistData((registData) => ({
@@ -223,6 +225,8 @@ const MaterialDialog = ({
                   sx={sxProps.fullWdithFormInputContainer}
                   name="image"
                   // value={}
+                  multiline={filename === "" ? false : true} ///TODO
+                  rows={filename === "" ? 1 : 4} ///TODO
                   error={touched.image && errors.image}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -234,8 +238,17 @@ const MaterialDialog = ({
                     readOnly: true,
                     startAdornment:
                       !materialImageLoading && filename ? (
+                        //TODO
                         <InputAdornment position="start">
-                          {filename}
+                          <Paper
+                            sx={{ width: "5rem", height: "5rem" }}
+                            variant="outlined"
+                          >
+                            <img
+                              style={{ width: "5rem", height: "5rem" }}
+                              src={filename}
+                            />
+                          </Paper>
                           <IconButton
                             disabled={viewMaterialMode}
                             onClick={(e) => removeFileHandler(e, setFieldValue)}
@@ -356,10 +369,7 @@ const MaterialDialog = ({
                       Edit
                     </Button>
                   ) : (
-                    <Button
-                      variant={"contained"}
-                      onClick={handleSubmit}
-                    >
+                    <Button variant={"contained"} onClick={handleSubmit}>
                       Save
                     </Button>
                   )}
