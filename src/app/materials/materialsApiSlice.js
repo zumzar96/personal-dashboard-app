@@ -48,10 +48,13 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
     }),
     deleteMaterials: builder.mutation({
       query: (params) => ({
-        url: `/products/${params.id}`,
+        url: `/products/delete`,
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${params.token}`,//TODO place in interceptors 
+        },
+        body: {
+          ...params
         },
       }),
       invalidatesTags: ["Materials"],

@@ -15,7 +15,7 @@ const columns = [
   //TODO adjust column names
   {
     field: "brand",
-    headerName: "First name",
+    headerName: "Brand",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
@@ -23,7 +23,7 @@ const columns = [
   },
   {
     field: "category",
-    headerName: "Last name",
+    headerName: "Category",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
@@ -31,7 +31,7 @@ const columns = [
   },
   {
     field: "description",
-    headerName: "Age",
+    headerName: "Description",
     type: "number",
     flex: 1,
     minWidth: 150,
@@ -39,35 +39,44 @@ const columns = [
     align: "center",
   },
   {
-    field: "user",
-    headerName: "Abe",
-    type: "number",
+    field: "image",
+    headerName: "Document",
+    type: "file",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "ace",
-    headerName: "Ace",
-    type: "number",
+    field: "createdAt",
+    headerName: "Created",
+    // type: "date",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
+    field: "updatedAt",
+    headerName: "Updated",
+    // type: "date",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
     align: "center",
-    valueGetter: (params) =>
-      `${params.row.firstName || ""} ${params.row.lastName || ""}`,
   },
+  // {
+  //   field: "updatedAt",
+  //   headerName: "Updated",
+  //   description: "This column has a value getter and is not sortable.",
+  //   sortable: false,
+  //   flex: 1,
+  //   minWidth: 150,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   valueGetter: (params) =>
+  //     `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+  // },
 ];
 
 export default function MaterialsTable({
@@ -92,6 +101,9 @@ export default function MaterialsTable({
         "& .MuiCheckbox-root": {
           color: `#666464 !important`,
         },
+        "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+          outline: "none !important",
+       },
       }}
       loading={loading}
       rows={data === undefined || error ? [] : data.products} //TODO improve error handling & implement custom no data overlay
