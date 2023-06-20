@@ -3,16 +3,24 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import { Grid } from "@mui/material";
 import MaterialsTable from "./components/materialsTable";
-import { useGetMaterialsQuery, useLazyGetMaterialByIdQuery } from "./materialsApiSlice";
+import {
+  useGetMaterialsQuery,
+  useLazyGetMaterialByIdQuery,
+  useDeleteMaterialsMutation,
+} from "./materialsApiSlice";
 import BreadcrumbPath from "../root/components/common/breadcrumb";
 import { mdiTableAccount, mdiLandPlots } from "@mdi/js";
 import SearchInput from "../root/components/common/input";
 import CreateButton from "../root/components/common/button";
 import MaterialDialog from "./components/materialDialog";
+import DeleteMaterialDialog from "./components/materialDeleteDialog";
+import Dialog from "@mui/material/Dialog/Dialog";
+import Alert from "../root/components/common/alert"
 
 const Materials = () => {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
   const [open, setOpen] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [viewMaterialMode, setViewMaterialMode] = useState(false);
   const [paginationModel, setPaginationModel] = useState({
     page: 1,
@@ -24,22 +32,27 @@ const Materials = () => {
     pageNumber: paginationModel.page,
   });
 
-  const [getMaterialById, result] = useLazyGetMaterialByIdQuery();
+  const [{ isSuccess: deleteMaterialsSuccess }] = useDeleteMaterialsMutation();
 
+  const [checkboxSelectionModel, setCheckboxSelectionModel] = useState([]);
+
+  const [getMaterialByIdOnRowClick, result] = useLazyGetMaterialByIdQuery();
 
   const handleClickOpen = () => {
     setOpen(true);
     setViewMaterialMode(false);
+  };
 
+  const handleClicDeletekOpen = () => {
+    setOpenDeleteDialog(true);
   };
 
   const onRowsSelectionHandler = (materialId) => {
-    getMaterialById({ productId: materialId })
+    getMaterialByIdOnRowClick({ productId: materialId });
     setViewMaterialMode(true);
     setOpen(true);
   };
 
-  // console.log("selectedRow material comp", selectedMaterialId);
 
   return (
     //TODO refactor grid layout code
@@ -80,8 +93,16 @@ const Materials = () => {
               display: "flex",
               justifyContent: "flex-end",
               width: "82%",
+              gap: "1rem",
             }}
           >
+            <CreateButton
+              disabled={!checkboxSelectionModel.length}
+              variant="contained"
+              onClick={handleClicDeletekOpen}
+            >
+              Delete
+            </CreateButton>
             <CreateButton variant="contained" onClick={handleClickOpen}>
               Create
             </CreateButton>
@@ -119,6 +140,8 @@ const Materials = () => {
               error={isError}
               loading={isFetching}
               onRowsSelectionHandler={onRowsSelectionHandler}
+              checkboxSelectionModel={checkboxSelectionModel}
+              setCheckboxSelectionModel={setCheckboxSelectionModel}
             />
           </Box>
         </Box>
@@ -127,9 +150,18 @@ const Materials = () => {
         setViewMaterialMode={setViewMaterialMode}
         viewMaterialMode={viewMaterialMode}
         open={open}
-        setOpen={setOpen}//TODO wrape it in separate handler function 
+        setOpen={setOpen} //TODO wrape in separate handler function
         materialById={result}
       ></MaterialDialog>
+      <DeleteMaterialDialog
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        checkboxSelectionModel={checkboxSelectionModel} //TODO wrape in separate handler function
+        setCheckboxSelectionModel={setCheckboxSelectionModel}
+      ></DeleteMaterialDialog>
+      <Dialog open={deleteMaterialsSuccess}>
+        <Alert>Succes</Alert>
+      </Dialog>
     </Grid>
   );
 };

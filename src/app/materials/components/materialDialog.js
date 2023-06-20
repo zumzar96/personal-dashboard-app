@@ -111,10 +111,11 @@ const MaterialDialog = ({
       setOpen(false);
     } else {
       createMaterial(params);
+      materialCreateResetMuatation();
+      setOpen(false);
     }
-    materialCreateResetMuatation();
-    setEditMaterialMode(false)
-    setViewMaterialMode(false)
+    setEditMaterialMode(false);
+    setViewMaterialMode(false);
     setRegistData(initialRegistData);
     setFilename(initialRegistData.image);
   };
@@ -140,17 +141,16 @@ const MaterialDialog = ({
   };
 
   useEffect(() => {
-    if (createMaterialSuccess) {
+    if (createMaterialSuccess || editMaterialSuccess) {
       setOpen(false);
       setFilename(initialRegistData.image);
     }
-  }, [createMaterialLoading]);
+  }, [createMaterialLoading, editMaterialLoading]);
 
   useEffect(() => {
     //TODO setting initial state
     if (materialById.data) {
       if (editMaterialMode || viewMaterialMode) {
-        console.log("materialById", materialById);
         setRegistData((registData) => ({
           ...registData,
           id: materialById.data._id,
@@ -258,6 +258,7 @@ const MaterialDialog = ({
                           position="end"
                         >
                           <Button
+                            disabled={viewMaterialMode}
                             sx={{
                               bgcolor:
                                 touched.image && errors.image
@@ -338,7 +339,7 @@ const MaterialDialog = ({
                   label="Description"
                   disabled={viewMaterialMode}
                 ></FormInput>
-                {createMaterialError ? (
+                {createMaterialError || editMaterialError ? (
                   <Alert
                     sx={sxProps.fullWdithFormInputContainer}
                     severity="error"
@@ -347,7 +348,7 @@ const MaterialDialog = ({
                   </Alert>
                 ) : null}
                 <DialogActions>
-                  {createMaterialLoading ? (
+                  {createMaterialLoading || editMaterialLoading ? (
                     <Loader sx={{ marginRight: "1rem" }} size="2rem"></Loader>
                   ) : null}
                   {viewMaterialMode ? (
@@ -355,7 +356,10 @@ const MaterialDialog = ({
                       Edit
                     </Button>
                   ) : (
-                    <Button variant={"contained"} onClick={handleSubmit}>
+                    <Button
+                      variant={"contained"}
+                      onClick={handleSubmit}
+                    >
                       Save
                     </Button>
                   )}

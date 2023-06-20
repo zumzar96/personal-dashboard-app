@@ -1,7 +1,4 @@
 import { rootApiSlice } from "../root/rootApiSlice";
-
-
-
 export const productsApiSlice = rootApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getMaterials: builder.query({
@@ -32,7 +29,7 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
         url: `/products/${productId}`,//TODO adjust endpoints after finishing with routes
       }),
       keepUnusedDataFor: 5,
-      providesTags: ["Materials"],
+      providesTags: ["Material"],
     }),
     editMaterial: builder.mutation({
       query(params) {
@@ -47,6 +44,16 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
           },
         };
       },
+      invalidatesTags: ["Materials"],
+    }),
+    deleteMaterials: builder.mutation({
+      query: (params) => ({
+        url: `/products/${params.id}`,
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${params.token}`,//TODO place in interceptors 
+        },
+      }),
       invalidatesTags: ["Materials"],
     }),
     uploadMaterialImage: builder.mutation({
@@ -64,5 +71,6 @@ export const {
   useLazyGetMaterialByIdQuery,
   useCreateMaterialMutation,
   useEditMaterialMutation,
+  useDeleteMaterialsMutation,
   useUploadMaterialImageMutation
 } = productsApiSlice;

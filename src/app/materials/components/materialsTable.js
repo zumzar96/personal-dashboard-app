@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import { DataGrid, GridValueGetterParams } from "@mui/x-data-grid";
 
 const columns = [
@@ -75,8 +76,11 @@ export default function MaterialsTable({
   setPaginationModel,
   loading,
   error,
-  onRowsSelectionHandler
+  onRowsSelectionHandler,
+  checkboxSelectionModel,
+  setCheckboxSelectionModel,
 }) {
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
   return (
     <DataGrid
       sx={{
@@ -103,10 +107,16 @@ export default function MaterialsTable({
         },
       }}
       onRowClick={(material) => onRowsSelectionHandler(material.row._id)}
+      disableRowSelectionOnClick
+      onRowSelectionModelChange={(newCheckboxSelectionModel) => {
+        setCheckboxSelectionModel(newCheckboxSelectionModel);
+      }}
+      rowSelectionModel={checkboxSelectionModel}
       paginationMode="server"
       onPaginationModelChange={setPaginationModel}
       pageSizeOptions={[2]}
       checkboxSelection
+      keepNonExistentRowsSelected
     />
   );
 }
