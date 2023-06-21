@@ -1,6 +1,11 @@
 import { SxProps } from "@mui/material";
 
+const dialogMainContainer: SxProps = {
+    maxHeight: "45rem",
+};
+
 const dialogContainer: SxProps = {
+    height:'10%',
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-between",
@@ -33,7 +38,7 @@ const fullWdithFormInputContainer : SxProps = {
 const imagePaperWraper : SxProps = {
     position: "relative",
     display: "flex",
-    width: "5rem",
+    maxWidth:'8rem',
     height: "5rem",
     alignItems: "flex-start",
 };
@@ -41,12 +46,13 @@ const iconButtonWraper : SxProps = {
     positon: "absolute",
     top: "-0.4rem",
     left: "-0.7rem",
-    backgroundColor: "#c7c7c7 !important",
+    backgroundColor: "#c7c7c7 !important",//TODO
     height: "1rem",
     width: "1rem",
 };
 const inputImageWraper : SxProps ={
-    height:'5rem'
+    height:'5rem',
+    
 }
 const imageDialogWraper : SxProps ={
         maxHeight: {
@@ -69,4 +75,4 @@ const imageDialogWraper : SxProps ={
 
 
 
-export {imageDialogWraper, iconButtonWraper, inputImageWraper, imagePaperWraper, dialogContainer, formInputContainer, dialogTitleContainer, uploadButtonContainer, fullWdithFormInputContainer };
+export {dialogMainContainer, imageDialogWraper, iconButtonWraper, inputImageWraper, imagePaperWraper, dialogContainer, formInputContainer, dialogTitleContainer, uploadButtonContainer, fullWdithFormInputContainer };

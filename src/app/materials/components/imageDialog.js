@@ -10,7 +10,7 @@ const imageDialog = ({ open, setOpen, image }) => {
   };
 
   return (
-    <Dialog maxWidth open={open} onClose={closeDialogHandler}>
+    <Dialog maxWidth sx={sxProps.dialogMainContainer} open={open} onClose={closeDialogHandler}>
       <DialogContent>
         <Box
           component="img"

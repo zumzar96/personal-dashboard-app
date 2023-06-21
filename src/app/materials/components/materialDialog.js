@@ -174,7 +174,11 @@ const MaterialDialog = ({
   }, [materialById]);
 
   return (
-    <Dialog open={open} onClose={closeDialogHandler}>
+    <Dialog
+      sx={sxProps.dialogMainContainer}
+      open={open}
+      onClose={closeDialogHandler}
+    >
       <DialogTitle sx={sxProps.dialogTitleContainer}>Create</DialogTitle>
       <DialogContent>
         <Box sx={sxProps.dialogContainer}>
