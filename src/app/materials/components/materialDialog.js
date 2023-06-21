@@ -6,7 +6,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-// import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import * as sxProps from "../styles/styles.ts";
 import { Formik, Form, Field } from "formik";
@@ -23,6 +22,7 @@ import { useSelector } from "react-redux";
 import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
 import Paper from "@mui/material/Paper";
+import ImageDialog from "./imageDialog.js";
 
 const MaterialDialog = ({
   open,
@@ -47,6 +47,7 @@ const MaterialDialog = ({
   const [registData, setRegistData] = useState(initialRegistData);
   const [filename, setFilename] = useState("");
   const [editMaterialMode, setEditMaterialMode] = useState(false);
+  const [openImageDialog, setOpenImageDialog] = useState(false);
   const [
     createMaterial,
     {
@@ -141,6 +142,10 @@ const MaterialDialog = ({
     setEditMaterialMode(false);
   };
 
+  const openImageDialogHandler = () => {
+    setOpenImageDialog(open);
+  };
+
   useEffect(() => {
     if (createMaterialSuccess || editMaterialSuccess) {
       setOpen(false);
@@ -150,7 +155,6 @@ const MaterialDialog = ({
 
   useEffect(() => {
     //TODO setting initial state
-    console.log("materialById.data.image", materialById.data);
     if (materialById.data) {
       if (editMaterialMode || viewMaterialMode) {
         setRegistData((registData) => ({
@@ -241,29 +245,38 @@ const MaterialDialog = ({
                         //TODO
                         <InputAdornment position="start">
                           <Paper
-                            sx={{ width: "5rem", height: "5rem" }}
+                            maxWidth
+                            sx={sxProps.imagePaperWraper}
                             variant="outlined"
                           >
                             <img
-                              style={{ width: "5rem", height: "5rem" }}
+                              onClick={openImageDialogHandler}
+                              style={sxProps.inputImageWraper}
                               src={filename}
                             />
+                            <IconButton
+                              sx={sxProps.iconButtonWraper}
+                              aria-label="delete"
+                              disabled={viewMaterialMode}
+                              onClick={(e) =>
+                                removeFileHandler(e, setFieldValue)
+                              }
+                            >
+                              <CancelTwoToneIcon />
+                            </IconButton>
                           </Paper>
-                          <IconButton
-                            disabled={viewMaterialMode}
-                            onClick={(e) => removeFileHandler(e, setFieldValue)}
-                            sx={{ marginTop: "0.3rem" }}
-                            aria-label="delete"
-                          >
-                            <CancelTwoToneIcon />
-                          </IconButton>
                         </InputAdornment>
                       ) : null,
                     endAdornment: (
                       <>
                         {materialImageLoading ? (
                           <InputAdornment position="start">
-                            <Loader size="1.3rem"></Loader>
+                            <Loader
+                              sx={{
+                                marginTop: filename === "" ? "0rem" : "5rem",
+                              }}
+                              size="1.3rem"
+                            ></Loader>
                           </InputAdornment>
                         ) : null}
                         <InputAdornment
@@ -273,6 +286,7 @@ const MaterialDialog = ({
                           <Button
                             disabled={viewMaterialMode}
                             sx={{
+                              marginTop: filename === "" ? "0rem" : "5rem",
                               bgcolor:
                                 touched.image && errors.image
                                   ? "red"
@@ -281,7 +295,7 @@ const MaterialDialog = ({
                             variant="contained"
                             component="label"
                           >
-                            Upload File
+                            Upload
                             <input
                               type="file"
                               hidden
@@ -386,6 +400,11 @@ const MaterialDialog = ({
           </Formik>
         </Box>
       </DialogContent>
+      <ImageDialog
+        setOpen={setOpenImageDialog}
+        open={openImageDialog}
+        image={filename}
+      ></ImageDialog>
     </Dialog>
   );
 };

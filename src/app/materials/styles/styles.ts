@@ -30,5 +30,43 @@ const fullWdithFormInputContainer : SxProps = {
     m: 1,
     width: "97%"
 };
+const imagePaperWraper : SxProps = {
+    position: "relative",
+    display: "flex",
+    width: "5rem",
+    height: "5rem",
+    alignItems: "flex-start",
+};
+const iconButtonWraper : SxProps = {
+    positon: "absolute",
+    top: "-0.4rem",
+    left: "-0.7rem",
+    backgroundColor: "#c7c7c7 !important",
+    height: "1rem",
+    width: "1rem",
+};
+const inputImageWraper : SxProps ={
+    height:'5rem'
+}
+const imageDialogWraper : SxProps ={
+        maxHeight: {
+          xs: '10rem',
+          sm: "20rem",
+          md: "30rem",
+          lg: "30rem",
+          xl: "30rem",
+        },
+        maxWidth: {
+          xs: '15rem',
+          sm: "30rem",
+          md: "50rem",
+          lg: "50rem",
+          xl: "50rem",
+        },
+}
 
-export { dialogContainer, formInputContainer, dialogTitleContainer, uploadButtonContainer, fullWdithFormInputContainer };
+
+
+
+
+export {imageDialogWraper, iconButtonWraper, inputImageWraper, imagePaperWraper, dialogContainer, formInputContainer, dialogTitleContainer, uploadButtonContainer, fullWdithFormInputContainer };
