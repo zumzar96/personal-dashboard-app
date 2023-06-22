@@ -5,14 +5,14 @@ const loginSlice = createSlice({
   name: "login",
   initialState: {
     user: null,
-    token: localStorage.getItem("token")
-      ? JSON.parse(localStorage.getItem("token"))
+    user_info: localStorage.getItem("user_info")
+      ? JSON.parse(localStorage.getItem("user_info"))
       : null,
   },
   reducers: {
     logout: (state) => {
-        localStorage.removeItem("token")
-        state.token = null;
+        localStorage.removeItem("user_info")//TODO improve logout handling
+        state.user_info = null;
      
     },
   },
@@ -20,9 +20,9 @@ const loginSlice = createSlice({
     builder.addMatcher(
       loginApi.endpoints.login.matchFulfilled,
       (state, { payload }) => {
-        state.token = payload;
+        state.user_info = payload;
         state.user = payload.user;
-        localStorage.setItem("token", JSON.stringify(state.token));
+        localStorage.setItem("user_info", JSON.stringify(state.user_info));
       }
     );
   },

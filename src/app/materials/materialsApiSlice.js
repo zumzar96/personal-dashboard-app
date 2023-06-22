@@ -1,73 +1,79 @@
-import { PRODUCTS_URL } from '../constants';
-import rootSlice from '../root/rootApiSlice';
-
-export const productsApiSlice = rootSlice.injectEndpoints({
+import { rootApiSlice } from "../root/rootApiSlice";
+export const productsApiSlice = rootApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query({
+    getMaterials: builder.query({
       query: ({ keyword, pageNumber }) => ({
-        url: PRODUCTS_URL,
+        url: "/products",//TODO adjust endpoints after finishing with routes
         params: { keyword, pageNumber },
       }),
       keepUnusedDataFor: 5,
-      providesTags: ['Products'],
+      providesTags: ["Materials"],
     }),
-    getProductDetails: builder.query({
-      query: (productId) => ({
-        url: `${PRODUCTS_URL}/${productId}`,
+    createMaterial: builder.mutation({
+      query(params) {
+        return {
+          url: `/products`,
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${params.token}`,//TODO place in interceptors 
+          },
+          body: {
+            ...params
+          },
+        };
+      },
+      invalidatesTags: ["Materials"],
+    }),
+    getMaterialById: builder.query({
+      query: ({productId}) => ({
+        url: `/products/${productId}`,//TODO adjust endpoints after finishing with routes
       }),
       keepUnusedDataFor: 5,
+      providesTags: ["Material"],
     }),
-    createProduct: builder.mutation({
-      query: () => ({
-        url: `${PRODUCTS_URL}`,
-        method: 'POST',
-      }),
-      invalidatesTags: ['Product'],
+    editMaterial: builder.mutation({
+      query(params) {
+        return {
+          url: `/products/${params.id}`,
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${params.token}`,//TODO place in interceptors 
+          },
+          body: {
+            ...params
+          },
+        };
+      },
+      invalidatesTags: ["Materials"],
     }),
-    updateProduct: builder.mutation({
-      query: (data) => ({
-        url: `${PRODUCTS_URL}/${data.productId}`,
-        method: 'PUT',
-        body: data,
-      }),
-      invalidatesTags: ['Products'],
-    }),
-    uploadProductImage: builder.mutation({
-      query: (data) => ({
-        url: `/api/upload`,
-        method: 'POST',
-        body: data,
-      }),
-    }),
-    deleteProduct: builder.mutation({
-      query: (productId) => ({
-        url: `${PRODUCTS_URL}/${productId}`,
+    deleteMaterials: builder.mutation({
+      query: (params) => ({
+        url: `/products/delete`,
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${params.token}`,//TODO place in interceptors 
+        },
+        body: {
+          ...params
+        },
       }),
-      providesTags: ['Product'],
+      invalidatesTags: ["Materials"],
     }),
-    createReview: builder.mutation({
+    uploadMaterialImage: builder.mutation({
       query: (data) => ({
-        url: `${PRODUCTS_URL}/${data.productId}/reviews`,
+        url: `/upload`,
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Product'],
-    }),
-    getTopProducts: builder.query({
-      query: () => `${PRODUCTS_URL}/top`,
-      keepUnusedDataFor: 5,
     }),
   }),
 });
 
 export const {
-  useGetProductsQuery,
-  useGetProductDetailsQuery,
-  useCreateProductMutation,
-  useUpdateProductMutation,
-  useUploadProductImageMutation,
-  useDeleteProductMutation,
-  useCreateReviewMutation,
-  useGetTopProductsQuery,
+  useGetMaterialsQuery,
+  useLazyGetMaterialByIdQuery,
+  useCreateMaterialMutation,
+  useEditMaterialMutation,
+  useDeleteMaterialsMutation,
+  useUploadMaterialImageMutation
 } = productsApiSlice;

@@ -102,8 +102,8 @@ export default function MiniDrawer({ children }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const token = useSelector((state) => state.login.token);
-  const isLoggedIn = token !== null
+  const user_info = useSelector((state) => state.login.user_info);
+  const isLoggedIn = user_info !== null;
   const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
@@ -122,157 +122,167 @@ export default function MiniDrawer({ children }) {
     setAnchorEl(null);
   };
 
-  const handleLogout = () =>{
+  const handleLogout = () => {
     setAnchorEl(null);
-    dispatch(logout())
-  }
-
-  console.log("lof", isLoggedIn)
+    dispatch(logout());
+  };
 
   return (
     <>
-    {isLoggedIn  ? (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            sx={{ minWidth: "13rem" }}
-            variant="h6"
-            noWrap
-            component="div"
-          >
-            Personal dashboard app
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flex: "1",
-              // backgroundColor: "black",
-              justifyContent: "flex-end",
-            }}
-          >
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={anchorEl}
-              onClose={handleClose}
-            >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>My account</MenuItem>
-              <MenuItem onClick={handleLogout}>Log out</MenuItem>
-            </Menu>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem
-              key={text}
-              disablePadding
-              sx={{ display: "block" }}
-              onClick={() => navigate("/dashboard")}
-            >
-              <ListItemButton
+      {isLoggedIn ? (
+        <Box sx={{ display: "flex" }}>
+          <CssBaseline />
+          <AppBar position="fixed" open={open}>
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  marginRight: 5,
+                  ...(open && { display: "none" }),
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem
-              key={text}
-              disablePadding
-              sx={{ display: "block" }}
-              onClick={() => navigate("/")}
-            >
-              <ListItemButton
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                sx={{ minWidth: "3rem" }}
+                variant="h6"
+                noWrap
+                component="div"
+              >
+                Dashboard
+              </Typography>
+              <Box
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  display: "flex",
+                  flex: "1",
+                  // backgroundColor: "black",
+                  justifyContent: "flex-end",
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Box component="main" sx={{ margin: "5rem", flexGrow: 1, p: 3 }}>
-        {children}
-      </Box>
-    </Box>
-  ) : <><Navigate to='/'></Navigate>{children}</>}
-  </>
-    
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={anchorEl}
+                  onClose={handleClose}
+                >
+                  <MenuItem>Profile</MenuItem>
+                  <MenuItem>My account</MenuItem>
+                  <MenuItem onClick={handleLogout}>Log out</MenuItem>
+                </Menu>
+              </Box>
+            </Toolbar>
+          </AppBar>
+          <Drawer variant="permanent" open={open}>
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === "rtl" ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ChevronLeftIcon />
+                )}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              {["Inbox", "Starred", "Send email", "Drafts"].map(
+                (text, index) => (
+                  <ListItem
+                    key={text}
+                    disablePadding
+                    sx={{ display: "block" }}
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={text}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                )
+              )}
+            </List>
+            <Divider />
+            <List>
+              {["All mail", "Trash", "Spam"].map((text, index) => (
+                <ListItem
+                  key={text}
+                  disablePadding
+                  sx={{ display: "block" }}
+                  onClick={() => navigate("/materials")}
+                >
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={text}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Drawer>
+          <>
+            {children}
+          </>
+        </Box>
+      ) : (
+        <>
+          <Navigate to="/"></Navigate>
+          {children}
+        </>
+      )}
+    </>
   );
 }

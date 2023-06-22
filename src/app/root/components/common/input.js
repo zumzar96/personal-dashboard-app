@@ -1,15 +1,47 @@
 import React from "react";
-import FilledInput from "@mui/material/FilledInput";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import TextField from "@mui/material/TextField";
 
-
-const commonInput = ({ children, color, variant, disabled, sx }) => {
+const commonInput = ({
+  children,
+  color,
+  variant,
+  disabled,
+  sx,
+  label,
+  onChange,
+  id,
+  error,
+  helperText,
+  name,
+  onBlur,
+  endAdornment,
+  InputProps,
+  type,
+  value,
+  multiline,
+  rows,
+}) => {
   return (
-    <FormControl variant="filled">
-      <InputLabel htmlFor="component-filled">{children}</InputLabel>
-      <FilledInput id="component-filled" />
-    </FormControl>
+    <TextField
+      rows={rows}
+      multiline={multiline}
+      value={value}
+      disabled={disabled}
+      name={name}
+      sx={sx}
+      onChange={onChange}
+      onBlur={onBlur}
+      id={id}
+      label={label}
+      variant="outlined"
+      error={error}
+      helperText={helperText}
+      endAdornment={endAdornment}
+      InputProps={InputProps}
+      type={type}
+    />
   );
 };
 
