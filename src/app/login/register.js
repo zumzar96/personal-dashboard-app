@@ -14,7 +14,7 @@ import * as sxProps from "./styles/styles.ts";
 import { Formik, Form, Field } from "formik";
 // import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import { useLoginMutation } from "./authApiSlice";
+import { useRegisterMutation } from "./authApiSlice";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
@@ -23,19 +23,21 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 
-const Login = (props) => {
+const Register = (props) => {
   const initialRegistData = useMemo(() => {
     return {
+      name: "",
       email: "",
       password: "",
+      confirmpassword: "",
     };
   }, []);
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
   const [
-    login,
+    register,
     { isLoading: loginLoading, isError: loginError, isSuccess: loginSuccess },
-  ] = useLoginMutation();
+  ] = useRegisterMutation();
 
   const [registData, setRegistData] = useState(initialRegistData);
 
@@ -43,6 +45,7 @@ const Login = (props) => {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   const SignupSchema = Yup.object().shape({
+    name: Yup.string().max(20).required("Field is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
       .max(50, "Password is too Long!")
@@ -51,6 +54,10 @@ const Login = (props) => {
         passRegex,
         "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
       ),
+    confirmpassword: Yup.string().oneOf(
+      [Yup.ref("password"), null],
+      "Passwords must match"
+    ),
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -61,13 +68,15 @@ const Login = (props) => {
     event.preventDefault();
   };
 
-  const loginFormHandler = (em, pswd) => {
-    login({ email: em, password: pswd });
+  const loginFormHandler = (name, em, pswd) => {
+    register({ name: name, email: em, password: pswd });
   };
 
   return (
     <Fragment>
-      {loginSuccess || isLoggedIn ? (
+      {loginSuccess ? (
+        <Navigate to="/" replace={true} />
+      ) : isLoggedIn ? (
         <Navigate to="/dashboard" replace={true} />
       ) : null}
       <Grid container>
@@ -81,7 +90,7 @@ const Login = (props) => {
             initialValues={registData}
             validationSchema={SignupSchema}
             onSubmit={(values, { setSubmitting }) => {
-              loginFormHandler(values.email, values.password);
+              loginFormHandler(values.name, values.email, values.password);
               setSubmitting(false);
             }}
           >
@@ -102,7 +111,7 @@ const Login = (props) => {
                     <Loader />
                   ) : (
                     <>
-                      <Typography variant="h4">Sign in</Typography>
+                      <Typography variant="h4">Sign up</Typography>
                       <Typography sx={sxProps.typograhyColor}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Nulla porttitor metus leo, ut ullamcorper diam aliquam
@@ -110,14 +119,24 @@ const Login = (props) => {
                         laoreet id
                       </Typography>
                       <TextField
+                        name="name"
+                        type="text"
+                        placeholder="Name"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.name}
+                        error={touched.name && errors.name}
+                        helperText={touched.name && errors.name}
+                      />
+                      <TextField
                         name="email"
                         type="email"
                         placeholder="Email"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.email}
-                        error={errors.email}
-                        helperText={errors.email}
+                        error={touched.email && errors.email}
+                        helperText={touched.email && errors.email}
                       />
 
                       {loginError && (
@@ -127,14 +146,13 @@ const Login = (props) => {
                       )}
                       <TextField
                         name="password"
-                        type={showPassword ? 'text' : 'password'}
-                        id="outlined-adornment-password"
+                        type={showPassword ? "text" : "password"}
                         placeholder="Password"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.password}
-                        error={errors.password}
-                        helperText={errors.password}
+                        error={touched.password && errors.password}
+                        helperText={touched.password && errors.password}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
@@ -159,16 +177,49 @@ const Login = (props) => {
                           User data is not correct!
                         </Alert>
                       )}
-                      <Link sx={sxProps.linkColor} href="register">
-                        Sign up
-                      </Link>
-                      <Link sx={sxProps.linkColor}>Forgot password?</Link>
+                      <TextField
+                        name="confirmpassword"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Confirm password"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.confirmpassword}
+                        error={
+                          touched.confirmpassword && errors.confirmpassword
+                        }
+                        helperText={
+                          touched.confirmpassword && errors.confirmpassword
+                        }
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityIcon />
+                                ) : (
+                                  <VisibilityOffIcon />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      ></TextField>
+                      {loginError && (
+                        <Alert severity="error">
+                          User data is not correct!
+                        </Alert>
+                      )}
                       <Button
                         variant="contained"
                         disabled={isSubmitting}
                         onClick={handleSubmit}
                       >
-                        Login
+                        Register
                       </Button>
                     </>
                   )}
@@ -182,4 +233,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default Register;

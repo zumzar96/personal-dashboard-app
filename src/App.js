@@ -11,12 +11,16 @@ import { Routes, Route } from "react-router-dom";
 import Dashboard from "./app/dashboard/dashboard";
 import Root from "./app/root/root";
 import Typography from "../src/app/root/components/common/typography";
-import Materials from '../src/app/materials/materials'
+import Materials from "../src/app/materials/materials";
+import Register from "./app/login/register";
 
 function App() {
   function ErrorBoundary() {
-    
-    return <Typography variant="h3" color={'grey'}>Error 404 Page not found</Typography>;
+    return (
+      <Typography variant="h3" color={"grey"}>
+        Error 404 Page not found
+      </Typography>
+    );
   }
   return (
     <>
@@ -24,10 +28,8 @@ function App() {
       <ThemeProvider theme={rootTheme}>
         <Root>
           <Routes>
-            <Route
-              path="/"
-              element={<Login />}
-            />
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/materials" element={<Materials />} />
             <Route path="*" element={<ErrorBoundary />} />

@@ -29,6 +29,7 @@ import Menu from "@mui/material/Menu";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../login/loginSlice";
 import { Navigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -105,6 +106,9 @@ export default function MiniDrawer({ children }) {
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  console.log("location.pathname", location.pathname);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -273,13 +277,15 @@ export default function MiniDrawer({ children }) {
               ))}
             </List>
           </Drawer>
-          <>
-            {children}
-          </>
+          <>{children}</>
         </Box>
       ) : (
         <>
-          <Navigate to="/"></Navigate>
+          {location.pathname === "/register" ? (
+            <Navigate to="/register"></Navigate>
+          ) : (
+            <Navigate to="/"></Navigate>
+          )}
           {children}
         </>
       )}
