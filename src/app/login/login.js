@@ -22,6 +22,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
+import { useLocation } from "react-router-dom";
 
 const Login = (props) => {
   const initialRegistData = useMemo(() => {
@@ -36,8 +37,8 @@ const Login = (props) => {
     login,
     { isLoading: loginLoading, isError: loginError, isSuccess: loginSuccess },
   ] = useLoginMutation();
-
   const [registData, setRegistData] = useState(initialRegistData);
+  const location = useLocation();
 
   const passRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -127,7 +128,7 @@ const Login = (props) => {
                       )}
                       <TextField
                         name="password"
-                        type={showPassword ? 'text' : 'password'}
+                        type={showPassword ? "text" : "password"}
                         id="outlined-adornment-password"
                         placeholder="Password"
                         onChange={handleChange}
@@ -159,6 +160,11 @@ const Login = (props) => {
                           User data is not correct!
                         </Alert>
                       )}
+                      {location.state?.verifyEmailMsg  ? (
+                        <Alert severity="info">
+                          {location.state.verifyEmailMsg}
+                        </Alert>
+                      ) : null}
                       <Link sx={sxProps.linkColor} href="register">
                         Sign up
                       </Link>

@@ -22,6 +22,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
+import { useNavigate } from "react-router-dom";
 
 const Register = (props) => {
   const initialRegistData = useMemo(() => {
@@ -36,11 +37,15 @@ const Register = (props) => {
   const isLoggedIn = user_info !== null;
   const [
     register,
-    { isLoading: loginLoading, isError: loginError, isSuccess: loginSuccess },
+    {
+      isLoading: registerLoading,
+      isError: registerError,
+      isSuccess: registerSuccess,
+    },
   ] = useRegisterMutation();
 
   const [registData, setRegistData] = useState(initialRegistData);
-
+  const navigate = useNavigate();
   const passRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -54,10 +59,9 @@ const Register = (props) => {
         passRegex,
         "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
       ),
-    confirmpassword: Yup.string().oneOf(
-      [Yup.ref("password"), null],
-      "Passwords must match"
-    ),
+    confirmpassword: Yup.string()
+      .required("Field is required")
+      .oneOf([Yup.ref("password"), null], "Passwords must match"),
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -68,17 +72,26 @@ const Register = (props) => {
     event.preventDefault();
   };
 
-  const loginFormHandler = (name, em, pswd) => {
-    register({ name: name, email: em, password: pswd });
+  const loginFormHandler = async (name, em, pswd) => {
+    const verifyEmailMsg = await register({
+      name: name,
+      email: em,
+      password: pswd,
+    });
+    try {
+      navigate("/", {
+        state: {
+          verifyEmailMsg: verifyEmailMsg.data.message,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <Fragment>
-      {loginSuccess ? (
-        <Navigate to="/" replace={true} />
-      ) : isLoggedIn ? (
-        <Navigate to="/dashboard" replace={true} />
-      ) : null}
+      {isLoggedIn ? <Navigate to="/dashboard" replace={true} /> : null}
       <Grid container>
         <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
           <Box sx={sxProps.svgLayout}>
@@ -107,7 +120,7 @@ const Register = (props) => {
             }) => (
               <Form>
                 <Box sx={sxProps.loginFormLayout}>
-                  {loginLoading ? (
+                  {registerLoading ? (
                     <Loader />
                   ) : (
                     <>
@@ -139,7 +152,7 @@ const Register = (props) => {
                         helperText={touched.email && errors.email}
                       />
 
-                      {loginError && (
+                      {registerError && (
                         <Alert severity="error">
                           User data is not correct!
                         </Alert>
@@ -172,7 +185,7 @@ const Register = (props) => {
                           ),
                         }}
                       ></TextField>
-                      {loginError && (
+                      {registerError && (
                         <Alert severity="error">
                           User data is not correct!
                         </Alert>
@@ -209,7 +222,7 @@ const Register = (props) => {
                           ),
                         }}
                       ></TextField>
-                      {loginError && (
+                      {registerError && (
                         <Alert severity="error">
                           User data is not correct!
                         </Alert>
