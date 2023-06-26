@@ -14,6 +14,7 @@ import Materials from "../src/app/materials/materials";
 import Register from "./app/login/register";
 import Dashboard from "./app/root/dashboard";
 import ErrorBoundary from "./app/root/components/common/errorBoundary";
+import ForgotPassword from "./app/login/forgotPassword";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="dashboard/*" element={<Dashboard />} />
           <Route path="*" element={<ErrorBoundary />} />
         </Routes>

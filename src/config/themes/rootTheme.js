@@ -33,20 +33,20 @@ const rootTheme = createTheme({
       },
     },
   },
-  typography: {
-    fontSize: 14,
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-  },
+  // typography: {
+  //   fontSize: 14,
+  //   fontFamily: [
+  //     "-apple-system",
+  //     "BlinkMacSystemFont",
+  //     '"Segoe UI"',
+  //     "Roboto",
+  //     '"Helvetica Neue"',
+  //     "Arial",
+  //     "sans-serif",
+  //     '"Apple Color Emoji"',
+  //     '"Segoe UI Emoji"',
+  //     '"Segoe UI Symbol"',
+  //   ].join(","),
+  // },
 });
 export default rootTheme;

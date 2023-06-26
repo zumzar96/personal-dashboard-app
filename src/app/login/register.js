@@ -72,7 +72,7 @@ const Register = (props) => {
     event.preventDefault();
   };
 
-  const loginFormHandler = async (name, em, pswd) => {
+  const registerFormHandler = async (name, em, pswd) => {
     const verifyEmailMsg = await register({
       name: name,
       email: em,
@@ -103,7 +103,7 @@ const Register = (props) => {
             initialValues={registData}
             validationSchema={SignupSchema}
             onSubmit={(values, { setSubmitting }) => {
-              loginFormHandler(values.name, values.email, values.password);
+              registerFormHandler(values.name, values.email, values.password);
               setSubmitting(false);
             }}
           >
