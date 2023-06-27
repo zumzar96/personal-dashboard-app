@@ -23,6 +23,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+
 
 const Login = (props) => {
   const initialRegistData = useMemo(() => {
@@ -65,6 +67,12 @@ const Login = (props) => {
   const loginFormHandler = (em, pswd) => {
     login({ email: em, password: pswd });
   };
+
+  useEffect(() => {
+    if (loginError) {
+      toast.error("User data not correct");
+    }
+  }, [loginError]);
 
   return (
     <Fragment>

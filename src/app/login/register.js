@@ -23,6 +23,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register = (props) => {
   const initialRegistData = useMemo(() => {
@@ -84,8 +85,10 @@ const Register = (props) => {
           verifyEmailMsg: verifyEmailMsg.data.message,
         },
       });
+      toast.info(`${verifyEmailMsg.data.message}`);
     } catch (error) {
       console.log(error);
+      toast.error(`${verifyEmailMsg.error.data.message}`);
     }
   };
 
@@ -227,6 +230,10 @@ const Register = (props) => {
                           User data is not correct!
                         </Alert>
                       )}
+                      <Link sx={sxProps.linkColor} href="/">
+                        Login
+                      </Link>
+                      <Link sx={sxProps.linkColor} href="forgot-password">Forgot password?</Link>
                       <Button
                         variant="contained"
                         disabled={isSubmitting}

@@ -107,14 +107,16 @@ const MaterialDialog = ({
     }
   };
 
+
+  //TODO refactor
   const submmitMaterialHandler = (params) => {
     if (editMaterialMode) {
       editMaterial(params);
-      materialEditResetMuatation();
+      // materialEditResetMuatation();
       setOpen(false);
     } else {
       createMaterial(params);
-      materialCreateResetMuatation();
+      // materialCreateResetMuatation();
       setOpen(false);
     }
     setEditMaterialMode(false);
@@ -137,7 +139,7 @@ const MaterialDialog = ({
     setOpen(false);
     // resetForm();TODO implement reset form function
     setFilename(initialRegistData.image);
-    materialCreateResetMuatation();
+    // materialCreateResetMuatation();
     setRegistData(initialRegistData); //TODO adjust mutation reset
     // dispatch(rootApiSlice.util.resetApiState());TODO adjust mutatuon cache flow
     setEditMaterialMode(false);
@@ -147,31 +149,31 @@ const MaterialDialog = ({
     setOpenImageDialog(open);
   };
 
-  console.log(
-    "createMaterialLoading, editMaterialLoading",
-    createMaterialLoading,
-    editMaterialLoading
-  );
-
-  console.log(
-    "createMaterialSuccess,editMaterialSuccess",
-    createMaterialSuccess,
-    editMaterialSuccess
-  );
-  console.log(
-    "createMaterialSuccess || editMaterialSuccess",
-    createMaterialSuccess || editMaterialSuccess
-  );
+//For testing purposes
+  useEffect(() => {
+    if (createMaterialSuccess) {
+      toast.success("Created successfuly");
+    }
+  }, [createMaterialSuccess]);
 
   useEffect(() => {
-    console.log("hoce use Effect va ifa")
-    if (createMaterialSuccess || editMaterialSuccess) {
-      console.log("hoceee useEfff material dialog");
-      setOpen(false);
-      setFilename(initialRegistData.image);
-      toast.success("MY SUCCESS");
+    if (editMaterialSuccess) {
+      toast.success("Edited successfuly");
     }
-  }, [createMaterialLoading, editMaterialLoading]);
+  }, [editMaterialSuccess]);
+
+  useEffect(() => {
+    if (createMaterialError) {
+      toast.error("Error create");
+    }
+  }, [createMaterialError]);
+
+  useEffect(() => {
+    if (editMaterialError) {
+      toast.error("Error edit");
+    }
+  }, [editMaterialError]);
+
 
   useEffect(() => {
     //TODO setting initial state
@@ -390,14 +392,6 @@ const MaterialDialog = ({
                   label="Description"
                   disabled={viewMaterialMode}
                 ></FormInput>
-                {createMaterialError || editMaterialError ? (
-                  <Alert
-                    sx={sxProps.fullWdithFormInputContainer}
-                    severity="error"
-                  >
-                    Create material error
-                  </Alert>
-                ) : null}
                 <DialogActions>
                   {createMaterialLoading || editMaterialLoading ? (
                     <Loader sx={{ marginRight: "1rem" }} size="2rem"></Loader>

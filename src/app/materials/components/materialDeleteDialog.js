@@ -11,6 +11,8 @@ import Alert from "../../root/components/common/alert";
 import { useDeleteMaterialsMutation } from "../materialsApiSlice";
 import DeleteTypography from "../../root/components/common/typography";
 import * as sxProps from "../styles/styles.ts";
+import { toast } from "react-toastify";
+
 
 const MaterialDialog = ({
   open,
@@ -42,10 +44,20 @@ const MaterialDialog = ({
   };
 
   useEffect(() => {
-    setOpen(false);
+    if (deleteMaterialsSuccess) {
+      toast.success("Materials deleted");
+    }
+    setOpen(false);//TODO
     deleteMaterialsResetMuatation();
     setCheckboxSelectionModel([]);
   }, [deleteMaterialsSuccess]); //TODO adjust isSucces state
+
+  useEffect(() => {
+    if (deleteMaterialsError) {
+      toast.error("Materials delete error");
+      setOpen(false);//TODO
+    }
+  }, [deleteMaterialsError]);
 
   return (
     <Dialog open={open} onClose={closeDialogHandler}>
@@ -60,9 +72,9 @@ const MaterialDialog = ({
             <DeleteTypography>
               Are you sure you want to delete material material?
             </DeleteTypography>
-            {deleteMaterialsError ? (
+            {/* {deleteMaterialsError ? (
               <Alert severity="error">Error delete</Alert>
-            ) : null}
+            ) : null} */}
           </DialogContent>
           <DialogActions>
             <Button variant={"contained"} onClick={confirmDeleteHandler}>
