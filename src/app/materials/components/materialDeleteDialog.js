@@ -31,7 +31,7 @@ const MaterialDialog = ({
       reset: deleteMaterialsResetMuatation,
     },
   ] = useDeleteMaterialsMutation();
-  
+
   const closeDialogHandler = () => {
     setOpen(false);
     deleteMaterialsResetMuatation();
@@ -45,12 +45,12 @@ const MaterialDialog = ({
     setOpen(false);
     deleteMaterialsResetMuatation();
     setCheckboxSelectionModel([]);
-  }, [deleteMaterialsSuccess]);//TODO adjust isSucces state
+  }, [deleteMaterialsSuccess]); //TODO adjust isSucces state
 
   return (
     <Dialog open={open} onClose={closeDialogHandler}>
       <DialogTitle sx={sxProps.dialogTitleContainer}>Delete</DialogTitle>
-      {deleteMaterialsLoading ? (//TODO adjust isLaoding state 
+      {deleteMaterialsLoading ? ( //TODO adjust isLaoding state
         <DialogContent>
           <Loader></Loader>
         </DialogContent>

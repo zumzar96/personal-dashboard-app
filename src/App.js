@@ -8,31 +8,29 @@ import { Grid } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "./app/dashboard/dashboard";
-import Root from "./app/root/root";
+import appDrawerBar from "./app/root/components/common/appDrawerBar";
 import Typography from "../src/app/root/components/common/typography";
-import Materials from '../src/app/materials/materials'
+import Materials from "../src/app/materials/materials";
+import Register from "./app/login/register";
+import Dashboard from "./app/root/dashboard";
+import ErrorBoundary from "./app/root/components/common/errorBoundary";
+import ForgotPassword from "./app/login/forgotPassword";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  function ErrorBoundary() {
-    
-    return <Typography variant="h3" color={'grey'}>Error 404 Page not found</Typography>;
-  }
   return (
     <>
       <CssBaseline />
       <ThemeProvider theme={rootTheme}>
-        <Root>
-          <Routes>
-            <Route
-              path="/"
-              element={<Login />}
-            />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/materials" element={<Materials />} />
-            <Route path="*" element={<ErrorBoundary />} />
-          </Routes>
-        </Root>
+        <ToastContainer autoClose={2000} />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="dashboard/*" element={<Dashboard />} />
+          <Route path="*" element={<ErrorBoundary />} />
+        </Routes>
       </ThemeProvider>
     </>
   );

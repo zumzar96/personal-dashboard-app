@@ -19,7 +19,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -27,8 +27,9 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../login/loginSlice";
+import { logout } from "../../../login/loginSlice";
 import { Navigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -105,6 +106,16 @@ export default function MiniDrawer({ children }) {
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const { pathname } = useLocation();
+
+  console.log("pathname", pathname);
+
+  console.log(
+    "pathname === `${pathname}/materials`",
+    pathname === `${pathname}/materials`
+  );
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -212,7 +223,9 @@ export default function MiniDrawer({ children }) {
                     key={text}
                     disablePadding
                     sx={{ display: "block" }}
-                    onClick={() => navigate("/dashboard")}
+                    // onClick={() => navigate(`${pathname}/stats`)}
+                    to={`stats`}
+                    component={Link}
                   >
                     <ListItemButton
                       sx={{
@@ -243,10 +256,12 @@ export default function MiniDrawer({ children }) {
             <List>
               {["All mail", "Trash", "Spam"].map((text, index) => (
                 <ListItem
-                  key={text}
+                  key={"materials"}
                   disablePadding
                   sx={{ display: "block" }}
-                  onClick={() => navigate("/materials")}
+                  // onClick={() => navigate(`${pathname}/materials`)}
+                  to={`materials`}
+                  component={Link}
                 >
                   <ListItemButton
                     sx={{
@@ -254,6 +269,10 @@ export default function MiniDrawer({ children }) {
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
                     }}
+                    // to={`${pathname}/materials`}
+                    // disable={pathname === `${pathname}/materials`}
+                    // onClick={() => navigate("/materials")}
+                    // component={Link}
                   >
                     <ListItemIcon
                       sx={{
@@ -273,13 +292,15 @@ export default function MiniDrawer({ children }) {
               ))}
             </List>
           </Drawer>
-          <>
-            {children}
-          </>
+          <>{children}</>
         </Box>
       ) : (
         <>
-          <Navigate to="/"></Navigate>
+          {location.pathname === "/register" ? (
+            <Navigate to="/register"></Navigate>
+          ) : (
+            <Navigate to="/"></Navigate>
+          )}
           {children}
         </>
       )}
