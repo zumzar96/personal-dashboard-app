@@ -23,6 +23,7 @@ import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
 import Paper from "@mui/material/Paper";
 import ImageDialog from "./imageDialog.js";
+import { toast } from "react-toastify";
 
 const MaterialDialog = ({
   open,
@@ -146,10 +147,29 @@ const MaterialDialog = ({
     setOpenImageDialog(open);
   };
 
+  console.log(
+    "createMaterialLoading, editMaterialLoading",
+    createMaterialLoading,
+    editMaterialLoading
+  );
+
+  console.log(
+    "createMaterialSuccess,editMaterialSuccess",
+    createMaterialSuccess,
+    editMaterialSuccess
+  );
+  console.log(
+    "createMaterialSuccess || editMaterialSuccess",
+    createMaterialSuccess || editMaterialSuccess
+  );
+
   useEffect(() => {
+    console.log("hoce use Effect va ifa")
     if (createMaterialSuccess || editMaterialSuccess) {
+      console.log("hoceee useEfff material dialog");
       setOpen(false);
       setFilename(initialRegistData.image);
+      toast.success("MY SUCCESS");
     }
   }, [createMaterialLoading, editMaterialLoading]);
 

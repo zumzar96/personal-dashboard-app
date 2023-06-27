@@ -15,12 +15,15 @@ import Register from "./app/login/register";
 import Dashboard from "./app/root/dashboard";
 import ErrorBoundary from "./app/root/components/common/errorBoundary";
 import ForgotPassword from "./app/login/forgotPassword";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <>
       <CssBaseline />
       <ThemeProvider theme={rootTheme}>
+        <ToastContainer autoClose={2000} />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
