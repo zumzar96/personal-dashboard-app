@@ -5,7 +5,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
-import { useSelector } from "react-redux";
 import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
 import { useDeleteMaterialsMutation } from "../materialsApiSlice";
@@ -22,8 +21,6 @@ const MaterialDialog = ({
   checkboxSelectionModel,
   setCheckboxSelectionModel,
 }) => {
-  const user_info = useSelector((state) => state.login.user_info);
-
   const [
     deleteMaterials,
     {
@@ -40,7 +37,7 @@ const MaterialDialog = ({
   };
 
   const confirmDeleteHandler = () => {
-    deleteMaterials({ token: user_info.token, id: checkboxSelectionModel });
+    deleteMaterials({ id: checkboxSelectionModel });
   };
 
   useEffect(() => {

@@ -2,17 +2,6 @@ import { rootApiSlice } from "../root/rootApiSlice";
 
 export const authApi = rootApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getPokemonByName: builder.query({
-      query(params) {
-        return {
-          url: `users/profile`,
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${params.token}`,
-          },
-        };
-      },
-    }),
     login: builder.mutation({
       query(params) {
         return {

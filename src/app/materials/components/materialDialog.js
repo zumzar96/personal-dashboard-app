@@ -18,7 +18,6 @@ import {
   useUploadMaterialImageMutation,
   useEditMaterialMutation,
 } from "../materialsApiSlice";
-import { useSelector } from "react-redux";
 import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
 import Paper from "@mui/material/Paper";
@@ -32,10 +31,8 @@ const MaterialDialog = ({
   setViewMaterialMode,
   materialById,
 }) => {
-  const user_info = useSelector((state) => state.login.user_info);
   const initialRegistData = useMemo(() => {
     return {
-      token: user_info.token,
       name: "",
       price: 0,
       image: "",
@@ -107,7 +104,6 @@ const MaterialDialog = ({
     }
   };
 
-
   //TODO refactor
   const submmitMaterialHandler = (params) => {
     if (editMaterialMode) {
@@ -149,7 +145,7 @@ const MaterialDialog = ({
     setOpenImageDialog(open);
   };
 
-//For testing purposes
+  //For testing purposes
   useEffect(() => {
     if (createMaterialSuccess) {
       toast.success("Created successfuly");
@@ -173,7 +169,6 @@ const MaterialDialog = ({
       toast.error("Error edit");
     }
   }, [editMaterialError]);
-
 
   useEffect(() => {
     //TODO setting initial state
@@ -201,7 +196,9 @@ const MaterialDialog = ({
       open={open}
       onClose={closeDialogHandler}
     >
-      <DialogTitle sx={sxProps.dialogTitleContainer}>Create</DialogTitle>
+      <DialogTitle sx={sxProps.dialogTitleContainer}>
+        {editMaterialMode ? "Edit" : viewMaterialMode ? "View" : "Crete"}
+      </DialogTitle>
       <DialogContent>
         <Box sx={sxProps.dialogContainer}>
           <Formik

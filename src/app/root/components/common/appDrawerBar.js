@@ -138,6 +138,7 @@ export default function MiniDrawer({ children }) {
     dispatch(logout());
   };
 
+
   return (
     <>
       {isLoggedIn ? (
@@ -232,7 +233,7 @@ export default function MiniDrawer({ children }) {
                         minHeight: 48,
                         justifyContent: open ? "initial" : "center",
                         px: 2.5,
-                        color: "#8b888f"
+                        color: "#8b888f",
                       }}
                     >
                       <ListItemIcon
@@ -270,7 +271,7 @@ export default function MiniDrawer({ children }) {
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
-                      color: "#8b888f"
+                      color: "#8b888f",
                     }}
                     // to={`${pathname}/materials`}
                     // disable={pathname === `${pathname}/materials`}
@@ -299,12 +300,7 @@ export default function MiniDrawer({ children }) {
         </Box>
       ) : (
         <>
-          {location.pathname === "/register" ? (
-            <Navigate to="/register"></Navigate>
-          ) : (
-            <Navigate to="/"></Navigate>
-          )}
-          {children}
+          <Navigate to="/"></Navigate>
         </>
       )}
     </>
