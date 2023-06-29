@@ -27,7 +27,7 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../../login/loginSlice";
+import { logout } from "../../../auth/loginSlice";
 import { Navigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 

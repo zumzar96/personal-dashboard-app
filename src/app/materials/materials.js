@@ -17,7 +17,7 @@ import DeleteMaterialDialog from "./components/materialDeleteDialog";
 
 const Materials = () => {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
-  const [open, setOpen] = useState(false);
+  const [openMaterialDialog, setOpenMaterialDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [viewMaterialMode, setViewMaterialMode] = useState(false);
   const [paginationModel, setPaginationModel] = useState({
@@ -25,7 +25,7 @@ const Materials = () => {
     pageSize: 2,
   });
 
-  const { data, isLoading, isError, isFetching } = useGetMaterialsQuery({
+  const { data, isError, isFetching } = useGetMaterialsQuery({
     keyword,
     pageNumber: paginationModel.page,
   });
@@ -35,7 +35,7 @@ const Materials = () => {
   const [getMaterialByIdOnRowClick, result] = useLazyGetMaterialByIdQuery();
 
   const createMaterialHandler = () => {
-    setOpen(true);
+    setOpenMaterialDialog(true);
     setViewMaterialMode(false);
   };
 
@@ -44,9 +44,9 @@ const Materials = () => {
   };
 
   const onRowsSelectionHandler = (materialId) => {
-    getMaterialByIdOnRowClick({ productId: materialId });
+    getMaterialByIdOnRowClick({ materialId });
     setViewMaterialMode(true);
-    setOpen(true);
+    setOpenMaterialDialog(true);
   };
 
   return (
@@ -144,8 +144,8 @@ const Materials = () => {
       <MaterialDialog
         setViewMaterialMode={setViewMaterialMode}
         viewMaterialMode={viewMaterialMode}
-        open={open}
-        setOpen={setOpen} //TODO wrape in separate handler function
+        openMaterialDialog={openMaterialDialog}
+        setOpenMaterialDialog={setOpenMaterialDialog} //TODO wrape in separate handler function
         materialById={result}
       ></MaterialDialog>
       <DeleteMaterialDialog

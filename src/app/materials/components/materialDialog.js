@@ -24,8 +24,8 @@ import Paper from "@mui/material/Paper";
 import ImageDialog from "./imageDialog.js";
 
 const MaterialDialog = ({
-  open,
-  setOpen,
+  openMaterialDialog,
+  setOpenMaterialDialog,
   viewMaterialMode,
   setViewMaterialMode,
   materialById,
@@ -80,7 +80,6 @@ const MaterialDialog = ({
     if (!e.target.files) {
       return;
     }
-    const file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
 
@@ -98,11 +97,11 @@ const MaterialDialog = ({
     if (editMaterialMode) {
       editMaterial(params);
       // materialEditResetMuatation();
-      setOpen(false);
+      setOpenMaterialDialog(false);
     } else {
       createMaterial(params);
       // materialCreateResetMuatation();
-      setOpen(false);
+      setOpenMaterialDialog(false);
     }
     setEditMaterialMode(false);
     setViewMaterialMode(false);
@@ -110,7 +109,7 @@ const MaterialDialog = ({
     setFilename(initialRegistData.image);
   };
 
-  const removeFileHandler = (data, setFieldValue) => {
+  const removeFileHandler = (setFieldValue) => {
     setFilename(initialRegistData.image);
     setFieldValue("image", initialRegistData.image);
   };
@@ -121,7 +120,7 @@ const MaterialDialog = ({
   };
 
   const closeDialogHandler = () => {
-    setOpen(false);
+    setOpenMaterialDialog(false);
     // resetForm();TODO implement reset form function
     setFilename(initialRegistData.image);
     // materialCreateResetMuatation();
@@ -131,7 +130,7 @@ const MaterialDialog = ({
   };
 
   const openImageDialogHandler = () => {
-    setOpenImageDialog(open);
+    setOpenImageDialog(true);
   };
 
   useEffect(() => {
@@ -154,11 +153,10 @@ const MaterialDialog = ({
     }
   }, [materialById]);
 
-
   return (
     <Dialog
       sx={sxProps.dialogMainContainer}
-      open={open}
+      open={openMaterialDialog}
       onClose={closeDialogHandler}
     >
       <DialogTitle sx={sxProps.dialogTitleContainer}>
@@ -254,9 +252,7 @@ const MaterialDialog = ({
                               sx={sxProps.iconButtonWraper}
                               aria-label="delete"
                               disabled={viewMaterialMode}
-                              onClick={(e) =>
-                                removeFileHandler(e, setFieldValue)
-                              }
+                              onClick={() => removeFileHandler(setFieldValue)}
                             >
                               <CancelTwoToneIcon />
                             </IconButton>
