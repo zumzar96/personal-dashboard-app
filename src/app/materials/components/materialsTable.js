@@ -1,16 +1,25 @@
 import * as React from "react";
 import { useState } from "react";
 import { DataGrid, GridValueGetterParams } from "@mui/x-data-grid";
+import ImageIcon from "@mui/icons-material/Image";
+import moment from "moment";
+import Typography from "../../root/components/common/typography";
 
 const columns = [
   {
     field: "name",
     headerName: "Name",
-    type: "number",
+    type: "text",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
-    align: "center",
+    renderCell: ({ row: { name } }) => {
+      return (
+        <Typography sx={{ fontWeight: 600, color: "dimgray" }}>
+          {name}
+        </Typography>
+      );
+    },
   },
   //TODO adjust column names
   {
@@ -40,12 +49,15 @@ const columns = [
   },
   {
     field: "image",
-    headerName: "Document",
+    headerName: "Image",
     type: "file",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
     align: "center",
+    renderCell: () => {
+      return <ImageIcon />; //<-- Mui icons should be put this way here.
+    },
   },
   {
     field: "createdAt",
@@ -55,6 +67,8 @@ const columns = [
     minWidth: 150,
     headerAlign: "center",
     align: "center",
+    valueFormatter: (params) =>
+      moment(params?.value).format("DD/MM/YYYY hh:mm A"),
   },
   {
     field: "updatedAt",
@@ -64,6 +78,8 @@ const columns = [
     minWidth: 150,
     headerAlign: "center",
     align: "center",
+    valueFormatter: (params) =>
+      moment(params?.value).format("DD/MM/YYYY hh:mm A"),
   },
   // {
   //   field: "updatedAt",
@@ -103,17 +119,17 @@ export default function MaterialsTable({
         },
         "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
           outline: "none !important",
-       },
+        },
       }}
       loading={loading}
       rows={data === undefined || error ? [] : data.materials} //TODO improve error handling & implement custom no data overlay
       getRowId={(row) => row._id}
-      rowCount={data?.pages}//TODO remove ? operator
+      rowCount={data?.pages} //TODO remove ? operator
       columns={columns}
       paginationModel={paginationModel}
       initialState={{
         pagination: {
-          paginationModel
+          paginationModel,
         },
       }}
       onRowClick={(material) => onRowsSelectionHandler(material.row._id)}
