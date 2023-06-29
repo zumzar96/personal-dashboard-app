@@ -22,7 +22,6 @@ import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
 import Paper from "@mui/material/Paper";
 import ImageDialog from "./imageDialog.js";
-import { toast } from "react-toastify";
 
 const MaterialDialog = ({
   open,
@@ -48,21 +47,11 @@ const MaterialDialog = ({
   const [openImageDialog, setOpenImageDialog] = useState(false);
   const [
     createMaterial,
-    {
-      isLoading: createMaterialLoading,
-      isError: createMaterialError,
-      isSuccess: createMaterialSuccess,
-      reset: materialCreateResetMuatation,
-    },
+    { isLoading: createMaterialLoading, reset: materialCreateResetMuatation },
   ] = useCreateMaterialMutation();
   const [
     editMaterial,
-    {
-      isLoading: editMaterialLoading,
-      isError: editMaterialError,
-      isSuccess: editMaterialSuccess,
-      reset: materialEditResetMuatation,
-    },
+    { isLoading: editMaterialLoading, reset: materialEditResetMuatation },
   ] = useEditMaterialMutation();
   const [
     uploadMaterialImage,
@@ -145,31 +134,6 @@ const MaterialDialog = ({
     setOpenImageDialog(open);
   };
 
-  //For testing purposes
-  useEffect(() => {
-    if (createMaterialSuccess) {
-      toast.success("Created successfuly");
-    }
-  }, [createMaterialSuccess]);
-
-  useEffect(() => {
-    if (editMaterialSuccess) {
-      toast.success("Edited successfuly");
-    }
-  }, [editMaterialSuccess]);
-
-  useEffect(() => {
-    if (createMaterialError) {
-      toast.error("Error create");
-    }
-  }, [createMaterialError]);
-
-  useEffect(() => {
-    if (editMaterialError) {
-      toast.error("Error edit");
-    }
-  }, [editMaterialError]);
-
   useEffect(() => {
     //TODO setting initial state
     if (materialById.data) {
@@ -190,6 +154,7 @@ const MaterialDialog = ({
     }
   }, [materialById]);
 
+
   return (
     <Dialog
       sx={sxProps.dialogMainContainer}
@@ -197,7 +162,15 @@ const MaterialDialog = ({
       onClose={closeDialogHandler}
     >
       <DialogTitle sx={sxProps.dialogTitleContainer}>
-        {editMaterialMode ? "Edit" : viewMaterialMode ? "View" : "Crete"}
+        {materialById.isFetching ? (
+          <Loader></Loader>
+        ) : editMaterialMode ? (
+          "Edit"
+        ) : viewMaterialMode ? (
+          "View"
+        ) : (
+          "Crete"
+        )}
       </DialogTitle>
       <DialogContent>
         <Box sx={sxProps.dialogContainer}>
@@ -389,6 +362,14 @@ const MaterialDialog = ({
                   label="Description"
                   disabled={viewMaterialMode}
                 ></FormInput>
+                {materialById.isError ? (
+                  <Alert
+                    sx={sxProps.fullWdithFormInputContainer}
+                    severity="error"
+                  >
+                    Error while viewing material
+                  </Alert>
+                ) : null}
                 <DialogActions>
                   {createMaterialLoading || editMaterialLoading ? (
                     <Loader sx={{ marginRight: "1rem" }} size="2rem"></Loader>

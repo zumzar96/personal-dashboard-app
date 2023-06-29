@@ -10,8 +10,6 @@ import Alert from "../../root/components/common/alert";
 import { useDeleteMaterialsMutation } from "../materialsApiSlice";
 import DeleteTypography from "../../root/components/common/typography";
 import * as sxProps from "../styles/styles.ts";
-import { toast } from "react-toastify";
-
 
 const MaterialDialog = ({
   open,
@@ -25,8 +23,6 @@ const MaterialDialog = ({
     deleteMaterials,
     {
       isLoading: deleteMaterialsLoading,
-      isError: deleteMaterialsError,
-      isSuccess: deleteMaterialsSuccess,
       reset: deleteMaterialsResetMuatation,
     },
   ] = useDeleteMaterialsMutation();
@@ -38,23 +34,10 @@ const MaterialDialog = ({
 
   const confirmDeleteHandler = () => {
     deleteMaterials({ id: checkboxSelectionModel });
-  };
-
-  useEffect(() => {
-    if (deleteMaterialsSuccess) {
-      toast.success("Materials deleted");
-    }
-    setOpen(false);//TODO
+    setOpen(false)
     deleteMaterialsResetMuatation();
     setCheckboxSelectionModel([]);
-  }, [deleteMaterialsSuccess]); //TODO adjust isSucces state
-
-  useEffect(() => {
-    if (deleteMaterialsError) {
-      toast.error("Materials delete error");
-      setOpen(false);//TODO
-    }
-  }, [deleteMaterialsError]);
+  };
 
   return (
     <Dialog open={open} onClose={closeDialogHandler}>

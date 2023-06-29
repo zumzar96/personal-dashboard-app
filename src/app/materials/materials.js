@@ -6,7 +6,6 @@ import MaterialsTable from "./components/materialsTable";
 import {
   useGetMaterialsQuery,
   useLazyGetMaterialByIdQuery,
-  useDeleteMaterialsMutation,
 } from "./materialsApiSlice";
 import BreadcrumbPath from "../root/components/common/breadcrumb";
 import { mdiTableAccount, mdiLandPlots } from "@mdi/js";
@@ -14,8 +13,7 @@ import SearchInput from "../root/components/common/input";
 import CreateButton from "../root/components/common/button";
 import MaterialDialog from "./components/materialDialog";
 import DeleteMaterialDialog from "./components/materialDeleteDialog";
-import Dialog from "@mui/material/Dialog/Dialog";
-import Alert from "../root/components/common/alert"
+
 
 const Materials = () => {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
@@ -32,18 +30,16 @@ const Materials = () => {
     pageNumber: paginationModel.page,
   });
 
-  const [{ isSuccess: deleteMaterialsSuccess }] = useDeleteMaterialsMutation();
-
   const [checkboxSelectionModel, setCheckboxSelectionModel] = useState([]);
 
   const [getMaterialByIdOnRowClick, result] = useLazyGetMaterialByIdQuery();
 
-  const handleClickOpen = () => {
+  const createMaterialHandler = () => {
     setOpen(true);
     setViewMaterialMode(false);
   };
 
-  const handleClicDeletekOpen = () => {
+  const deleteMaterialHandler = () => {
     setOpenDeleteDialog(true);
   };
 
@@ -52,7 +48,6 @@ const Materials = () => {
     setViewMaterialMode(true);
     setOpen(true);
   };
-
 
   return (
     //TODO refactor grid layout code
@@ -99,11 +94,11 @@ const Materials = () => {
             <CreateButton
               disabled={!checkboxSelectionModel.length}
               variant="contained"
-              onClick={handleClicDeletekOpen}
+              onClick={deleteMaterialHandler}
             >
               Delete
             </CreateButton>
-            <CreateButton variant="contained" onClick={handleClickOpen}>
+            <CreateButton variant="contained" onClick={createMaterialHandler}>
               Create
             </CreateButton>
           </Box>
@@ -159,9 +154,6 @@ const Materials = () => {
         checkboxSelectionModel={checkboxSelectionModel} //TODO wrape in separate handler function
         setCheckboxSelectionModel={setCheckboxSelectionModel}
       ></DeleteMaterialDialog>
-      <Dialog open={deleteMaterialsSuccess}>
-        <Alert>Succes</Alert>
-      </Dialog>
     </Grid>
   );
 };
