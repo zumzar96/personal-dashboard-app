@@ -106,7 +106,7 @@ export default function MaterialsTable({
        },
       }}
       loading={loading}
-      rows={data === undefined || error ? [] : data.products} //TODO improve error handling & implement custom no data overlay
+      rows={data === undefined || error ? [] : data.materials} //TODO improve error handling & implement custom no data overlay
       getRowId={(row) => row._id}
       rowCount={10}
       columns={columns}
