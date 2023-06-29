@@ -21,8 +21,8 @@ const Materials = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [viewMaterialMode, setViewMaterialMode] = useState(false);
   const [paginationModel, setPaginationModel] = useState({
-    page: 1,
-    pageSize: 2,
+    page: 0,
+    pageSize: 1,
   });
 
   const { data, isError, isFetching } = useGetMaterialsQuery({

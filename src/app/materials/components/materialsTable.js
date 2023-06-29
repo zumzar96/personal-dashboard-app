@@ -108,14 +108,12 @@ export default function MaterialsTable({
       loading={loading}
       rows={data === undefined || error ? [] : data.materials} //TODO improve error handling & implement custom no data overlay
       getRowId={(row) => row._id}
-      rowCount={10}
+      rowCount={data?.pages}//TODO remove ? operator
       columns={columns}
       paginationModel={paginationModel}
       initialState={{
         pagination: {
-          paginationModel: {
-            pageSize: 2,
-          },
+          paginationModel
         },
       }}
       onRowClick={(material) => onRowsSelectionHandler(material.row._id)}
@@ -126,7 +124,7 @@ export default function MaterialsTable({
       rowSelectionModel={checkboxSelectionModel}
       paginationMode="server"
       onPaginationModelChange={setPaginationModel}
-      pageSizeOptions={[2]}
+      // pageSizeOptions={[4]}
       checkboxSelection
       keepNonExistentRowsSelected
     />
