@@ -14,7 +14,6 @@ import CreateButton from "../root/components/common/button";
 import MaterialDialog from "./components/materialDialog";
 import DeleteMaterialDialog from "./components/materialDeleteDialog";
 
-
 const Materials = () => {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
   const [openMaterialDialog, setOpenMaterialDialog] = useState(false);
@@ -111,11 +110,18 @@ const Materials = () => {
           >
             {/* TODO add separate filter component including search' */}
             <SearchInput
-              sx={{
-                input: {
-                  height: "0.7rem",
-                },
-              }}
+            //TODO
+              //sx={{
+                // input: {
+                //   height: "0.7rem",
+                // },
+                // "& .MuiInputLabel-shrink": {
+                //   transform: "translate(14px, -8px) scale(0.8) !important",
+                // },
+                // "& .MuiInputLabel-outlined": {
+                //   transform: "translate(14px, 9px) scale(1) ",
+                // },
+              //}}
               id={"search_input"}
               onChange={(e) => setKeyword(e.target.value)}
               label={"Search"}

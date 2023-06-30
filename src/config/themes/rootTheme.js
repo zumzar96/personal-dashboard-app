@@ -4,7 +4,7 @@ import { createTheme } from "@mui/material/styles";
 const rootTheme = createTheme({
   palette: {
     primary: {
-      main: "#85818b",
+      main: "#818b81",
     },
     secondary: {
       // This is green.A700 as hex.
@@ -28,7 +28,7 @@ const rootTheme = createTheme({
           transform: "translate(14px, -8px) scale(0.8) !important",
         },
         outlined: {
-          transform: "translate(14px, 9px) scale(1)",
+          transform: "translate(14px, 10px) scale(1)",
         },
       },
     },

@@ -56,7 +56,7 @@ const columns = [
     headerAlign: "center",
     align: "center",
     renderCell: () => {
-      return <ImageIcon />; //<-- Mui icons should be put this way here.
+      return <ImageIcon sx={{ color: "#5fc6cf" }} />; //<-- Mui icons should be put this way here.
     },
   },
   {
@@ -110,15 +110,27 @@ export default function MaterialsTable({
     <DataGrid
       sx={{
         "& .MuiDataGrid-columnHeaders": {
-          backgroundColor: "#8b888f",
+          backgroundColor: "#818b81",
           color: "#ffffff",
           borderBottom: "none",
         },
         "& .MuiCheckbox-root": {
-          color: `#666464 !important`,
+          color: `#5d685d !important`,
         },
-        "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+        "& .MuiDataGrid-cell:focus-within": {
           outline: "none !important",
+        },
+      }}
+      slotProps={{
+        panel: {
+          sx: {
+            "& .MuiInput-input": {
+              height: "1.2rem",
+            },
+            // '& .MuiDataGrid-filterForm': {
+            //   bgcolor: 'lightblue',
+            // },
+          },
         },
       }}
       loading={loading}
