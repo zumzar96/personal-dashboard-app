@@ -5,7 +5,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
-import { useSelector } from "react-redux";
 import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
 import { useDeleteMaterialsMutation } from "../materialsApiSlice";
@@ -20,14 +19,10 @@ const MaterialDialog = ({
   checkboxSelectionModel,
   setCheckboxSelectionModel,
 }) => {
-  const user_info = useSelector((state) => state.login.user_info);
-
   const [
     deleteMaterials,
     {
       isLoading: deleteMaterialsLoading,
-      isError: deleteMaterialsError,
-      isSuccess: deleteMaterialsSuccess,
       reset: deleteMaterialsResetMuatation,
     },
   ] = useDeleteMaterialsMutation();
@@ -38,14 +33,11 @@ const MaterialDialog = ({
   };
 
   const confirmDeleteHandler = () => {
-    deleteMaterials({ token: user_info.token, id: checkboxSelectionModel });
-  };
-
-  useEffect(() => {
-    setOpen(false);
+    deleteMaterials({ id: checkboxSelectionModel });
+    setOpen(false)
     deleteMaterialsResetMuatation();
     setCheckboxSelectionModel([]);
-  }, [deleteMaterialsSuccess]); //TODO adjust isSucces state
+  };
 
   return (
     <Dialog open={open} onClose={closeDialogHandler}>
@@ -60,9 +52,9 @@ const MaterialDialog = ({
             <DeleteTypography>
               Are you sure you want to delete material material?
             </DeleteTypography>
-            {deleteMaterialsError ? (
+            {/* {deleteMaterialsError ? (
               <Alert severity="error">Error delete</Alert>
-            ) : null}
+            ) : null} */}
           </DialogContent>
           <DialogActions>
             <Button variant={"contained"} onClick={confirmDeleteHandler}>

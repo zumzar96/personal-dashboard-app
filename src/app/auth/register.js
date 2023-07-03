@@ -14,7 +14,7 @@ import * as sxProps from "./styles/styles.ts";
 import { Formik, Form, Field } from "formik";
 // import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import { useLoginMutation } from "./authApiSlice";
+import { useRegisterMutation } from "./authApiSlice";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
@@ -22,28 +22,36 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const Login = (props) => {
+const Register = (props) => {
   const initialRegistData = useMemo(() => {
     return {
+      name: "",
       email: "",
       password: "",
+      confirmpassword: "",
     };
   }, []);
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
   const [
-    login,
-    { isLoading: loginLoading, isError: loginError, isSuccess: loginSuccess },
-  ] = useLoginMutation();
-  const [registData, setRegistData] = useState(initialRegistData);
-  const location = useLocation();
+    register,
+    {
+      isLoading: registerLoading,
+      isError: registerError,
+      isSuccess: registerSuccess,
+    },
+  ] = useRegisterMutation();
 
+  const [registData, setRegistData] = useState(initialRegistData);
+  const navigate = useNavigate();
   const passRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   const SignupSchema = Yup.object().shape({
+    name: Yup.string().max(20).required("Field is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
       .max(50, "Password is too Long!")
@@ -52,6 +60,9 @@ const Login = (props) => {
         passRegex,
         "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
       ),
+    confirmpassword: Yup.string()
+      .required("Field is required")
+      .oneOf([Yup.ref("password"), null], "Passwords must match"),
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -62,27 +73,40 @@ const Login = (props) => {
     event.preventDefault();
   };
 
-  const loginFormHandler = (em, pswd) => {
-    login({ email: em, password: pswd });
+  const registerFormHandler = async (name, em, pswd) => {
+    const verifyEmailMsg = await register({
+      name: name,
+      email: em,
+      password: pswd,
+    });
+    try {
+      navigate("/", {
+        state: {
+          verifyEmailMsg: verifyEmailMsg.data.message,
+        },
+      });
+      toast.info(`${verifyEmailMsg.data.message}`);
+    } catch (error) {
+      console.log(error);
+      toast.error(`${verifyEmailMsg.error.data.message}`);
+    }
   };
 
   return (
     <Fragment>
-      {loginSuccess || isLoggedIn ? (
-        <Navigate to="/dashboard" replace={true} />
-      ) : null}
-      <Grid container>
-        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+      {isLoggedIn ? <Navigate to="/dashboard" replace={true} /> : null}
+      <Grid container sx={sxProps.authContainer}>
+        <Grid item xs={2} sm={2} md={6} lg={6} xl={6}>
           <Box sx={sxProps.svgLayout}>
             <img src={svgBackground} />
           </Box>
         </Grid>
-        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+        <Grid item xs={2} sm={2} md={6} lg={6} xl={6}>
           <Formik
             initialValues={registData}
             validationSchema={SignupSchema}
             onSubmit={(values, { setSubmitting }) => {
-              loginFormHandler(values.email, values.password);
+              registerFormHandler(values.name, values.email, values.password);
               setSubmitting(false);
             }}
           >
@@ -99,11 +123,11 @@ const Login = (props) => {
             }) => (
               <Form>
                 <Box sx={sxProps.loginFormLayout}>
-                  {loginLoading ? (
+                  {registerLoading ? (
                     <Loader />
                   ) : (
                     <>
-                      <Typography variant="h4">Sign in</Typography>
+                      <Typography variant="h4">Sign up</Typography>
                       <Typography sx={sxProps.typograhyColor}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Nulla porttitor metus leo, ut ullamcorper diam aliquam
@@ -111,17 +135,27 @@ const Login = (props) => {
                         laoreet id
                       </Typography>
                       <TextField
+                        name="name"
+                        type="text"
+                        placeholder="Name"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.name}
+                        error={touched.name && errors.name}
+                        helperText={touched.name && errors.name}
+                      />
+                      <TextField
                         name="email"
                         type="email"
                         placeholder="Email"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.email}
-                        error={errors.email}
-                        helperText={errors.email}
+                        error={touched.email && errors.email}
+                        helperText={touched.email && errors.email}
                       />
 
-                      {loginError && (
+                      {registerError && (
                         <Alert severity="error">
                           User data is not correct!
                         </Alert>
@@ -129,13 +163,12 @@ const Login = (props) => {
                       <TextField
                         name="password"
                         type={showPassword ? "text" : "password"}
-                        id="outlined-adornment-password"
                         placeholder="Password"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.password}
-                        error={errors.password}
-                        helperText={errors.password}
+                        error={touched.password && errors.password}
+                        helperText={touched.password && errors.password}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
@@ -155,26 +188,60 @@ const Login = (props) => {
                           ),
                         }}
                       ></TextField>
-                      {loginError && (
+                      {registerError && (
                         <Alert severity="error">
                           User data is not correct!
                         </Alert>
                       )}
-                      {location.state?.verifyEmailMsg  ? (
-                        <Alert severity="info">
-                          {location.state.verifyEmailMsg}
+                      <TextField
+                        name="confirmpassword"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Confirm password"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.confirmpassword}
+                        error={
+                          touched.confirmpassword && errors.confirmpassword
+                        }
+                        helperText={
+                          touched.confirmpassword && errors.confirmpassword
+                        }
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityIcon />
+                                ) : (
+                                  <VisibilityOffIcon />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      ></TextField>
+                      {registerError && (
+                        <Alert severity="error">
+                          User data is not correct!
                         </Alert>
-                      ) : null}
-                      <Link sx={sxProps.linkColor} href="register">
-                        Sign up
+                      )}
+                      <Link sx={sxProps.linkColor} href="/">
+                        Login
                       </Link>
-                      <Link sx={sxProps.linkColor} href="forgot-password">Forgot password?</Link>
+                      <Link sx={sxProps.linkColor} href="forgot-password">
+                        Forgot password?
+                      </Link>
                       <Button
                         variant="contained"
                         disabled={isSubmitting}
                         onClick={handleSubmit}
                       >
-                        Login
+                        Register
                       </Button>
                     </>
                   )}
@@ -188,4 +255,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default Register;

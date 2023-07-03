@@ -1,16 +1,25 @@
 import * as React from "react";
 import { useState } from "react";
 import { DataGrid, GridValueGetterParams } from "@mui/x-data-grid";
+import ImageIcon from "@mui/icons-material/Image";
+import moment from "moment";
+import Typography from "../../root/components/common/typography";
 
 const columns = [
   {
     field: "name",
     headerName: "Name",
-    type: "number",
+    type: "text",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
-    align: "center",
+    renderCell: ({ row: { name } }) => {
+      return (
+        <Typography sx={{ fontWeight: 600, color: "dimgray" }}>
+          {name}
+        </Typography>
+      );
+    },
   },
   //TODO adjust column names
   {
@@ -40,12 +49,15 @@ const columns = [
   },
   {
     field: "image",
-    headerName: "Document",
+    headerName: "Image",
     type: "file",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
     align: "center",
+    renderCell: () => {
+      return <ImageIcon sx={{ color: "#5fc6cf" }} />; //<-- Mui icons should be put this way here.
+    },
   },
   {
     field: "createdAt",
@@ -55,6 +67,8 @@ const columns = [
     minWidth: 150,
     headerAlign: "center",
     align: "center",
+    valueFormatter: (params) =>
+      moment(params?.value).format("DD/MM/YYYY hh:mm A"),
   },
   {
     field: "updatedAt",
@@ -64,6 +78,8 @@ const columns = [
     minWidth: 150,
     headerAlign: "center",
     align: "center",
+    valueFormatter: (params) =>
+      moment(params?.value).format("DD/MM/YYYY hh:mm A"),
   },
   // {
   //   field: "updatedAt",
@@ -94,28 +110,38 @@ export default function MaterialsTable({
     <DataGrid
       sx={{
         "& .MuiDataGrid-columnHeaders": {
-          backgroundColor: "#8b888f",
+          backgroundColor: "#8e8df5",
           color: "#ffffff",
           borderBottom: "none",
         },
         "& .MuiCheckbox-root": {
-          color: `#666464 !important`,
+          color: `#5d6068 !important`,
         },
-        "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+        "& .MuiDataGrid-cell:focus-within": {
           outline: "none !important",
-       },
+        },
+      }}
+      slotProps={{
+        panel: {
+          sx: {
+            "& .MuiInput-input": {
+              height: "1.2rem",
+            },
+            // '& .MuiDataGrid-filterForm': {
+            //   bgcolor: 'lightblue',
+            // },
+          },
+        },
       }}
       loading={loading}
-      rows={data === undefined || error ? [] : data.products} //TODO improve error handling & implement custom no data overlay
+      rows={data === undefined || error ? [] : data.materials} //TODO improve error handling & implement custom no data overlay
       getRowId={(row) => row._id}
-      rowCount={10}
+      rowCount={data?.pages} //TODO remove ? operator
       columns={columns}
       paginationModel={paginationModel}
       initialState={{
         pagination: {
-          paginationModel: {
-            pageSize: 2,
-          },
+          paginationModel,
         },
       }}
       onRowClick={(material) => onRowsSelectionHandler(material.row._id)}
@@ -126,7 +152,7 @@ export default function MaterialsTable({
       rowSelectionModel={checkboxSelectionModel}
       paginationMode="server"
       onPaginationModelChange={setPaginationModel}
-      pageSizeOptions={[2]}
+      // pageSizeOptions={[4]}
       checkboxSelection
       keepNonExistentRowsSelected
     />

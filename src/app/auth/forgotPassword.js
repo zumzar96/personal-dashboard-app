@@ -21,6 +21,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Link from "../root/components/common/link";
 
 const Register = (props) => {
   const initialRegistData = useMemo(() => {
@@ -79,16 +81,18 @@ const Register = (props) => {
           verifyEmailMsg: verifyEmailMsg.data.message,
         },
       });
+      toast.info(`${verifyEmailMsg.data.message}`);
     } catch (error) {
       console.log(error);
+      toast.error(`${verifyEmailMsg.error.data.message}`);
     }
   };
 
   return (
     <Fragment>
       {isLoggedIn ? <Navigate to="/dashboard" replace={true} /> : null}
-      <Grid container>
-        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+      <Grid container sx={sxProps.authContainer}>
+        <Grid item xs={2} sm={2} md={6} lg={6} xl={6}>
           <Box sx={sxProps.svgLayout}>
             <img src={svgBackground} />
           </Box>
@@ -98,7 +102,7 @@ const Register = (props) => {
             initialValues={registData}
             validationSchema={SignupSchema}
             onSubmit={(values, { setSubmitting }) => {
-                forgotPasswordFormHandler( values.email, values.password);
+              forgotPasswordFormHandler(values.email, values.password);
               setSubmitting(false);
             }}
           >
@@ -212,6 +216,12 @@ const Register = (props) => {
                           User data is not correct!
                         </Alert>
                       )}
+                      <Link sx={sxProps.linkColor} href="register">
+                        Sign up
+                      </Link>
+                      <Link sx={sxProps.linkColor} href="/">
+                        Login
+                      </Link>
                       <Button
                         variant="contained"
                         disabled={isSubmitting}

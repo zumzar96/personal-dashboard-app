@@ -1,9 +1,10 @@
 import { rootApiSlice } from "../root/rootApiSlice";
+
 export const productsApiSlice = rootApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getMaterials: builder.query({
       query: ({ keyword, pageNumber }) => ({
-        url: "/products",//TODO adjust endpoints after finishing with routes
+        url: "/materials", //TODO adjust endpoints after finishing with routes
         params: { keyword, pageNumber },
       }),
       keepUnusedDataFor: 5,
@@ -12,21 +13,18 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
     createMaterial: builder.mutation({
       query(params) {
         return {
-          url: `/products`,
+          url: `/materials`,
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${params.token}`,//TODO place in interceptors 
-          },
           body: {
-            ...params
+            ...params,
           },
         };
       },
       invalidatesTags: ["Materials"],
     }),
     getMaterialById: builder.query({
-      query: ({productId}) => ({
-        url: `/products/${productId}`,//TODO adjust endpoints after finishing with routes
+      query: ({ materialId }) => ({
+        url: `/materials/${materialId}`, //TODO adjust endpoints after finishing with routes
       }),
       keepUnusedDataFor: 5,
       providesTags: ["Material"],
@@ -34,13 +32,10 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
     editMaterial: builder.mutation({
       query(params) {
         return {
-          url: `/products/${params.id}`,
+          url: `/materials/${params.id}`,
           method: "PUT",
-          headers: {
-            Authorization: `Bearer ${params.token}`,//TODO place in interceptors 
-          },
           body: {
-            ...params
+            ...params,
           },
         };
       },
@@ -48,13 +43,10 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
     }),
     deleteMaterials: builder.mutation({
       query: (params) => ({
-        url: `/products/delete`,
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${params.token}`,//TODO place in interceptors 
-        },
+        url: `/materials/delete`,
+        method: "DELETE",
         body: {
-          ...params
+          id: params.id,
         },
       }),
       invalidatesTags: ["Materials"],
@@ -62,7 +54,7 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
     uploadMaterialImage: builder.mutation({
       query: (data) => ({
         url: `/upload`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
@@ -75,5 +67,5 @@ export const {
   useCreateMaterialMutation,
   useEditMaterialMutation,
   useDeleteMaterialsMutation,
-  useUploadMaterialImageMutation
+  useUploadMaterialImageMutation,
 } = productsApiSlice;

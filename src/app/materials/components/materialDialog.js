@@ -18,24 +18,20 @@ import {
   useUploadMaterialImageMutation,
   useEditMaterialMutation,
 } from "../materialsApiSlice";
-import { useSelector } from "react-redux";
 import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
 import Paper from "@mui/material/Paper";
 import ImageDialog from "./imageDialog.js";
-import { toast } from "react-toastify";
 
 const MaterialDialog = ({
-  open,
-  setOpen,
+  openMaterialDialog,
+  setOpenMaterialDialog,
   viewMaterialMode,
   setViewMaterialMode,
   materialById,
 }) => {
-  const user_info = useSelector((state) => state.login.user_info);
   const initialRegistData = useMemo(() => {
     return {
-      token: user_info.token,
       name: "",
       price: 0,
       image: "",
@@ -51,21 +47,11 @@ const MaterialDialog = ({
   const [openImageDialog, setOpenImageDialog] = useState(false);
   const [
     createMaterial,
-    {
-      isLoading: createMaterialLoading,
-      isError: createMaterialError,
-      isSuccess: createMaterialSuccess,
-      reset: materialCreateResetMuatation,
-    },
+    { isLoading: createMaterialLoading, reset: materialCreateResetMuatation },
   ] = useCreateMaterialMutation();
   const [
     editMaterial,
-    {
-      isLoading: editMaterialLoading,
-      isError: editMaterialError,
-      isSuccess: editMaterialSuccess,
-      reset: materialEditResetMuatation,
-    },
+    { isLoading: editMaterialLoading, reset: materialEditResetMuatation },
   ] = useEditMaterialMutation();
   const [
     uploadMaterialImage,
@@ -94,7 +80,6 @@ const MaterialDialog = ({
     if (!e.target.files) {
       return;
     }
-    const file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
 
@@ -107,15 +92,16 @@ const MaterialDialog = ({
     }
   };
 
+  //TODO refactor
   const submmitMaterialHandler = (params) => {
     if (editMaterialMode) {
       editMaterial(params);
-      materialEditResetMuatation();
-      setOpen(false);
+      // materialEditResetMuatation();
+      setOpenMaterialDialog(false);
     } else {
       createMaterial(params);
-      materialCreateResetMuatation();
-      setOpen(false);
+      // materialCreateResetMuatation();
+      setOpenMaterialDialog(false);
     }
     setEditMaterialMode(false);
     setViewMaterialMode(false);
@@ -123,7 +109,7 @@ const MaterialDialog = ({
     setFilename(initialRegistData.image);
   };
 
-  const removeFileHandler = (data, setFieldValue) => {
+  const removeFileHandler = (setFieldValue) => {
     setFilename(initialRegistData.image);
     setFieldValue("image", initialRegistData.image);
   };
@@ -134,44 +120,18 @@ const MaterialDialog = ({
   };
 
   const closeDialogHandler = () => {
-    setOpen(false);
+    setOpenMaterialDialog(false);
     // resetForm();TODO implement reset form function
     setFilename(initialRegistData.image);
-    materialCreateResetMuatation();
+    // materialCreateResetMuatation();
     setRegistData(initialRegistData); //TODO adjust mutation reset
     // dispatch(rootApiSlice.util.resetApiState());TODO adjust mutatuon cache flow
     setEditMaterialMode(false);
   };
 
   const openImageDialogHandler = () => {
-    setOpenImageDialog(open);
+    setOpenImageDialog(true);
   };
-
-  console.log(
-    "createMaterialLoading, editMaterialLoading",
-    createMaterialLoading,
-    editMaterialLoading
-  );
-
-  console.log(
-    "createMaterialSuccess,editMaterialSuccess",
-    createMaterialSuccess,
-    editMaterialSuccess
-  );
-  console.log(
-    "createMaterialSuccess || editMaterialSuccess",
-    createMaterialSuccess || editMaterialSuccess
-  );
-
-  useEffect(() => {
-    console.log("hoce use Effect va ifa")
-    if (createMaterialSuccess || editMaterialSuccess) {
-      console.log("hoceee useEfff material dialog");
-      setOpen(false);
-      setFilename(initialRegistData.image);
-      toast.success("MY SUCCESS");
-    }
-  }, [createMaterialLoading, editMaterialLoading]);
 
   useEffect(() => {
     //TODO setting initial state
@@ -196,10 +156,20 @@ const MaterialDialog = ({
   return (
     <Dialog
       sx={sxProps.dialogMainContainer}
-      open={open}
+      open={openMaterialDialog}
       onClose={closeDialogHandler}
     >
-      <DialogTitle sx={sxProps.dialogTitleContainer}>Create</DialogTitle>
+      <DialogTitle sx={sxProps.dialogTitleContainer}>
+        {materialById.isFetching ? (
+          <Loader></Loader>
+        ) : editMaterialMode ? (
+          "Edit"
+        ) : viewMaterialMode ? (
+          "View"
+        ) : (
+          "Crete"
+        )}
+      </DialogTitle>
       <DialogContent>
         <Box sx={sxProps.dialogContainer}>
           <Formik
@@ -282,9 +252,7 @@ const MaterialDialog = ({
                               sx={sxProps.iconButtonWraper}
                               aria-label="delete"
                               disabled={viewMaterialMode}
-                              onClick={(e) =>
-                                removeFileHandler(e, setFieldValue)
-                              }
+                              onClick={() => removeFileHandler(setFieldValue)}
                             >
                               <CancelTwoToneIcon />
                             </IconButton>
@@ -390,12 +358,12 @@ const MaterialDialog = ({
                   label="Description"
                   disabled={viewMaterialMode}
                 ></FormInput>
-                {createMaterialError || editMaterialError ? (
+                {materialById.isError ? (
                   <Alert
                     sx={sxProps.fullWdithFormInputContainer}
                     severity="error"
                   >
-                    Create material error
+                    Error while viewing material
                   </Alert>
                 ) : null}
                 <DialogActions>

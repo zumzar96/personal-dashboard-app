@@ -27,7 +27,7 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../../login/loginSlice";
+import { logout } from "../../../auth/loginSlice";
 import { Navigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
@@ -141,7 +141,7 @@ export default function MiniDrawer({ children }) {
   return (
     <>
       {isLoggedIn ? (
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", height: "46.6rem", }}>
           <CssBaseline />
           <AppBar position="fixed" open={open}>
             <Toolbar>
@@ -232,6 +232,7 @@ export default function MiniDrawer({ children }) {
                         minHeight: 48,
                         justifyContent: open ? "initial" : "center",
                         px: 2.5,
+                        color: "#8b888f",
                       }}
                     >
                       <ListItemIcon
@@ -245,7 +246,8 @@ export default function MiniDrawer({ children }) {
                       </ListItemIcon>
                       <ListItemText
                         primary={text}
-                        sx={{ opacity: open ? 1 : 0 }}
+                        sx={{ opacity: open ? 1 : 0, color: "#2f4f4f" }}
+                        // sx={{ color: "#2f4f4f" }}
                       />
                     </ListItemButton>
                   </ListItem>
@@ -268,6 +270,7 @@ export default function MiniDrawer({ children }) {
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
+                      color: "#8b888f",
                     }}
                     // to={`${pathname}/materials`}
                     // disable={pathname === `${pathname}/materials`}
@@ -285,7 +288,7 @@ export default function MiniDrawer({ children }) {
                     </ListItemIcon>
                     <ListItemText
                       primary={text}
-                      sx={{ opacity: open ? 1 : 0 }}
+                      sx={{ opacity: open ? 1 : 0, color: "#2f4f4f" }}
                     />
                   </ListItemButton>
                 </ListItem>
@@ -296,12 +299,7 @@ export default function MiniDrawer({ children }) {
         </Box>
       ) : (
         <>
-          {location.pathname === "/register" ? (
-            <Navigate to="/register"></Navigate>
-          ) : (
-            <Navigate to="/"></Navigate>
-          )}
-          {children}
+          <Navigate to="/"></Navigate>
         </>
       )}
     </>

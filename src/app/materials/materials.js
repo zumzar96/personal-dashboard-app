@@ -6,7 +6,6 @@ import MaterialsTable from "./components/materialsTable";
 import {
   useGetMaterialsQuery,
   useLazyGetMaterialByIdQuery,
-  useDeleteMaterialsMutation,
 } from "./materialsApiSlice";
 import BreadcrumbPath from "../root/components/common/breadcrumb";
 import { mdiTableAccount, mdiLandPlots } from "@mdi/js";
@@ -14,143 +13,129 @@ import SearchInput from "../root/components/common/input";
 import CreateButton from "../root/components/common/button";
 import MaterialDialog from "./components/materialDialog";
 import DeleteMaterialDialog from "./components/materialDeleteDialog";
-import Dialog from "@mui/material/Dialog/Dialog";
-import Alert from "../root/components/common/alert"
+import * as sxProps from "./styles/styles.ts";
 
 const Materials = () => {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
-  const [open, setOpen] = useState(false);
+  const [openMaterialDialog, setOpenMaterialDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [viewMaterialMode, setViewMaterialMode] = useState(false);
   const [paginationModel, setPaginationModel] = useState({
-    page: 1,
-    pageSize: 2,
+    page: 0,
+    pageSize: 1,
   });
 
-  const { data, isLoading, isError, isFetching } = useGetMaterialsQuery({
+  const { data, isError, isFetching } = useGetMaterialsQuery({
     keyword,
     pageNumber: paginationModel.page,
   });
-
-  const [{ isSuccess: deleteMaterialsSuccess }] = useDeleteMaterialsMutation();
 
   const [checkboxSelectionModel, setCheckboxSelectionModel] = useState([]);
 
   const [getMaterialByIdOnRowClick, result] = useLazyGetMaterialByIdQuery();
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const createMaterialHandler = () => {
+    setOpenMaterialDialog(true);
     setViewMaterialMode(false);
   };
 
-  const handleClicDeletekOpen = () => {
+  const deleteMaterialHandler = () => {
     setOpenDeleteDialog(true);
   };
 
   const onRowsSelectionHandler = (materialId) => {
-    getMaterialByIdOnRowClick({ productId: materialId });
+    getMaterialByIdOnRowClick({ materialId });
     setViewMaterialMode(true);
-    setOpen(true);
+    setOpenMaterialDialog(true);
   };
-
 
   return (
     //TODO refactor grid layout code
-    <Grid container item={true} xs={10} sm={10} md={10} lg={12} xl={12}>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+    <Grid
+      container
+      sx={sxProps.gridContainer}
+      xs={10}
+      sm={10}
+      md={10}
+      lg={12}
+      xl={12}
+    >
+      <Grid
+        sx={sxProps.gridItemWrapper}
+        item
+      >
         <Box
-          sx={{
-            marginTop: "5rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-            width: "100%",
-            alignItems: "center",
-          }}
+          sx={sxProps.breadcrumbWrapper}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              width: "82%",
-            }}
+          <BreadcrumbPath
+            breadcrumbPath={[
+              {
+                pathName: "Dashboard",
+                icon: mdiTableAccount,
+              },
+              {
+                pathName: "Materials",
+                icon: mdiLandPlots,
+              },
+            ]}
+          />
+        </Box>
+        <Box
+          sx={sxProps.buttonWrapper}
+        >
+          <CreateButton
+            disabled={!checkboxSelectionModel.length}
+            variant="contained"
+            onClick={deleteMaterialHandler}
           >
-            <BreadcrumbPath
-              breadcrumbPath={[
-                {
-                  pathName: "Dashboard",
-                  icon: mdiTableAccount,
-                },
-                {
-                  pathName: "Materials",
-                  icon: mdiLandPlots,
-                },
-              ]}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              width: "82%",
-              gap: "1rem",
-            }}
-          >
-            <CreateButton
-              disabled={!checkboxSelectionModel.length}
-              variant="contained"
-              onClick={handleClicDeletekOpen}
-            >
-              Delete
-            </CreateButton>
-            <CreateButton variant="contained" onClick={handleClickOpen}>
-              Create
-            </CreateButton>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              width: "82%",
-            }}
-          >
-            {/* TODO add separate filter component including search' */}
-            <SearchInput
-              sx={{
-                input: {
-                  height: "0.7rem",
-                },
-              }}
-              id={"search_input"}
-              onChange={(e) => setKeyword(e.target.value)}
-              label={"Search"}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              height: "30rem",
-              width: "82%",
-            }}
-          >
-            <MaterialsTable
-              data={data}
-              paginationModel={paginationModel}
-              setPaginationModel={setPaginationModel}
-              error={isError}
-              loading={isFetching}
-              onRowsSelectionHandler={onRowsSelectionHandler}
-              checkboxSelectionModel={checkboxSelectionModel}
-              setCheckboxSelectionModel={setCheckboxSelectionModel}
-            />
-          </Box>
+            Delete
+          </CreateButton>
+          <CreateButton variant="contained" onClick={createMaterialHandler}>
+            Create
+          </CreateButton>
+        </Box>
+        <Box
+          sx={sxProps.inputWrapper}
+        >
+          {/* TODO add separate filter component including search' */}
+          <SearchInput
+            //TODO
+            //sx={{
+            // input: {
+            //   height: "0.7rem",
+            // },
+            // "& .MuiInputLabel-shrink": {
+            //   transform: "translate(14px, -8px) scale(0.8) !important",
+            // },
+            // "& .MuiInputLabel-outlined": {
+            //   transform: "translate(14px, 9px) scale(1) ",
+            // },
+            //}}
+            id={"search_input"}
+            onChange={(e) => setKeyword(e.target.value)}
+            label={"Search"}
+          />
+        </Box>
+        <Box
+          sx={sxProps.tableWrapper}
+        >
+          <MaterialsTable
+            data={data}
+            paginationModel={paginationModel}
+            setPaginationModel={setPaginationModel}
+            error={isError}
+            loading={isFetching}
+            onRowsSelectionHandler={onRowsSelectionHandler}
+            checkboxSelectionModel={checkboxSelectionModel}
+            setCheckboxSelectionModel={setCheckboxSelectionModel}
+          />
         </Box>
       </Grid>
       <MaterialDialog
         setViewMaterialMode={setViewMaterialMode}
         viewMaterialMode={viewMaterialMode}
-        open={open}
-        setOpen={setOpen} //TODO wrape in separate handler function
+        openMaterialDialog={openMaterialDialog}
+        setOpenMaterialDialog={setOpenMaterialDialog} //TODO wrape in separate handler function
         materialById={result}
       ></MaterialDialog>
       <DeleteMaterialDialog
@@ -159,9 +144,6 @@ const Materials = () => {
         checkboxSelectionModel={checkboxSelectionModel} //TODO wrape in separate handler function
         setCheckboxSelectionModel={setCheckboxSelectionModel}
       ></DeleteMaterialDialog>
-      <Dialog open={deleteMaterialsSuccess}>
-        <Alert>Succes</Alert>
-      </Dialog>
     </Grid>
   );
 };
