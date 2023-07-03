@@ -50,101 +50,118 @@ const Materials = () => {
 
   return (
     //TODO refactor grid layout code
-    <Grid container item={true} xs={10} sm={10} md={10} lg={12} xl={12}>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+    <Grid
+      container
+      sx={{
+        display: "flex",
+        // backgroundColor: "green",
+        flexDirection: "column-reverse",
+        height: "100%"
+         
+
+      }}
+      xs={10}
+      sm={10}
+      md={10}
+      lg={12}
+      xl={12}
+    >
+      <Grid
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.5rem",
+          width: "100%",
+          height: "90%",
+          alignItems: "center",
+          // backgroundColor: "yellow",
+        }}
+        item
+      >
         <Box
           sx={{
-            marginTop: "5rem",
             display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-            width: "100%",
-            alignItems: "center",
+            justifyContent: "flex-end",
+            width: "95%",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              width: "82%",
-            }}
+          <BreadcrumbPath
+            breadcrumbPath={[
+              {
+                pathName: "Dashboard",
+                icon: mdiTableAccount,
+              },
+              {
+                pathName: "Materials",
+                icon: mdiLandPlots,
+              },
+            ]}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            width: "95%",
+            gap: "1rem",
+          }}
+        >
+          <CreateButton
+            disabled={!checkboxSelectionModel.length}
+            variant="contained"
+            onClick={deleteMaterialHandler}
           >
-            <BreadcrumbPath
-              breadcrumbPath={[
-                {
-                  pathName: "Dashboard",
-                  icon: mdiTableAccount,
-                },
-                {
-                  pathName: "Materials",
-                  icon: mdiLandPlots,
-                },
-              ]}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              width: "82%",
-              gap: "1rem",
-            }}
-          >
-            <CreateButton
-              disabled={!checkboxSelectionModel.length}
-              variant="contained"
-              onClick={deleteMaterialHandler}
-            >
-              Delete
-            </CreateButton>
-            <CreateButton variant="contained" onClick={createMaterialHandler}>
-              Create
-            </CreateButton>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              width: "82%",
-            }}
-          >
-            {/* TODO add separate filter component including search' */}
-            <SearchInput
+            Delete
+          </CreateButton>
+          <CreateButton variant="contained" onClick={createMaterialHandler}>
+            Create
+          </CreateButton>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            width: "95%",
+          }}
+        >
+          {/* TODO add separate filter component including search' */}
+          <SearchInput
             //TODO
-              //sx={{
-                // input: {
-                //   height: "0.7rem",
-                // },
-                // "& .MuiInputLabel-shrink": {
-                //   transform: "translate(14px, -8px) scale(0.8) !important",
-                // },
-                // "& .MuiInputLabel-outlined": {
-                //   transform: "translate(14px, 9px) scale(1) ",
-                // },
-              //}}
-              id={"search_input"}
-              onChange={(e) => setKeyword(e.target.value)}
-              label={"Search"}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              height: "30rem",
-              width: "82%",
-            }}
-          >
-            <MaterialsTable
-              data={data}
-              paginationModel={paginationModel}
-              setPaginationModel={setPaginationModel}
-              error={isError}
-              loading={isFetching}
-              onRowsSelectionHandler={onRowsSelectionHandler}
-              checkboxSelectionModel={checkboxSelectionModel}
-              setCheckboxSelectionModel={setCheckboxSelectionModel}
-            />
-          </Box>
+            //sx={{
+            // input: {
+            //   height: "0.7rem",
+            // },
+            // "& .MuiInputLabel-shrink": {
+            //   transform: "translate(14px, -8px) scale(0.8) !important",
+            // },
+            // "& .MuiInputLabel-outlined": {
+            //   transform: "translate(14px, 9px) scale(1) ",
+            // },
+            //}}
+            id={"search_input"}
+            onChange={(e) => setKeyword(e.target.value)}
+            label={"Search"}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            height: "75%",
+            width: "95%",
+            paddingBottom: "35px",
+
+          }}
+        >
+          <MaterialsTable
+            data={data}
+            paginationModel={paginationModel}
+            setPaginationModel={setPaginationModel}
+            error={isError}
+            loading={isFetching}
+            onRowsSelectionHandler={onRowsSelectionHandler}
+            checkboxSelectionModel={checkboxSelectionModel}
+            setCheckboxSelectionModel={setCheckboxSelectionModel}
+          />
         </Box>
       </Grid>
       <MaterialDialog

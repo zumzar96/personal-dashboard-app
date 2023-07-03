@@ -110,12 +110,12 @@ export default function MaterialsTable({
     <DataGrid
       sx={{
         "& .MuiDataGrid-columnHeaders": {
-          backgroundColor: "#818b81",
+          backgroundColor: "#8e8df5",
           color: "#ffffff",
           borderBottom: "none",
         },
         "& .MuiCheckbox-root": {
-          color: `#5d685d !important`,
+          color: `#5d6068 !important`,
         },
         "& .MuiDataGrid-cell:focus-within": {
           outline: "none !important",

@@ -25,7 +25,6 @@ import IconButton from "@mui/material/IconButton";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
-
 const Login = (props) => {
   const initialRegistData = useMemo(() => {
     return {
@@ -79,13 +78,13 @@ const Login = (props) => {
       {loginSuccess || isLoggedIn ? (
         <Navigate to="/dashboard" replace={true} />
       ) : null}
-      <Grid container>
-        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+      <Grid container sx={sxProps.authContainer}>
+        <Grid item xs={2} sm={2} md={6} lg={6} xl={6}>
           <Box sx={sxProps.svgLayout}>
             <img src={svgBackground} />
           </Box>
         </Grid>
-        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+        <Grid item xs={10} sm={10} md={6} lg={6} xl={6}>
           <Formik
             initialValues={registData}
             validationSchema={SignupSchema}
@@ -112,12 +111,6 @@ const Login = (props) => {
                   ) : (
                     <>
                       <Typography variant="h4">Sign in</Typography>
-                      <Typography sx={sxProps.typograhyColor}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nulla porttitor metus leo, ut ullamcorper diam aliquam
-                        quis. Ut accumsan lorem ligula, aliquet placerat ipsum
-                        laoreet id
-                      </Typography>
                       <TextField
                         name="email"
                         type="email"
@@ -168,7 +161,7 @@ const Login = (props) => {
                           User data is not correct!
                         </Alert>
                       )}
-                      {location.state?.verifyEmailMsg  ? (
+                      {location.state?.verifyEmailMsg ? (
                         <Alert severity="info">
                           {location.state.verifyEmailMsg}
                         </Alert>
@@ -176,7 +169,9 @@ const Login = (props) => {
                       <Link sx={sxProps.linkColor} href="register">
                         Sign up
                       </Link>
-                      <Link sx={sxProps.linkColor} href="forgot-password">Forgot password?</Link>
+                      <Link sx={sxProps.linkColor} href="forgot-password">
+                        Forgot password?
+                      </Link>
                       <Button
                         variant="contained"
                         disabled={isSubmitting}

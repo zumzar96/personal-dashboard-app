@@ -138,11 +138,10 @@ export default function MiniDrawer({ children }) {
     dispatch(logout());
   };
 
-
   return (
     <>
       {isLoggedIn ? (
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", height: "46.6rem", }}>
           <CssBaseline />
           <AppBar position="fixed" open={open}>
             <Toolbar>

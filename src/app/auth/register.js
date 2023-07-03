@@ -95,13 +95,13 @@ const Register = (props) => {
   return (
     <Fragment>
       {isLoggedIn ? <Navigate to="/dashboard" replace={true} /> : null}
-      <Grid container>
-        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+      <Grid container sx={sxProps.authContainer}>
+        <Grid item xs={2} sm={2} md={6} lg={6} xl={6}>
           <Box sx={sxProps.svgLayout}>
             <img src={svgBackground} />
           </Box>
         </Grid>
-        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+        <Grid item xs={2} sm={2} md={6} lg={6} xl={6}>
           <Formik
             initialValues={registData}
             validationSchema={SignupSchema}
@@ -233,7 +233,9 @@ const Register = (props) => {
                       <Link sx={sxProps.linkColor} href="/">
                         Login
                       </Link>
-                      <Link sx={sxProps.linkColor} href="forgot-password">Forgot password?</Link>
+                      <Link sx={sxProps.linkColor} href="forgot-password">
+                        Forgot password?
+                      </Link>
                       <Button
                         variant="contained"
                         disabled={isSubmitting}

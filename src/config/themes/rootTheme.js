@@ -4,11 +4,11 @@ import { createTheme } from "@mui/material/styles";
 const rootTheme = createTheme({
   palette: {
     primary: {
-      main: "#818b81",
+      main: "#7c7af8",
     },
     secondary: {
       // This is green.A700 as hex.
-      main: "#9b9b9b",
+      main: "#808080",
     },
   },
   components: {
