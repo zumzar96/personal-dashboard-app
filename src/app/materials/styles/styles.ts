@@ -1,5 +1,47 @@
 import { SxProps } from "@mui/material";
 
+const gridContainer: SxProps = {
+    display: "flex",
+    // backgroundColor: "green",
+    flexDirection: "column-reverse",
+    height: "100%"
+};
+
+const gridItemWrapper: SxProps = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+    width: "100%",
+    height: "90%",
+    alignItems: "center",
+};
+
+const breadcrumbWrapper: SxProps = {
+    display: "flex",
+    justifyContent: "flex-end",
+    width: "95%",
+};
+
+const buttonWrapper: SxProps = {
+    display: "flex",
+    justifyContent: "flex-end",
+    width: "95%",
+    gap: "1rem",
+};
+
+const inputWrapper: SxProps = {
+    display: "flex",
+    justifyContent: "flex-end",
+    width: "95%",
+}
+
+const tableWrapper: SxProps = {
+    display: "flex",
+    height: "75%",
+    width: "95%",
+    paddingBottom: "35px",
+}
+
 const dialogMainContainer: SxProps = {
     maxHeight: "45rem",
 };
@@ -75,4 +117,4 @@ const imageDialogWraper : SxProps ={
 
 
 
-export {dialogMainContainer, imageDialogWraper, iconButtonWraper, inputImageWraper, imagePaperWraper, dialogContainer, formInputContainer, dialogTitleContainer, uploadButtonContainer, fullWdithFormInputContainer };
+export {tableWrapper, inputWrapper, buttonWrapper, breadcrumbWrapper, gridItemWrapper, gridContainer, dialogMainContainer, imageDialogWraper, iconButtonWraper, inputImageWraper, imagePaperWraper, dialogContainer, formInputContainer, dialogTitleContainer, uploadButtonContainer, fullWdithFormInputContainer };

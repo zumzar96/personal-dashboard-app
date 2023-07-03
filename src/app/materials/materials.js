@@ -13,6 +13,7 @@ import SearchInput from "../root/components/common/input";
 import CreateButton from "../root/components/common/button";
 import MaterialDialog from "./components/materialDialog";
 import DeleteMaterialDialog from "./components/materialDeleteDialog";
+import * as sxProps from "./styles/styles.ts";
 
 const Materials = () => {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
@@ -52,14 +53,7 @@ const Materials = () => {
     //TODO refactor grid layout code
     <Grid
       container
-      sx={{
-        display: "flex",
-        // backgroundColor: "green",
-        flexDirection: "column-reverse",
-        height: "100%"
-         
-
-      }}
+      sx={sxProps.gridContainer}
       xs={10}
       sm={10}
       md={10}
@@ -67,23 +61,11 @@ const Materials = () => {
       xl={12}
     >
       <Grid
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.5rem",
-          width: "100%",
-          height: "90%",
-          alignItems: "center",
-          // backgroundColor: "yellow",
-        }}
+        sx={sxProps.gridItemWrapper}
         item
       >
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            width: "95%",
-          }}
+          sx={sxProps.breadcrumbWrapper}
         >
           <BreadcrumbPath
             breadcrumbPath={[
@@ -99,12 +81,7 @@ const Materials = () => {
           />
         </Box>
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            width: "95%",
-            gap: "1rem",
-          }}
+          sx={sxProps.buttonWrapper}
         >
           <CreateButton
             disabled={!checkboxSelectionModel.length}
@@ -118,11 +95,7 @@ const Materials = () => {
           </CreateButton>
         </Box>
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            width: "95%",
-          }}
+          sx={sxProps.inputWrapper}
         >
           {/* TODO add separate filter component including search' */}
           <SearchInput
@@ -144,13 +117,7 @@ const Materials = () => {
           />
         </Box>
         <Box
-          sx={{
-            display: "flex",
-            height: "75%",
-            width: "95%",
-            paddingBottom: "35px",
-
-          }}
+          sx={sxProps.tableWrapper}
         >
           <MaterialsTable
             data={data}
