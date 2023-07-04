@@ -5,6 +5,8 @@ export const productsApiSlice = rootApiSlice.injectEndpoints({
     getMaterials: builder.query({
       query: ({ keyword, pageNumber }) => ({
         url: "/materials", //TODO adjust endpoints after finishing with routes
+        method: "GET",
+        mode:'cors',
         params: { keyword, pageNumber },
       }),
       keepUnusedDataFor: 5,

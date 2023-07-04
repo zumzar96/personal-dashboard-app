@@ -141,7 +141,7 @@ export default function MiniDrawer({ children }) {
   return (
     <>
       {isLoggedIn ? (
-        <Box sx={{ display: "flex", height: "46.6rem", }}>
+        <Box sx={{ display: "flex", height: "46.6rem" }}>
           <CssBaseline />
           <AppBar position="fixed" open={open}>
             <Toolbar>
@@ -256,43 +256,45 @@ export default function MiniDrawer({ children }) {
             </List>
             <Divider />
             <List>
-              {["All mail", "Trash", "Spam"].map((text, index) => (
-                <ListItem
-                  key={"materials"}
-                  disablePadding
-                  sx={{ display: "block" }}
-                  // onClick={() => navigate(`${pathname}/materials`)}
-                  to={`materials`}
-                  component={Link}
-                >
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? "initial" : "center",
-                      px: 2.5,
-                      color: "#8b888f",
-                    }}
-                    // to={`${pathname}/materials`}
-                    // disable={pathname === `${pathname}/materials`}
-                    // onClick={() => navigate("/materials")}
-                    // component={Link}
+              {["materials", "facilities", "Spam", "Route"].map(
+                (text, index) => (
+                  <ListItem
+                    key={text}
+                    disablePadding
+                    sx={{ display: "block" }}
+                    // onClick={() => navigate(`${pathname}/materials`)}
+                    to={text}
+                    component={Link}
                   >
-                    <ListItemIcon
+                    <ListItemButton
                       sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
+                        color: "#8b888f",
                       }}
+                      // to={`${pathname}/materials`}
+                      // disable={pathname === `${pathname}/materials`}
+                      // onClick={() => navigate("/materials")}
+                      // component={Link}
                     >
-                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={text}
-                      sx={{ opacity: open ? 1 : 0, color: "#2f4f4f" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={text}
+                        sx={{ opacity: open ? 1 : 0, color: "#2f4f4f" }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                )
+              )}
             </List>
           </Drawer>
           <>{children}</>
