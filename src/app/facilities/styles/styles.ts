@@ -1,3 +1,4 @@
+import { mdiBorderAll } from "@mdi/js";
 import { SxProps } from "@mui/material";
 
 const gridContainer: SxProps = {
@@ -35,30 +36,40 @@ const inputWrapper: SxProps = {
     width: "95%",
 }
 
-const facilitiesWrapper: SxProps = {
+const warehouseWrapper: SxProps = {
     display: "flex",
     height: "75%",
     width: "95%",
     paddingBottom: "35px",
-    backgroundColor:'yellow',
-    justifyContent:'space-between'
+    // backgroundColor:'yellow',
+    justifyContent:'space-between',
+    
 }
 
-const mapWrapper: SxProps = {
+const mapContainerWrapper: SxProps = {
     display: "flex",
     flexDirection:'column',
     height: "100%",
-    width: "80%",
+    width: "70%",
     // paddingBottom: "35px",
-    backgroundColor:'red'
+    // backgroundColor:'red',
+    borderRadius: 1,
+    
 }
 
-const facilityMaterialsWrapper: SxProps = {
+const materialsIconBoxWrapper: SxProps = {
+    padding:'1.8rem',
     display: "flex",
+    gap:'0.5rem',
     height: "100%",
-    width: "15%",
+    width: "25%",
     // paddingBottom: "35px",
-    backgroundColor:'green'
+    // backgroundColor:'green',
+    justifyContent:'center',
+    flexWrap:'wrap',
+    overflow: "auto",
+    borderRadius: 1,
+    backgroundColor:"#ddd"
 }
 
 const dialogMainContainer: SxProps = {
@@ -131,9 +142,26 @@ const imageDialogWraper : SxProps ={
           xl: "50rem",
         },
 }
+const boxMaterialWrapper : SxProps ={
+    display: "flex",
+    width: "4rem",
+    height: "5rem",
+    flexDirection: "column",
+    justifyContent: "center",
+}
+
+const boxMaterialTextWrapper : SxProps ={
+    width: "4rem",
+    display: "inline-block",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    // display: "-webkit-box",
+    whiteSpace: "nowrap",
+    "-webkit-line-clamp": 1,
+    "-webkit-box-orient": "vertical",
+}
 
 
 
 
-
-export {facilityMaterialsWrapper ,facilitiesWrapper , mapWrapper, inputWrapper, buttonWrapper, breadcrumbWrapper, gridItemWrapper, gridContainer, dialogMainContainer, imageDialogWraper, iconButtonWraper, inputImageWraper, imagePaperWraper, dialogContainer, formInputContainer, dialogTitleContainer, uploadButtonContainer, fullWdithFormInputContainer };
+export {boxMaterialTextWrapper,boxMaterialWrapper,materialsIconBoxWrapper ,warehouseWrapper , mapContainerWrapper, inputWrapper, buttonWrapper, breadcrumbWrapper, gridItemWrapper, gridContainer, dialogMainContainer, imageDialogWraper, iconButtonWraper, inputImageWraper, imagePaperWraper, dialogContainer, formInputContainer, dialogTitleContainer, uploadButtonContainer, fullWdithFormInputContainer };

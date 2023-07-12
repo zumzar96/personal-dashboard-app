@@ -110,12 +110,6 @@ export default function MiniDrawer({ children }) {
 
   const { pathname } = useLocation();
 
-  console.log("pathname", pathname);
-
-  console.log(
-    "pathname === `${pathname}/materials`",
-    pathname === `${pathname}/materials`
-  );
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -256,7 +250,7 @@ export default function MiniDrawer({ children }) {
             </List>
             <Divider />
             <List>
-              {["materials", "facilities", "Spam", "Route"].map(
+              {["materials", "warehouse", "Spam", "Route"].map(
                 (text, index) => (
                   <ListItem
                     key={text}
