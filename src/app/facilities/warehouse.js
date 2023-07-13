@@ -9,92 +9,96 @@ import CreateButton from "../root/components/common/button.js";
 import SearchInput from "../root/components/common/input.js";
 import SvgIconC from "../../assets/svg/fabric-material-svgrepo-com.svg";
 import { MapContainer } from "react-leaflet";
-import { LatLngBounds } from "leaflet";
-import { Icon } from "leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import SvgIcon from "@mui/material/SvgIcon";
 import ImageMap from "./components/imageMap.js";
 import {
   useGetWarehouseMaterialsQuery,
   useWarehouseMaterialCordinatesMutation,
 } from "./warehouseApiSlice.js";
+import Loader from "../root/components/common/loader.js";
+import { toast } from "react-toastify";
+import WarehouseMaterialsIconsBox from "./components/iconsBox.js";
 
 const Warehouse = () => {
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
-  const [materialsLocation, setMaterialsLocation] = useState([]);
-
-  const [map, setMap] = useState();
-
-  const [removeFromMapMaterial, setRemoveFromMapMaterial] = useState();
-
   const [isMapInteractive, setIsMapInteractive] = useState(false);
+  const [currentMapMaterials, setCurrentMapMaterials] = useState([]);
+  const [iconBoxMaterials, setIconBoxMaterials] = useState([]);
+  const [map, setMap] = useState();
+  const [
+    setWarehouseMaterialCordinates,
+    {
+      isLoading: setWarehouseMaterialCordinatesLoading,
+      isError: setWarehouseMaterialCordinatesError,
+      reset: materialCreateResetMuatation,
+    },
+  ] = useWarehouseMaterialCordinatesMutation();
 
-  const { data, isError, isFetching } = useGetWarehouseMaterialsQuery({
+  const {
+    data: werehouseMaterials,
+    isError: warehouseMaterialsError,
+    isFetching: warehouseMaterialsFetching,
+    isLoading: warehouseMaterialsLoading,
+  } = useGetWarehouseMaterialsQuery({
     keyword,
   });
 
-  const [currentMapMaterials, setCurrentMapMaterials] = useState([]);
-
-  const [setWarehouseMaterialCordinates] =
-    useWarehouseMaterialCordinatesMutation();
-
-  const [draggedMaterial, setDraggedMaterial] = useState();
-
-  const [drop, setDrop] = useState(false);
-
-  const onDragHandler = (e, widgetType) => {
-    setDraggedMaterial(widgetType);
+  const onDragHandler = (e, draggedMaterial) => {
+    e.dataTransfer.setData(`draggedMaterial`, JSON.stringify(draggedMaterial));
   };
 
   const onDropHandler = (e) => {
+    const draggedMaterial = JSON.parse(
+      e.dataTransfer.getData("draggedMaterial")
+    );
     const rect = e.target.getBoundingClientRect();
     const coordinates = map.containerPointToLatLng(
       L.point([e.clientX - rect.left, e.clientY - rect.top])
     );
-
-    setDraggedMaterial((prevState) => ({
-      ...prevState,
-      cordinates: coordinates,
-    }));
-    setDrop(!drop);
+    draggedMaterial.cordinates = coordinates;
+    setIconBoxMaterials(
+      iconBoxMaterials.filter((item) => draggedMaterial._id !== item._id)
+    );
+    setCurrentMapMaterials([...currentMapMaterials, draggedMaterial]);
   };
 
-  const interactMapHandler = (e) => {
+  const mapInteractiveHandler = (e) => {
     e.stopPropagation();
     setIsMapInteractive(!isMapInteractive);
   };
 
+  const removeMaterialFromMapHandler = (material) => {
+    setCurrentMapMaterials(() => {
+      return currentMapMaterials.filter((item) => material._id !== item._id);
+    });
+    setIconBoxMaterials([...iconBoxMaterials, material]);
+    setWarehouseMaterialCordinates({
+      id: material._id,
+      cordinates: null,
+    });
+  };
+
   useEffect(() => {
-    if (removeFromMapMaterial) {
+    if (werehouseMaterials) {
       setCurrentMapMaterials(
-        currentMapMaterials.filter((m) => m.name !== removeFromMapMaterial.name)
+        werehouseMaterials.materials.filter((m) => m.cordinates !== null)
       );
-      setRemoveFromMapMaterial(null);
-    }
-  }, [removeFromMapMaterial]);
-
-  useEffect(() => {
-    if (draggedMaterial) {
-      setWarehouseMaterialCordinates({
-        id: draggedMaterial._id,
-        cordinates: draggedMaterial.cordinates,
-      });
-      setCurrentMapMaterials([...currentMapMaterials, draggedMaterial]);
-    }
-  }, [drop]);
-
-  useEffect(() => {
-    if (data) {
-      setCurrentMapMaterials(
-        data?.materials.filter((m) => m.cordinates !== null)
+      setIconBoxMaterials(
+        werehouseMaterials.materials.filter((m) => m.cordinates === null)
       );
     }
-  }, [isFetching]);
+  }, [warehouseMaterialsLoading]);
 
-
+  useEffect(() => {
+    if (warehouseMaterialsError) {
+      toast.error("Warehouse material error");
+    } else if (setWarehouseMaterialCordinatesError) {
+      toast.error("Warehouse material position error");
+    }
+  }, [warehouseMaterialsError, setWarehouseMaterialCordinatesError]);
 
   return (
     <Grid
@@ -115,7 +119,7 @@ const Warehouse = () => {
                 icon: mdiTableAccount,
               },
               {
-                pathName: "Facilities",
+                pathName: "Warehouse",
                 icon: mdiChartTimeline,
               },
             ]}
@@ -131,7 +135,7 @@ const Warehouse = () => {
         </Box>
         <Box sx={sxProps.buttonWrapper}>
           <FormControlLabel
-            control={<Switch onClick={interactMapHandler} />}
+            control={<Switch onClick={mapInteractiveHandler} />}
             label={isMapInteractive ? "Lock map" : "Unlock map"}
           />
         </Box>
@@ -158,46 +162,35 @@ const Warehouse = () => {
               }}
               // zoomControl={false}
             >
-              <ImageMap
-                disabled={isMapInteractive}
-                setRemoveFromMapMaterial={setRemoveFromMapMaterial}
-                setMap={setMap}
-                currentMapMaterials={currentMapMaterials}
-                setWarehouseMaterialCordinates={setWarehouseMaterialCordinates}
-              ></ImageMap>
+              {warehouseMaterialsLoading ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "2rem",
+                  }}
+                >
+                  <Loader></Loader>
+                </Box>
+              ) : (
+                <ImageMap
+                  disabled={isMapInteractive}
+                  removeMaterialFromMapHandler={removeMaterialFromMapHandler}
+                  setMap={setMap}
+                  currentMapMaterials={currentMapMaterials}
+                  setWarehouseMaterialCordinates={
+                    setWarehouseMaterialCordinates
+                  }
+                ></ImageMap>
+              )}
             </MapContainer>
           </Box>
-          <Box sx={sxProps.materialsIconBoxWrapper}>
-            {data?.materials
-              .filter((m) => m.cordinates === null)
-              .map((material, index) => (
-                <Box
-                  key={material.id}
-                  draggable={isMapInteractive}
-                  onDragStart={(e) => onDragHandler(e, material)}
-                  sx={sxProps.boxMaterialWrapper}
-                >
-                  {/* <Box
-                  // sx={{
-                  //   width: "4rem",
-                  //   height: "4rem",
-                  //   // backgroundColor: "green",
-                  // }}
-                > */}
-                  <img
-                    style={{ width: "4rem", height: "4rem" }}
-                    src={SvgIconC}
-                    draggable={isMapInteractive}
-                  />
-                  {/* </Box> */}
-                  <Box>
-                    <Typography sx={sxProps.boxMaterialTextWrapper}>
-                      {material.name}
-                    </Typography>
-                  </Box>
-                </Box>
-              ))}
-          </Box>
+          <WarehouseMaterialsIconsBox
+            warehouseMaterialsLoading={warehouseMaterialsLoading}
+            iconBoxMaterials={iconBoxMaterials}
+            isMapInteractive={isMapInteractive}
+            onDragHandler={onDragHandler}
+          ></WarehouseMaterialsIconsBox>
         </Box>
       </Grid>
     </Grid>

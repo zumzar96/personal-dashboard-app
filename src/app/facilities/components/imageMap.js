@@ -1,25 +1,14 @@
 import React from "react";
 import { useState, useRef, useMemo, useCallback, useEffect } from "react";
-import * as sxProps from "../styles/styles.ts";
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import SvgIconC from "../../../assets/svg/undraw_remotely_2j6y.svg";
-import { Icon } from "leaflet";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  useMap,
-  TileLayer,
-  ImageOverlay,
-} from "react-leaflet";
+import { useMap, ImageOverlay } from "react-leaflet";
 import DraggableMarker from "./draggableMarker.js";
 
 const ImageMap = ({
   disabled,
   setMap,
-  setRemoveFromMapMaterial,
-  setActiveBlurForStorage,
+  removeMaterialFromMapHandler,
   currentMapMaterials,
   setWarehouseMaterialCordinates,
 }) => {
@@ -28,7 +17,6 @@ const ImageMap = ({
   useEffect(() => {
     setMap(map);
   }, [map]);
-
 
   return (
     <>
@@ -47,7 +35,7 @@ const ImageMap = ({
           disabled={disabled}
           key={material.name}
           material={material}
-          setRemoveFromMapMaterial={setRemoveFromMapMaterial}
+          removeMaterialFromMapHandler={removeMaterialFromMapHandler}
           setWarehouseMaterialCordinates={setWarehouseMaterialCordinates}
         />
       ))}
