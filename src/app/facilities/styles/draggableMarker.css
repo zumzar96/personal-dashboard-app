@@ -1,0 +1,24 @@
+.btn,
+.btn:link,
+.btn:visited {
+  background-color: rgba(181, 35, 35, 0.719);
+  font-size: 15px;
+  width: 83px;
+  border: 0px;
+  border-radius: 4px;
+}
+.btn:hover {
+  background-color: rgba(161, 33, 33, 0.704);
+}
+
+.btnDisabled,
+.btnDisabled:link,
+.btnDisabled:visited {
+  background-color: rgba(165, 83, 83, 0.719);
+  font-size: 15px;
+  width: 83px;
+  border: 0px;
+  border-radius: 4px;
+}
+
+

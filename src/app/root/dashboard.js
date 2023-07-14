@@ -10,6 +10,7 @@ import Materials from "../materials/materials";
 import Dashboarda from "../dashboard/dashboard";
 import { useLocation } from "react-router-dom";
 import ErrorBoundary from "./components/common/errorBoundary";
+import Warehouse from "../facilities/warehouse";
 
 const Dashboard = () => {
   const { pathname } = useLocation();
@@ -21,6 +22,7 @@ const Dashboard = () => {
         <Routes>
           <Route path="stats" element={<Dashboarda />} />
           <Route path="materials" element={<Materials />} />
+          <Route path="warehouse" element={<Warehouse />} />
           <Route path={`${nonExistingRoute}`} element={<ErrorBoundary />} />
         </Routes>
       </AppDrawerBar>
