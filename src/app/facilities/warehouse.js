@@ -81,16 +81,35 @@ const Warehouse = () => {
     });
   };
 
+
+  //TODO filter data in warehouseApiSlice using transform data
   useEffect(() => {
     if (werehouseMaterials) {
       setCurrentMapMaterials(
-        werehouseMaterials.materials.filter((m) => m.cordinates !== null)
+        werehouseMaterials.materials.filter(
+          (m) => m.cordinates && m.cordinates !== null //TODO
+        )
       );
       setIconBoxMaterials(
-        werehouseMaterials.materials.filter((m) => m.cordinates === null)
+        werehouseMaterials.materials.filter(
+          (m) => m.cordinates === null || !m.cordinates //TODO
+        )
       );
     }
   }, [warehouseMaterialsLoading]);
+
+
+  //TODO
+  useEffect(() => {
+    console.log("keyword", keyword);
+    if (werehouseMaterials) {
+      setIconBoxMaterials(
+        werehouseMaterials.materials.filter(
+          (m) => m.cordinates === null || !m.cordinates
+        )
+      );
+    }
+  }, [werehouseMaterials]);
 
   useEffect(() => {
     if (warehouseMaterialsError) {
@@ -99,6 +118,7 @@ const Warehouse = () => {
       toast.error("Warehouse material position error");
     }
   }, [warehouseMaterialsError, setWarehouseMaterialCordinatesError]);
+
 
   return (
     <Grid
@@ -153,7 +173,7 @@ const Warehouse = () => {
           >
             <MapContainer
               center={[5, 208]}
-              zoom={1}
+              zoom={0}
               maxZoom={10}
               style={{
                 width: "100%",

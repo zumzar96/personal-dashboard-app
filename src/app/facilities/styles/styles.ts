@@ -5,7 +5,7 @@ const gridContainer: SxProps = {
     display: "flex",
     // backgroundColor: "green",
     flexDirection: "column-reverse",
-    height: "100%"
+    height: "87%"
 };
 
 const gridItemWrapper: SxProps = {
@@ -15,6 +15,7 @@ const gridItemWrapper: SxProps = {
     width: "100%",
     height: "90%",
     alignItems: "center",
+    // backgroundColor:'red'
 };
 
 const breadcrumbWrapper: SxProps = {
@@ -43,14 +44,32 @@ const warehouseWrapper: SxProps = {
     paddingBottom: "35px",
     // backgroundColor:'yellow',
     justifyContent:'space-between',
+    gap:'0.2rem',
+    flexDirection:{ 
+        xs: 'column-reverse',
+        sm: 'column-reverse',
+        md: 'row',
+        lg: 'row',
+        xl: 'row',},
     
 }
 
 const mapContainerWrapper: SxProps = {
     display: "flex",
     flexDirection:'column',
-    height: "100%",
-    width: "70%",
+    // height: "100%",
+    height:{ 
+        xs: '85%',
+        sm: '85%',
+        md: '100%',
+        lg: '100%',
+        xl: '100%',},
+    width:{ 
+        xs: '100%',
+        sm: '100%',
+        md: '70%',
+        lg: '70%',
+        xl: '70%',},
     // paddingBottom: "35px",
     // backgroundColor:'red',
     borderRadius: 1,
@@ -58,14 +77,25 @@ const mapContainerWrapper: SxProps = {
 }
 
 const materialsIconBoxWrapper: SxProps = {
-    padding:'1.8rem',
+    padding:'0.6rem',
     display: "flex",
     gap:'0.5rem',
-    height: "100%",
-    width: "25%",
+    height: { 
+        xs: '60%',
+        sm: '60%',
+        md: '100%',
+        lg: '100%',
+        xl: '100%',},
+    width:{ 
+        xs: '100%',
+        sm: '100%',
+        md: '25%',
+        lg: '25%',
+        xl: '25%',},
     // paddingBottom: "35px",
     // backgroundColor:'green',
     justifyContent:'center',
+    alignContent:'flex-start',
     flexWrap:'wrap',
     overflow: "auto",
     borderRadius: 1,

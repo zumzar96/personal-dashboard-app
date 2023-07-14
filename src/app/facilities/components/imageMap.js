@@ -21,8 +21,9 @@ const ImageMap = ({
   return (
     <>
       <ImageOverlay
+        /*TODO */
         //   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://firebasestorage.googleapis.com/v0/b/personaldashboadapp.appspot.com/o/files%2FScreenshot%202023-06-27%20164047.png%20%20%20%20%20%20%202023-7-4%2010%3A0%3A52?alt=media&token=f05ea013-22ce-4b93-8cff-b808ff4e3479"
+        url="https://firebasestorage.googleapis.com/v0/b/personaldashboadapp.appspot.com/o/files%2Fstock-example.png%20%20%20%20%20%20%202023-7-14%209%3A49%3A54?alt=media&token=cea53674-762e-4aa9-a888-094abdc1d970"
         bounds={[
           [-526.5, -125],
           [521.5, 523],
