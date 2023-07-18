@@ -110,7 +110,6 @@ export default function MiniDrawer({ children }) {
 
   const { pathname } = useLocation();
 
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -135,7 +134,7 @@ export default function MiniDrawer({ children }) {
   return (
     <>
       {isLoggedIn ? (
-        <Box sx={{ display: "flex", height: "46.6rem" }}>
+        <Box sx={{ display: "flex" }}>
           <CssBaseline />
           <AppBar position="fixed" open={open}>
             <Toolbar>
@@ -291,7 +290,10 @@ export default function MiniDrawer({ children }) {
               )}
             </List>
           </Drawer>
-          <>{children}</>
+          <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <DrawerHeader />
+            {children}
+          </Box>
         </Box>
       ) : (
         <>
