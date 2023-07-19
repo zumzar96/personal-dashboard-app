@@ -113,8 +113,6 @@ export default function MiniDrawer({ children }) {
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
-  console.log("colorMode.toggleColorMode", colorMode.toggleColorMode)
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };

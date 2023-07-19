@@ -92,12 +92,20 @@ const Register = (props) => {
     <Fragment>
       {isLoggedIn ? <Navigate to="/dashboard" replace={true} /> : null}
       <Grid container sx={sxProps.authContainer}>
-        <Grid item xs={2} sm={2} md={6} lg={6} xl={6}>
+        <Grid item md={6} lg={6} xl={6} sx={sxProps.svgWrapper}>
           <Box sx={sxProps.svgLayout}>
-            <img src={svgBackground} />
+            <img style={sxProps.svg} src={svgBackground} />
           </Box>
         </Grid>
-        <Grid item xs={4} sm={4} md={6} lg={6} xl={6}>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={6}
+          lg={6}
+          xl={6}
+          sx={sxProps.authFormWrapper}
+        >
           <Formik
             initialValues={registData}
             validationSchema={SignupSchema}
@@ -117,19 +125,12 @@ const Register = (props) => {
               handleBlur,
               handleSubmit,
             }) => (
-              <Form>
-                <Box sx={sxProps.loginFormLayout}>
+                <Box sx={sxProps.authForm}>
                   {forgotenPassResetLoading ? (
                     <Loader />
                   ) : (
                     <>
                       <Typography variant="h4">Forgot password</Typography>
-                      <Typography sx={sxProps.typograhyColor}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nulla porttitor metus leo, ut ullamcorper diam aliquam
-                        quis. Ut accumsan lorem ligula, aliquet placerat ipsum
-                        laoreet id
-                      </Typography>
                       <TextField
                         name="email"
                         type="email"
@@ -232,7 +233,6 @@ const Register = (props) => {
                     </>
                   )}
                 </Box>
-              </Form>
             )}
           </Formik>
         </Grid>

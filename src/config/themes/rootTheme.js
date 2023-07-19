@@ -223,11 +223,7 @@ export const useMode = () => {
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () =>
-        setMode(
-          (prevMode) => (
-            console.log("hoce"), prevMode === "dark" ? "light" : "dark"
-          )
-        ),
+        setMode((prevMode) => (prevMode === "dark" ? "light" : "dark")),
     }),
     []
   );
