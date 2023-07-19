@@ -17,12 +17,15 @@ import ErrorBoundary from "./app/root/components/common/errorBoundary";
 import ForgotPassword from "./app/auth/forgotPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ColorModeContext, useMode } from "./config/themes/rootTheme";
 
 function App() {
+  const [theme, colorMode] = useMode();
+
   return (
-    <>
+    <ColorModeContext.Provider value={colorMode}>
       <CssBaseline />
-      <ThemeProvider theme={rootTheme}>
+      <ThemeProvider theme={theme}>
         <ToastContainer autoClose={2000} />
         <Routes>
           <Route path="/" element={<Login />} />
@@ -32,7 +35,7 @@ function App() {
           <Route path="*" element={<ErrorBoundary />} />
         </Routes>
       </ThemeProvider>
-    </>
+    </ColorModeContext.Provider>
   );
 }
 

@@ -30,6 +30,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../../auth/loginSlice";
 import { Navigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { ColorModeContext, tokens } from "../../../../config/themes/rootTheme";
+import { useContext } from "react";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 
 const drawerWidth = 240;
 
@@ -106,9 +110,10 @@ export default function MiniDrawer({ children }) {
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
   const dispatch = useDispatch();
-  const location = useLocation();
+  const colors = tokens(theme.palette.mode);
+  const colorMode = useContext(ColorModeContext);
 
-  const { pathname } = useLocation();
+  console.log("colorMode.toggleColorMode", colorMode.toggleColorMode)
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -166,6 +171,13 @@ export default function MiniDrawer({ children }) {
                   justifyContent: "flex-end",
                 }}
               >
+                <IconButton onClick={colorMode.toggleColorMode}>
+                  {theme.palette.mode === "dark" ? (
+                    <LightModeOutlinedIcon />
+                  ) : (
+                    <DarkModeOutlinedIcon />
+                  )}
+                </IconButton>
                 <IconButton
                   size="large"
                   aria-label="account of current user"
