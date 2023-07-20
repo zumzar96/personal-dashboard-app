@@ -50,23 +50,9 @@ const Materials = () => {
   };
 
   return (
-    //TODO refactor grid layout code
-    <Grid
-      container
-      sx={sxProps.gridContainer}
-      xs={10}
-      sm={10}
-      md={10}
-      lg={12}
-      xl={12}
-    >
-      <Grid
-        sx={sxProps.gridItemWrapper}
-        item
-      >
-        <Box
-          sx={sxProps.breadcrumbWrapper}
-        >
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sx={sxProps.breadcrumbWrapper}>
           <BreadcrumbPath
             breadcrumbPath={[
               {
@@ -79,10 +65,8 @@ const Materials = () => {
               },
             ]}
           />
-        </Box>
-        <Box
-          sx={sxProps.buttonWrapper}
-        >
+        </Grid>
+        <Grid item xs={12} sx={sxProps.buttonWrapper}>
           <CreateButton
             disabled={!checkboxSelectionModel.length}
             variant="contained"
@@ -93,32 +77,15 @@ const Materials = () => {
           <CreateButton variant="contained" onClick={createMaterialHandler}>
             Create
           </CreateButton>
-        </Box>
-        <Box
-          sx={sxProps.inputWrapper}
-        >
-          {/* TODO add separate filter component including search' */}
+        </Grid>
+        <Grid item xs={12} sx={sxProps.inputWrapper}>
           <SearchInput
-            //TODO
-            //sx={{
-            // input: {
-            //   height: "0.7rem",
-            // },
-            // "& .MuiInputLabel-shrink": {
-            //   transform: "translate(14px, -8px) scale(0.8) !important",
-            // },
-            // "& .MuiInputLabel-outlined": {
-            //   transform: "translate(14px, 9px) scale(1) ",
-            // },
-            //}}
             id={"search_input"}
             onChange={(e) => setKeyword(e.target.value)}
             label={"Search"}
           />
-        </Box>
-        <Box
-          sx={sxProps.tableWrapper}
-        >
+        </Grid>
+        <Grid sx={sxProps.gridItemWrapper} item xs={12}>
           <MaterialsTable
             data={data}
             paginationModel={paginationModel}
@@ -129,8 +96,9 @@ const Materials = () => {
             checkboxSelectionModel={checkboxSelectionModel}
             setCheckboxSelectionModel={setCheckboxSelectionModel}
           />
-        </Box>
+        </Grid>
       </Grid>
+
       <MaterialDialog
         setViewMaterialMode={setViewMaterialMode}
         viewMaterialMode={viewMaterialMode}
@@ -144,7 +112,7 @@ const Materials = () => {
         checkboxSelectionModel={checkboxSelectionModel} //TODO wrape in separate handler function
         setCheckboxSelectionModel={setCheckboxSelectionModel}
       ></DeleteMaterialDialog>
-    </Grid>
+    </>
   );
 };
 

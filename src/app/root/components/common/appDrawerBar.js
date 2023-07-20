@@ -153,14 +153,14 @@ export default function MiniDrawer({ children }) {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography
+              {/* <Typography
                 sx={{ minWidth: "3rem" }}
                 variant="h6"
                 noWrap
                 component="div"
               >
                 Dashboard
-              </Typography>
+              </Typography> */}
               <Box
                 sx={{
                   display: "flex",
@@ -300,7 +300,10 @@ export default function MiniDrawer({ children }) {
               )}
             </List>
           </Drawer>
-          <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Box
+            component="main"
+            sx={{ flexGrow: 1, p: 3, minWidth: "20%", height: "100vh" }}
+          >
             <DrawerHeader />
             {children}
           </Box>

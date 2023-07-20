@@ -11,7 +11,7 @@ const columns = [
     headerName: "Name",
     type: "text",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     renderCell: ({ row: { name } }) => {
       return (
@@ -26,7 +26,7 @@ const columns = [
     field: "brand",
     headerName: "Brand",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
   },
@@ -34,7 +34,7 @@ const columns = [
     field: "category",
     headerName: "Category",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
   },
@@ -43,7 +43,7 @@ const columns = [
     headerName: "Description",
     type: "number",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
   },
@@ -52,7 +52,7 @@ const columns = [
     headerName: "Image",
     type: "file",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
     renderCell: () => {
@@ -64,7 +64,7 @@ const columns = [
     headerName: "Created",
     // type: "date",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
     valueFormatter: (params) =>
@@ -75,7 +75,7 @@ const columns = [
     headerName: "Updated",
     // type: "date",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
     valueFormatter: (params) =>
