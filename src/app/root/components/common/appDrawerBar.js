@@ -70,6 +70,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
+  // backgroundColor: theme.palette.primary.dark,
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
@@ -112,6 +113,8 @@ export default function MiniDrawer({ children }) {
   const dispatch = useDispatch();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
+
+  console.log("theme.palette.mode.primary", theme.palette.primary.dark);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -169,11 +172,11 @@ export default function MiniDrawer({ children }) {
                   justifyContent: "flex-end",
                 }}
               >
-                <IconButton onClick={colorMode.toggleColorMode}>
+                <IconButton size="large" onClick={colorMode.toggleColorMode}>
                   {theme.palette.mode === "dark" ? (
                     <LightModeOutlinedIcon />
                   ) : (
-                    <DarkModeOutlinedIcon />
+                    <DarkModeOutlinedIcon sx={{ color: "white" }} />
                   )}
                 </IconButton>
                 <IconButton

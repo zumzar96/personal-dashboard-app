@@ -223,11 +223,11 @@ const Register = (props) => {
                     {registerError && (
                       <Alert severity="error">User data is not correct!</Alert>
                     )}
-                    <Link sx={sxProps.linkColor} href="/">
-                      Login
+                    <Link href="/" sx={sxProps.linkColor}>
+                      <Typography variant="h5">Login</Typography>
                     </Link>
-                    <Link sx={sxProps.linkColor} href="forgot-password">
-                      Forgot password?
+                    <Link href="forgot-password" sx={sxProps.linkColor}>
+                      <Typography variant="h5"> Forgot password?</Typography>
                     </Link>
                     <Button
                       variant="contained"

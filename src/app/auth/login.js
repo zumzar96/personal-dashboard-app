@@ -173,11 +173,11 @@ const Login = (props) => {
                       {location.state.verifyEmailMsg}
                     </Alert>
                   ) : null}
-                  <Link sx={sxProps.linkColor} href="register">
-                    Sign up
+                  <Link href="register" sx={sxProps.linkColor}>
+                    <Typography variant="h5">Sign up</Typography>
                   </Link>
-                  <Link sx={sxProps.linkColor} href="forgot-password">
-                    Forgot password?
+                  <Link href="forgot-password" sx={sxProps.linkColor}>
+                    <Typography variant="h5">Forgot password?</Typography>
                   </Link>
                   <Button
                     variant="contained"

@@ -12,16 +12,16 @@ const columns = [
     type: "text",
     flex: 1,
     minWidth: 120,
-    headerAlign: "center",
+    // headerAlign: "center",
+    // align: "center",
     renderCell: ({ row: { name } }) => {
       return (
-        <Typography sx={{ fontWeight: 600, color: "dimgray" }}>
+        <Typography variant={"h5"} color={'neutral.main'}>
           {name}
         </Typography>
       );
     },
   },
-  //TODO adjust column names
   {
     field: "brand",
     headerName: "Brand",
@@ -108,19 +108,6 @@ export default function MaterialsTable({
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   return (
     <DataGrid
-      sx={{
-        "& .MuiDataGrid-columnHeaders": {
-          backgroundColor: "#8e8df5",
-          color: "#ffffff",
-          borderBottom: "none",
-        },
-        "& .MuiCheckbox-root": {
-          color: `#5d6068 !important`,
-        },
-        "& .MuiDataGrid-cell:focus-within": {
-          outline: "none !important",
-        },
-      }}
       slotProps={{
         panel: {
           sx: {

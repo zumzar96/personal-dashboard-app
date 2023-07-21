@@ -6,7 +6,7 @@ export const tokens = (mode) => ({
   ...(mode === "dark"
     ? {
         grey: {
-          100: "#e0e0e0",
+          100: "#ffffff",
           200: "#c2c2c2",
           300: "#a3a3a3",
           400: "#858585",
@@ -19,8 +19,8 @@ export const tokens = (mode) => ({
         primary: {
           100: "#d0d1d5",
           200: "#a1a4ab",
-          300: "#727681",
-          400: "#1F2A40",
+          300: "#2e458a",
+          400: "#2e2e32",
           500: "#141b2d",
           600: "#101624",
           700: "#0c101b",
@@ -75,10 +75,10 @@ export const tokens = (mode) => ({
         },
         primary: {
           100: "#040509",
-          200: "#080b12",
-          300: "#0c101b",
-          400: "#f2f0f0", // manually changed
-          500: "#141b2d",
+          200: "#161c29",
+          300: "#273356",
+          400: "#3b487a", // manually changed
+          500: "#2d1414",
           600: "#1F2A40",
           700: "#727681",
           800: "#a1a4ab",
@@ -122,6 +122,7 @@ export const tokens = (mode) => ({
 
 export const themeSettings = (mode) => {
   const colors = tokens(mode);
+  console.log("colors", colors);
   return {
     palette: {
       mode: mode,
@@ -129,10 +130,10 @@ export const themeSettings = (mode) => {
         ? {
             // palette values for dark mode
             primary: {
-              main: colors.primary[500],
+              main: colors.primary[400],
             },
             secondary: {
-              main: colors.greenAccent[500],
+              main: colors.greenAccent[800],
             },
             neutral: {
               dark: colors.grey[700],
@@ -146,10 +147,10 @@ export const themeSettings = (mode) => {
         : {
             // palette values for light mode
             primary: {
-              main: colors.primary[100],
+              main: colors.primary[400],
             },
             secondary: {
-              main: colors.greenAccent[500],
+              main: colors.greenAccent[800],
             },
             neutral: {
               dark: colors.grey[700],
@@ -190,10 +191,42 @@ export const themeSettings = (mode) => {
       },
     },
     components: {
+      mode: mode,
       MuiInputBase: {
         styleOverrides: {
           input: {
             height: "0.7rem",
+            "&:-webkit-autofill": {
+              "-webkit-box-shadow": "0 0 0 100px var(--primary-weak) inset",
+              "-webkit-text-fill-color": "var(--text-primary)",
+            },
+          },
+        },
+      },
+      MuiDataGrid: {
+        mode,
+        styleOverrides: {
+          columnHeaders: {
+            backgroundColor: colors.primary[400],
+            color: "#ffffff",
+            borderBottom: "none",
+          },
+          cell: {
+            outline: "none !important",
+          },
+        },
+      },
+      MuiCheckbox: {
+        styleOverrides: {
+          root: {
+            color: `${colors.grey[500]} !important`,
+            "&.Mui-checked": {
+              color: `${colors.blueAccent[500]} !important`,
+            },
+            "&:hover": {
+              // color: `${colors.blueAccent[500]} !important`,
+              backgroundColor: `${colors.blueAccent[900]} !important`,
+            },
           },
         },
       },
@@ -219,124 +252,25 @@ export const ColorModeContext = createContext({
 });
 
 export const useMode = () => {
-  const [mode, setMode] = useState("dark");
+  const [mode, setMode] = useState(
+    JSON.parse(localStorage.getItem("theme_mode")) !== null
+      ? JSON.parse(localStorage.getItem("theme_mode"))
+      : "dark"
+  );
+
   const colorMode = useMemo(
     () => ({
-      toggleColorMode: () =>
-        setMode((prevMode) => (prevMode === "dark" ? "light" : "dark")),
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === "dark" ? "light" : "dark"));
+        mode === "dark"
+          ? localStorage.setItem("theme_mode", JSON.stringify("light"))
+          : localStorage.setItem("theme_mode", JSON.stringify("dark"));
+      },
     }),
-    []
+    [mode]
   );
 
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
   return [theme, colorMode];
 };
-
-// const rootTheme = createTheme({
-//   const colors = tokens(mode);
-//   palette: {
-//     mode: mode,
-//     ...(mode === "dark"
-//       ? {
-//           // palette values for dark mode
-//           primary: {
-//             main: colors.primary[500],
-//           },
-//           secondary: {
-//             main: colors.greenAccent[500],
-//           },
-//           neutral: {
-//             dark: colors.grey[700],
-//             main: colors.grey[500],
-//             light: colors.grey[100],
-//           },
-//           background: {
-//             default: colors.primary[500],
-//           },
-//         }
-//       : {
-//           // palette values for light mode
-//           primary: {
-//             main: colors.primary[100],
-//           },
-//           secondary: {
-//             main: colors.greenAccent[500],
-//           },
-//           neutral: {
-//             dark: colors.grey[700],
-//             main: colors.grey[500],
-//             light: colors.grey[100],
-//           },
-//           background: {
-//             default: "#fcfcfc",
-//           },
-//         }),
-//   },
-//   typography: {
-//     fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-//     fontSize: 12,
-//     h1: {
-//       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-//       fontSize: 40,
-//     },
-//     h2: {
-//       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-//       fontSize: 32,
-//     },
-//     h3: {
-//       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-//       fontSize: 24,
-//     },
-//     h4: {
-//       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-//       fontSize: 20,
-//     },
-//     h5: {
-//       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-//       fontSize: 16,
-//     },
-//     h6: {
-//       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-//       fontSize: 14,
-//     },
-//   },
-//   components: {
-//     MuiInputBase: {
-//       styleOverrides: {
-//         input: {
-//           height: "0.7rem",
-//         },
-//       },
-//     },
-//     MuiInputLabel: {
-//       styleOverrides: {
-//         root: {
-//           fontSize: 14,
-//         },
-//         shrink: {
-//           transform: "translate(14px, -8px) scale(0.8) !important",
-//         },
-//         outlined: {
-//           transform: "translate(14px, 10px) scale(1)",
-//         },
-//       },
-//     },
-//   },
-// typography: {
-//   fontSize: 14,
-//   fontFamily: [
-//     "-apple-system",
-//     "BlinkMacSystemFont",
-//     '"Segoe UI"',
-//     "Roboto",
-//     '"Helvetica Neue"',
-//     "Arial",
-//     "sans-serif",
-//     '"Apple Color Emoji"',
-//     '"Segoe UI Emoji"',
-//     '"Segoe UI Symbol"',
-//   ].join(","),
-// },
-// });
-// export default rootTheme;

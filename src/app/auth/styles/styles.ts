@@ -14,7 +14,6 @@ const svgWrapper: SxProps = {
     xl: 'flex',},
   alignItems:'center',
   justifyContent: "center",
-  // backgroundColor: "green",
   height:'100%',
   wdith:'100%',
 };
@@ -23,21 +22,18 @@ const svgLayout: SxProps = {
   display: "flex",
   width: "63%",
   height: "50%",
-  // backgroundColor:"white",
 };
 
 const svg: SxProps = {
   display: "flex",
   width: "100%",
   height: "100%",
-  // backgroundColor:"white",
 };
 
 const authFormWrapper: SxProps = {
   display: "flex",
   height:'100%',
   wdith:'100%',
-  // backgroundColor: "blue",
   flexDirection: "column",
   rowGap: "0.6rem",
   justifyContent: "center",
@@ -54,11 +50,10 @@ const authForm: SxProps = {
     md: '70%',
     lg: '60%',
     xl: '60%',},
-  // backgroundColor: "yellow",
 };
 
 const linkColor: SxProps = {
-  color: "secondary.main",
+  color: "neutral.main",
   textDecorationColor: "grey",
 };
 

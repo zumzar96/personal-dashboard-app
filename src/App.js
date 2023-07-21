@@ -24,8 +24,8 @@ function App() {
 
   return (
     <ColorModeContext.Provider value={colorMode}>
-      <CssBaseline />
       <ThemeProvider theme={theme}>
+        <CssBaseline/>
         <ToastContainer autoClose={2000} />
         <Routes>
           <Route path="/" element={<Login />} />

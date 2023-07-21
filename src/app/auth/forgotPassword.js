@@ -125,114 +125,106 @@ const Register = (props) => {
               handleBlur,
               handleSubmit,
             }) => (
-                <Box sx={sxProps.authForm}>
-                  {forgotenPassResetLoading ? (
-                    <Loader />
-                  ) : (
-                    <>
-                      <Typography variant="h4">Forgot password</Typography>
-                      <TextField
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.email}
-                        error={touched.email && errors.email}
-                        helperText={touched.email && errors.email}
-                      />
+              <Box sx={sxProps.authForm}>
+                {forgotenPassResetLoading ? (
+                  <Loader />
+                ) : (
+                  <>
+                    <Typography variant="h4">Forgot password</Typography>
+                    <TextField
+                      name="email"
+                      type="email"
+                      placeholder="Email"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.email}
+                      error={touched.email && errors.email}
+                      helperText={touched.email && errors.email}
+                    />
 
-                      {forgotenPassResetError && (
-                        <Alert severity="error">
-                          User data is not correct!
-                        </Alert>
-                      )}
-                      <TextField
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Password"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.password}
-                        error={touched.password && errors.password}
-                        helperText={touched.password && errors.password}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityIcon />
-                                ) : (
-                                  <VisibilityOffIcon />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      ></TextField>
-                      {forgotenPassResetError && (
-                        <Alert severity="error">
-                          User data is not correct!
-                        </Alert>
-                      )}
-                      <TextField
-                        name="confirmpassword"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Confirm password"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.confirmpassword}
-                        error={
-                          touched.confirmpassword && errors.confirmpassword
-                        }
-                        helperText={
-                          touched.confirmpassword && errors.confirmpassword
-                        }
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityIcon />
-                                ) : (
-                                  <VisibilityOffIcon />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      ></TextField>
-                      {forgotenPassResetError && (
-                        <Alert severity="error">
-                          User data is not correct!
-                        </Alert>
-                      )}
-                      <Link sx={sxProps.linkColor} href="register">
-                        Sign up
-                      </Link>
-                      <Link sx={sxProps.linkColor} href="/">
-                        Login
-                      </Link>
-                      <Button
-                        variant="contained"
-                        disabled={isSubmitting}
-                        onClick={handleSubmit}
-                      >
-                        Reset password
-                      </Button>
-                    </>
-                  )}
-                </Box>
+                    {forgotenPassResetError && (
+                      <Alert severity="error">User data is not correct!</Alert>
+                    )}
+                    <TextField
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                      error={touched.password && errors.password}
+                      helperText={touched.password && errors.password}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? (
+                                <VisibilityIcon />
+                              ) : (
+                                <VisibilityOffIcon />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    ></TextField>
+                    {forgotenPassResetError && (
+                      <Alert severity="error">User data is not correct!</Alert>
+                    )}
+                    <TextField
+                      name="confirmpassword"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Confirm password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.confirmpassword}
+                      error={touched.confirmpassword && errors.confirmpassword}
+                      helperText={
+                        touched.confirmpassword && errors.confirmpassword
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? (
+                                <VisibilityIcon />
+                              ) : (
+                                <VisibilityOffIcon />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    ></TextField>
+                    {forgotenPassResetError && (
+                      <Alert severity="error">User data is not correct!</Alert>
+                    )}
+                    <Link href="register" sx={sxProps.linkColor}>
+                      <Typography variant="h5" >Sign up</Typography>
+                    </Link>
+                    <Link href="/" sx={sxProps.linkColor}>
+                      <Typography variant="h5">Login</Typography>
+                    </Link>
+                    <Button
+                      variant="contained"
+                      disabled={isSubmitting}
+                      onClick={handleSubmit}
+                    >
+                      Reset password
+                    </Button>
+                  </>
+                )}
+              </Box>
             )}
           </Formik>
         </Grid>

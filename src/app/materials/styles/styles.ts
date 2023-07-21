@@ -12,6 +12,7 @@ const breadcrumbWrapper: SxProps = {
 
 const buttonWrapper: SxProps = {
     display: "flex",
+    flexWrap:'wrap',
     justifyContent: "flex-end",
     gap: "1rem",
 };
