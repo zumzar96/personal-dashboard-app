@@ -12,7 +12,7 @@ export const tokens = (mode) => ({
           400: "#858585",
           500: "#666666",
           600: "#525252",
-          700: "#3d3d3d",
+          700: "hsla(0, 0.00%, 23.90%, 0.42)",
           800: "#292929",
           900: "#141414",
         },
@@ -56,7 +56,7 @@ export const tokens = (mode) => ({
           400: "#868dfb",
           500: "#6870fa",
           600: "#535ac8",
-          700: "#3e4396",
+          700: "#266798",
           800: "#2a2d64",
           900: "#151632",
         },
@@ -69,7 +69,7 @@ export const tokens = (mode) => ({
           400: "#525252",
           500: "#666666",
           600: "#858585",
-          700: "#a3a3a3",
+          700: "rgba(163, 163, 163, 0.13)",
           800: "#c2c2c2",
           900: "#e0e0e0",
         },
@@ -115,7 +115,7 @@ export const tokens = (mode) => ({
           600: "#868dfb",
           700: "#a4a9fc",
           800: "#c3c6fd",
-          900: "#e1e2fe",
+          900: "rgb(232, 240, 254)",
         },
       }),
 });
@@ -133,7 +133,8 @@ export const themeSettings = (mode) => {
               main: colors.primary[400],
             },
             secondary: {
-              main: colors.greenAccent[800],
+              main: colors.blueAccent[500],
+              light: colors.blueAccent[700],
             },
             neutral: {
               dark: colors.grey[700],
@@ -150,7 +151,8 @@ export const themeSettings = (mode) => {
               main: colors.primary[400],
             },
             secondary: {
-              main: colors.greenAccent[800],
+              main: colors.blueAccent[500],
+              light: colors.blueAccent[900],
             },
             neutral: {
               dark: colors.grey[700],
@@ -194,6 +196,12 @@ export const themeSettings = (mode) => {
       mode: mode,
       MuiInputBase: {
         styleOverrides: {
+          root: ({ theme }) => ({
+            "&:has(> input:-webkit-autofill)": {
+              backgroundColor: theme.palette.secondary.light,
+              // borderRadiusRight: "none",
+            },
+          }),
           input: {
             height: "0.7rem",
             "&:-webkit-autofill": {
@@ -206,11 +214,11 @@ export const themeSettings = (mode) => {
       MuiDataGrid: {
         mode,
         styleOverrides: {
-          columnHeaders: {
-            backgroundColor: colors.primary[400],
+          columnHeaders: ({ theme }) => ({
+            backgroundColor: theme.palette.primary.main,
             color: "#ffffff",
             borderBottom: "none",
-          },
+          }),
           cell: {
             outline: "none !important",
           },
@@ -218,16 +226,16 @@ export const themeSettings = (mode) => {
       },
       MuiCheckbox: {
         styleOverrides: {
-          root: {
-            color: `${colors.grey[500]} !important`,
+          root: ({ theme }) => ({
+            color: `${theme.palette.neutral.main} !important`,
             "&.Mui-checked": {
-              color: `${colors.blueAccent[500]} !important`,
+              color: `${theme.palette.secondary.main} !important`,
             },
             "&:hover": {
               // color: `${colors.blueAccent[500]} !important`,
-              backgroundColor: `${colors.blueAccent[900]} !important`,
+              backgroundColor: `${theme.palette.neutral.dark} !important`,
             },
-          },
+          }),
         },
       },
       MuiInputLabel: {

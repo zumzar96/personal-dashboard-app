@@ -4,7 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import * as sxProps from "../styles/styles.ts";
@@ -22,6 +22,7 @@ import Loader from "../../root/components/common/loader";
 import Alert from "../../root/components/common/alert";
 import Paper from "@mui/material/Paper";
 import ImageDialog from "./imageDialog.js";
+import { useTheme } from "@mui/material";
 
 const MaterialDialog = ({
   openMaterialDialog,
@@ -45,6 +46,7 @@ const MaterialDialog = ({
   const [filename, setFilename] = useState("");
   const [editMaterialMode, setEditMaterialMode] = useState(false);
   const [openImageDialog, setOpenImageDialog] = useState(false);
+  const theme = useTheme();
   const [
     createMaterial,
     { isLoading: createMaterialLoading, reset: materialCreateResetMuatation },
@@ -155,7 +157,7 @@ const MaterialDialog = ({
 
   return (
     <Dialog
-      sx={sxProps.dialogMainContainer}
+      // sx={sxProps.dialogMainContainer}
       open={openMaterialDialog}
       onClose={closeDialogHandler}
     >
@@ -171,7 +173,7 @@ const MaterialDialog = ({
         )}
       </DialogTitle>
       <DialogContent>
-        <Box sx={sxProps.dialogContainer}>
+        <Grid container spacing={1} sx={{ p: theme.spacing(2) }}>
           <Formik
             initialValues={registData}
             validationSchema={SignupSchema}
@@ -193,171 +195,185 @@ const MaterialDialog = ({
               handleSubmit,
               setFieldValue,
             }) => (
-              <Form>
-                <FormInput
-                  sx={sxProps.formInputContainer}
-                  name="name"
-                  value={values.name}
-                  error={touched.name && errors.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.name && errors.name}
-                  id="name"
-                  label="Name"
-                  disabled={viewMaterialMode}
-                ></FormInput>
-                <FormInput
-                  sx={sxProps.formInputContainer}
-                  name="price"
-                  value={values.price}
-                  error={touched.price && errors.price}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.price && errors.price}
-                  id="price"
-                  label="Price"
-                  type="number"
-                  disabled={viewMaterialMode}
-                ></FormInput>
-                <FormInput
-                  sx={sxProps.fullWdithFormInputContainer}
-                  name="image"
-                  // value={}
-                  multiline={filename === "" ? false : true} ///TODO
-                  rows={filename === "" ? 1 : 4} ///TODO
-                  error={touched.image && errors.image}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.image && errors.image}
-                  id="image"
-                  label="Image"
-                  disabled={viewMaterialMode}
-                  InputProps={{
-                    readOnly: true,
-                    startAdornment:
-                      !materialImageLoading && filename ? (
-                        //TODO
-                        <InputAdornment position="start">
-                          <Paper
-                            maxWidth
-                            sx={sxProps.imagePaperWraper}
-                            variant="outlined"
-                          >
-                            <img
-                              onClick={openImageDialogHandler}
-                              style={sxProps.inputImageWraper}
-                              src={filename}
-                            />
-                            <IconButton
-                              sx={sxProps.iconButtonWraper}
-                              aria-label="delete"
-                              disabled={viewMaterialMode}
-                              onClick={() => removeFileHandler(setFieldValue)}
-                            >
-                              <CancelTwoToneIcon />
-                            </IconButton>
-                          </Paper>
-                        </InputAdornment>
-                      ) : null,
-                    endAdornment: (
-                      <>
-                        {materialImageLoading ? (
+              <>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                  <FormInput
+                    sx={sxProps.formInputContainer}
+                    name="name"
+                    value={values.name}
+                    error={touched.name && errors.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={touched.name && errors.name}
+                    id="name"
+                    label="Name"
+                    disabled={viewMaterialMode}
+                  ></FormInput>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                  <FormInput
+                    sx={sxProps.formInputContainer}
+                    name="price"
+                    value={values.price}
+                    error={touched.price && errors.price}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={touched.price && errors.price}
+                    id="price"
+                    label="Price"
+                    type="number"
+                    disabled={viewMaterialMode}
+                  ></FormInput>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <FormInput
+                    sx={sxProps.formInputContainer}
+                    name="image"
+                    // value={}
+                    multiline={filename === "" ? false : true} ///TODO
+                    rows={filename === "" ? 1 : 4} ///TODO
+                    error={touched.image && errors.image}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={touched.image && errors.image}
+                    id="image"
+                    label="Image"
+                    disabled={viewMaterialMode}
+                    InputProps={{
+                      readOnly: true,
+                      startAdornment:
+                        !materialImageLoading && filename ? (
+                          //TODO
                           <InputAdornment position="start">
-                            <Loader
-                              sx={{
-                                marginTop: filename === "" ? "0rem" : "5rem",
-                              }}
-                              size="1.3rem"
-                            ></Loader>
+                            <Paper
+                              maxWidth
+                              sx={sxProps.imagePaperWraper}
+                              variant="outlined"
+                            >
+                              <img
+                                onClick={openImageDialogHandler}
+                                style={sxProps.inputImageWraper}
+                                src={filename}
+                              />
+                              <IconButton
+                                sx={sxProps.iconButtonWraper}
+                                aria-label="delete"
+                                disabled={viewMaterialMode}
+                                onClick={() => removeFileHandler(setFieldValue)}
+                              >
+                                <CancelTwoToneIcon />
+                              </IconButton>
+                            </Paper>
                           </InputAdornment>
-                        ) : null}
-                        <InputAdornment
-                          sx={sxProps.uploadButtonContainer}
-                          position="end"
-                        >
-                          <Button
-                            disabled={viewMaterialMode}
-                            sx={{
-                              marginTop: filename === "" ? "0rem" : "5rem",
-                              bgcolor:
-                                touched.image && errors.image
-                                  ? "red"
-                                  : "#85818b",
-                            }}
-                            variant="contained"
-                            component="label"
+                        ) : null,
+                      endAdornment: (
+                        <>
+                          {materialImageLoading ? (
+                            <InputAdornment position="start">
+                              <Loader
+                                sx={{
+                                  marginTop: filename === "" ? "0rem" : "5rem",
+                                }}
+                                size="1.3rem"
+                              ></Loader>
+                            </InputAdornment>
+                          ) : null}
+                          <InputAdornment
+                            sx={sxProps.uploadButtonContainer}
+                            position="end"
                           >
-                            Upload
-                            <input
-                              type="file"
-                              hidden
-                              onChange={(e) =>
-                                fileUploadHandler(e, setFieldValue)
-                              }
-                            />
-                          </Button>
-                        </InputAdornment>
-                      </>
-                    ),
-                  }}
-                ></FormInput>
-                {materialImageError ? (
-                  <Alert
-                    sx={sxProps.fullWdithFormInputContainer}
-                    severity="error"
-                  >
-                    Image upload failed
-                  </Alert>
-                ) : null}
-                <FormInput
-                  sx={sxProps.formInputContainer}
-                  name="brand"
-                  value={values.brand}
-                  error={touched.brand && errors.brand}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.brand && errors.brand}
-                  id="brand"
-                  label="Brand"
-                  disabled={viewMaterialMode}
-                ></FormInput>
-                <FormInput
-                  sx={sxProps.formInputContainer}
-                  name="countInStock"
-                  value={values.countInStock}
-                  error={touched.countInStock && errors.countInStock}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.countInStock && errors.countInStock}
-                  id="countInStock"
-                  label="Count"
-                  type="number"
-                  disabled={viewMaterialMode}
-                ></FormInput>
-                <FormInput
-                  sx={sxProps.formInputContainer}
-                  name="category"
-                  value={values.category}
-                  error={touched.category && errors.category}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.category && errors.category}
-                  id="category"
-                  label="Category"
-                  disabled={viewMaterialMode}
-                ></FormInput>
-                <FormInput
-                  sx={sxProps.fullWdithFormInputContainer}
-                  name="description"
-                  value={values.description}
-                  error={touched.description && errors.description}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={touched.description && errors.description}
-                  id="description"
-                  label="Description"
-                  disabled={viewMaterialMode}
-                ></FormInput>
+                            <Button
+                              disabled={viewMaterialMode}
+                              sx={{
+                                marginTop: filename === "" ? "0rem" : "4.7rem",
+                                bgcolor:
+                                  touched.image && errors.image
+                                    ? "red"
+                                    : "primary.main",
+                              }}
+                              variant="contained"
+                              component="label"
+                            >
+                              Upload
+                              <input
+                                type="file"
+                                hidden
+                                onChange={(e) =>
+                                  fileUploadHandler(e, setFieldValue)
+                                }
+                              />
+                            </Button>
+                          </InputAdornment>
+                        </>
+                      ),
+                    }}
+                  ></FormInput>
+                  {materialImageError ? (
+                    <Alert
+                      sx={sxProps.fullWdithFormInputContainer}
+                      severity="error"
+                    >
+                      Image upload failed
+                    </Alert>
+                  ) : null}
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                  <FormInput
+                    sx={sxProps.formInputContainer}
+                    name="brand"
+                    value={values.brand}
+                    error={touched.brand && errors.brand}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={touched.brand && errors.brand}
+                    id="brand"
+                    label="Brand"
+                    disabled={viewMaterialMode}
+                  ></FormInput>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                  <FormInput
+                    sx={sxProps.formInputContainer}
+                    name="countInStock"
+                    value={values.countInStock}
+                    error={touched.countInStock && errors.countInStock}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={touched.countInStock && errors.countInStock}
+                    id="countInStock"
+                    label="Count"
+                    type="number"
+                    disabled={viewMaterialMode}
+                  ></FormInput>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                  <FormInput
+                    sx={sxProps.formInputContainer}
+                    name="category"
+                    value={values.category}
+                    error={touched.category && errors.category}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={touched.category && errors.category}
+                    id="category"
+                    label="Category"
+                    disabled={viewMaterialMode}
+                  ></FormInput>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <FormInput
+                    sx={sxProps.formInputContainer}
+                    name="description"
+                    value={values.description}
+                    error={touched.description && errors.description}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={touched.description && errors.description}
+                    id="description"
+                    label="Description"
+                    disabled={viewMaterialMode}
+                  ></FormInput>
+                </Grid>
                 {materialById.isError ? (
                   <Alert
                     sx={sxProps.fullWdithFormInputContainer}
@@ -366,31 +382,33 @@ const MaterialDialog = ({
                     Error while viewing material
                   </Alert>
                 ) : null}
-                <DialogActions>
-                  {createMaterialLoading || editMaterialLoading ? (
-                    <Loader sx={{ marginRight: "1rem" }} size="2rem"></Loader>
-                  ) : null}
-                  {viewMaterialMode ? (
-                    <Button variant={"contained"} onClick={editHandler}>
-                      Edit
-                    </Button>
-                  ) : (
-                    <Button variant={"contained"} onClick={handleSubmit}>
-                      Save
-                    </Button>
-                  )}
+                <Grid item xs={12}>
+                  <DialogActions>
+                    {createMaterialLoading || editMaterialLoading ? (
+                      <Loader sx={{ marginRight: "1rem" }} size="2rem"></Loader>
+                    ) : null}
+                    {viewMaterialMode ? (
+                      <Button variant={"contained"} onClick={editHandler}>
+                        Edit
+                      </Button>
+                    ) : (
+                      <Button variant={"contained"} onClick={handleSubmit}>
+                        Save
+                      </Button>
+                    )}
 
-                  <Button
-                    variant={"contained"}
-                    onClick={(e) => closeDialogHandler(e, resetForm)}
-                  >
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Form>
+                    <Button
+                      variant={"contained"}
+                      onClick={(e) => closeDialogHandler(e, resetForm)}
+                    >
+                      Cancel
+                    </Button>
+                  </DialogActions>
+                </Grid>
+              </>
             )}
           </Formik>
-        </Box>
+        </Grid>
       </DialogContent>
       <ImageDialog
         setOpen={setOpenImageDialog}

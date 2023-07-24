@@ -24,6 +24,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTheme } from "@mui/material";
 
 const Register = (props) => {
   const initialRegistData = useMemo(() => {
@@ -36,6 +37,7 @@ const Register = (props) => {
   }, []);
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
+  const theme = useTheme();
   const [
     register,
     {
@@ -95,7 +97,7 @@ const Register = (props) => {
   return (
     <Fragment>
       {isLoggedIn ? <Navigate to="/dashboard" replace={true} /> : null}
-      <Grid container sx={sxProps.authContainer}>
+      <Grid container sx={sxProps.authContainer} spacing={theme.spacing(1)} sx={sxProps.authContainer}>
         <Grid item md={6} lg={6} xl={6} sx={sxProps.svgWrapper}>
           <Box sx={sxProps.svgLayout}>
             <img style={sxProps.svg} src={svgBackground} />

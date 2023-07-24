@@ -83,7 +83,7 @@ const Login = (props) => {
       {loginSuccess || isLoggedIn ? (
         <Navigate to="/dashboard" replace={true} />
       ) : null}
-      <Grid container sx={sxProps.authContainer}>
+      <Grid spacing={theme.spacing(1)} container sx={sxProps.authContainer}>
         <Grid item md={6} lg={6} xl={6} sx={sxProps.svgWrapper}>
           <Box sx={sxProps.svgLayout}>
             <img style={sxProps.svg} src={svgBackground} />

@@ -3,6 +3,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import * as sxProps from "../styles/styles.ts";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 const imageDialog = ({ open, setOpen, image }) => {
   const closeDialogHandler = () => {
@@ -10,14 +11,19 @@ const imageDialog = ({ open, setOpen, image }) => {
   };
 
   return (
-    <Dialog maxWidth sx={sxProps.dialogMainContainer} open={open} onClose={closeDialogHandler}>
+    <Dialog maxWidth={"md"} open={open} onClose={closeDialogHandler}>
       <DialogContent>
-        <Box
-          component="img"
-          sx={sxProps.imageDialogWraper}
-          alt="dialogImage"
-          src={image}
-        />
+        <Grid
+          container
+        >
+          <Grid
+            item
+            component="img"
+            sx={sxProps.imageDialogWraper}
+            alt="dialogImage"
+            src={image}
+          ></Grid>
+        </Grid>
       </DialogContent>
     </Dialog>
   );

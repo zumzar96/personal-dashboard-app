@@ -19,7 +19,7 @@ const inputWrapper: SxProps = {
 
 const warehouseWrapper: SxProps = {//TODO increase height of container on sm & xs
     display: "flex",
-    height: "29.9rem",
+    height: "32.9rem",
     justifyContent:'space-between',
     gap:'0.2rem',
     flexDirection:{ 

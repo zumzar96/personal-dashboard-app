@@ -305,7 +305,12 @@ export default function MiniDrawer({ children }) {
           </Drawer>
           <Box
             component="main"
-            sx={{ flexGrow: 1, p: 3, minWidth: "20%", height: "100vh" }}
+            sx={{
+              flexGrow: 1,
+              p: theme.spacing(2),
+              minWidth: "20%",
+              height: "100vh",
+            }}
           >
             <DrawerHeader />
             {children}

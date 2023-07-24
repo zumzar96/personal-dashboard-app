@@ -16,7 +16,7 @@ const columns = [
     // align: "center",
     renderCell: ({ row: { name } }) => {
       return (
-        <Typography variant={"h5"} color={'neutral.main'}>
+        <Typography variant={"h5"} color={'neutral.light'}>
           {name}
         </Typography>
       );

@@ -14,8 +14,11 @@ import CreateButton from "../root/components/common/button";
 import MaterialDialog from "./components/materialDialog";
 import DeleteMaterialDialog from "./components/materialDeleteDialog";
 import * as sxProps from "./styles/styles.ts";
+import { useTheme } from "@mui/material/styles";
+
 
 const Materials = () => {
+  const theme = useTheme();
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
   const [openMaterialDialog, setOpenMaterialDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -51,7 +54,7 @@ const Materials = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={1}>
         <Grid item xs={12} sx={sxProps.breadcrumbWrapper}>
           <BreadcrumbPath
             breadcrumbPath={[

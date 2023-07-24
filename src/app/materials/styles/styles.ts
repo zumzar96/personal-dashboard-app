@@ -1,7 +1,7 @@
 import { SxProps } from "@mui/material";
 
 const gridItemWrapper: SxProps = {
-    height: "29.9rem",
+    height: "100%",
     
 };
 
@@ -27,21 +27,11 @@ const dialogMainContainer: SxProps = {
 };
 
 const dialogContainer: SxProps = {
-    height:'10%',
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
+    p: 2
 };
 
 const formInputContainer: SxProps = {
-    m: 1,
-    width: {
-      xs: "97%",
-      sm: "97%",
-      md: "47%",
-      lg: "47%",
-      xl: "47%",
-    },
+    width: "100%"
 };
 
 const dialogTitleContainer: SxProps = {
@@ -60,7 +50,9 @@ const fullWdithFormInputContainer : SxProps = {
 const imagePaperWraper : SxProps = {
     position: "relative",
     display: "flex",
-    maxWidth:'8rem',
+    maxWidth:'80%',
+    backgroundColor:'transparent',
+    border:'0px',
     height: "5rem",
     alignItems: "flex-start",
 };
@@ -73,24 +65,14 @@ const iconButtonWraper : SxProps = {
     width: "1rem",
 };
 const inputImageWraper : SxProps ={
-    height:'5rem',
+    height:'100%',
+    // width:'100%',
     
 }
 const imageDialogWraper : SxProps ={
-        maxHeight: {
-          xs: '10rem',
-          sm: "20rem",
-          md: "30rem",
-          lg: "30rem",
-          xl: "30rem",
-        },
-        maxWidth: {
-          xs: '15rem',
-          sm: "30rem",
-          md: "50rem",
-          lg: "50rem",
-          xl: "50rem",
-        },
+        maxHeight: '100%',
+        maxWidth: "100%",
+        
 }
 
 

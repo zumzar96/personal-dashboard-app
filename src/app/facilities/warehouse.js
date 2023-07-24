@@ -19,8 +19,10 @@ import {
 import Loader from "../root/components/common/loader.js";
 import { toast } from "react-toastify";
 import WarehouseMaterialsIconsBox from "./components/iconsBox.js";
+import { useTheme } from "@mui/material";
 
 const Warehouse = () => {
+  const theme = useTheme();
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
   const [isMapInteractive, setIsMapInteractive] = useState(false);
   const [currentMapMaterials, setCurrentMapMaterials] = useState([]);
@@ -118,7 +120,7 @@ const Warehouse = () => {
   return (
     <Grid
       container
-      spacing={2}
+      spacing={theme.spacing(1)}
     >
       <Grid
         item
