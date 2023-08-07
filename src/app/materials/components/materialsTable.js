@@ -98,14 +98,14 @@ const columns = [
 export default function MaterialsTable({
   data,
   paginationModel,
-  setPaginationModel,
+  paginationModelHandler,
   loading,
   error,
-  onRowsSelectionHandler,
+  onRowSelectionHandler,
   checkboxSelectionModel,
-  setCheckboxSelectionModel,
+  newCheckboxSelectionModelHandler,
 }) {
-  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
   return (
     <DataGrid
       slotProps={{
@@ -131,14 +131,14 @@ export default function MaterialsTable({
           paginationModel,
         },
       }}
-      onRowClick={(material) => onRowsSelectionHandler(material.row._id)}
+      onRowClick={(material) => onRowSelectionHandler(material.row._id)}
       disableRowSelectionOnClick
       onRowSelectionModelChange={(newCheckboxSelectionModel) => {
-        setCheckboxSelectionModel(newCheckboxSelectionModel);
+        newCheckboxSelectionModelHandler(newCheckboxSelectionModel);
       }}
       rowSelectionModel={checkboxSelectionModel}
       paginationMode="server"
-      onPaginationModelChange={setPaginationModel}
+      onPaginationModelChange={paginationModelHandler}
       checkboxSelection
       keepNonExistentRowsSelected
     />

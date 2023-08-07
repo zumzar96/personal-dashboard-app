@@ -16,13 +16,13 @@ import DeleteMaterialDialog from "./components/materialDeleteDialog";
 import * as sxProps from "./styles/styles.ts";
 import { useTheme } from "@mui/material/styles";
 
-
 const Materials = () => {
   const theme = useTheme();
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
   const [openMaterialDialog, setOpenMaterialDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [viewMaterialMode, setViewMaterialMode] = useState(false);
+  const [checkboxSelectionModel, setCheckboxSelectionModel] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 20,
@@ -33,20 +33,36 @@ const Materials = () => {
     pageNumber: paginationModel.page,
   });
 
-  const [checkboxSelectionModel, setCheckboxSelectionModel] = useState([]);
-
   const [getMaterialByIdOnRowClick, result] = useLazyGetMaterialByIdQuery();
 
-  const createMaterialHandler = () => {
-    setOpenMaterialDialog(true);
-    setViewMaterialMode(false);
+  const paginationModelHandler = (paginationModel) => {
+    setPaginationModel(paginationModel);
   };
 
-  const deleteMaterialHandler = () => {
-    setOpenDeleteDialog(true);
+  const viewMaterialModeHandler = () => {
+    setViewMaterialMode(!viewMaterialMode);
   };
 
-  const onRowsSelectionHandler = (materialId) => {
+  const emptyCheckboxSelectionModelHandler = () => {
+    setCheckboxSelectionModel([]);
+  };
+
+  const newCheckboxSelectionModelHandler = (checkboxSelectionModel) => {
+    setCheckboxSelectionModel(checkboxSelectionModel);
+  };
+
+  const toggleMaterialModalHandler = () => {
+    setOpenMaterialDialog(!openMaterialDialog);
+    if (viewMaterialMode) {
+      viewMaterialModeHandler();
+    }
+  };
+
+  const toggleDeleteMaterialModalHandler = () => {
+    setOpenDeleteDialog(!openDeleteDialog);
+  };
+
+  const onRowSelectionHandler = (materialId) => {
     getMaterialByIdOnRowClick({ materialId });
     setViewMaterialMode(true);
     setOpenMaterialDialog(true);
@@ -73,11 +89,14 @@ const Materials = () => {
           <CreateButton
             disabled={!checkboxSelectionModel.length}
             variant="contained"
-            onClick={deleteMaterialHandler}
+            onClick={toggleDeleteMaterialModalHandler}
           >
             Delete
           </CreateButton>
-          <CreateButton variant="contained" onClick={createMaterialHandler}>
+          <CreateButton
+            variant="contained"
+            onClick={toggleMaterialModalHandler}
+          >
             Create
           </CreateButton>
         </Grid>
@@ -92,28 +111,28 @@ const Materials = () => {
           <MaterialsTable
             data={data}
             paginationModel={paginationModel}
-            setPaginationModel={setPaginationModel}
+            paginationModelHandler={paginationModelHandler}
             error={isError}
             loading={isFetching}
-            onRowsSelectionHandler={onRowsSelectionHandler}
+            onRowSelectionHandler={onRowSelectionHandler}
             checkboxSelectionModel={checkboxSelectionModel}
-            setCheckboxSelectionModel={setCheckboxSelectionModel}
+            newCheckboxSelectionModelHandler={newCheckboxSelectionModelHandler}
           />
         </Grid>
       </Grid>
 
       <MaterialDialog
-        setViewMaterialMode={setViewMaterialMode}
+        viewMaterialModeHandler={viewMaterialModeHandler}
         viewMaterialMode={viewMaterialMode}
         openMaterialDialog={openMaterialDialog}
-        setOpenMaterialDialog={setOpenMaterialDialog} //TODO wrape in separate handler function
+        toggleMaterialModalHandler={toggleMaterialModalHandler} //TODO wrape in separate handler function
         materialById={result}
       ></MaterialDialog>
       <DeleteMaterialDialog
         open={openDeleteDialog}
-        setOpen={setOpenDeleteDialog}
+        toggleDeleteMaterialModalHandler={toggleDeleteMaterialModalHandler}
         checkboxSelectionModel={checkboxSelectionModel} //TODO wrape in separate handler function
-        setCheckboxSelectionModel={setCheckboxSelectionModel}
+        emptyCheckboxSelectionModelHandler={emptyCheckboxSelectionModelHandler}
       ></DeleteMaterialDialog>
     </>
   );

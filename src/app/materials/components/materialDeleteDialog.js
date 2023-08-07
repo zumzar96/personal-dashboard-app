@@ -13,30 +13,27 @@ import * as sxProps from "../styles/styles.ts";
 
 const MaterialDialog = ({
   open,
-  setOpen,
+  toggleDeleteMaterialModalHandler,
 
   //   deleteMaterialsIds,
   checkboxSelectionModel,
-  setCheckboxSelectionModel,
+  emptyCheckboxSelectionModelHandler,
 }) => {
   const [
     deleteMaterials,
-    {
-      isLoading: deleteMaterialsLoading,
-      reset: deleteMaterialsResetMuatation,
-    },
+    { isLoading: deleteMaterialsLoading, reset: deleteMaterialsResetMuatation },
   ] = useDeleteMaterialsMutation();
 
   const closeDialogHandler = () => {
-    setOpen(false);
+    toggleDeleteMaterialModalHandler();
     deleteMaterialsResetMuatation();
   };
 
   const confirmDeleteHandler = () => {
     deleteMaterials({ id: checkboxSelectionModel });
-    setOpen(false)
+    toggleDeleteMaterialModalHandler();
     deleteMaterialsResetMuatation();
-    setCheckboxSelectionModel([]);
+    emptyCheckboxSelectionModelHandler();
   };
 
   return (
