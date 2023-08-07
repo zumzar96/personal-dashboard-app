@@ -199,15 +199,15 @@ export const themeSettings = (mode) => {
           root: ({ theme }) => ({
             "&:has(> input:-webkit-autofill)": {
               backgroundColor: theme.palette.secondary.light,
-              // borderRadiusRight: "none",
-            },
+              // borderRadius: 0,
+            }, 
           }),
           input: {
             height: "0.7rem",
-            "&:-webkit-autofill": {
-              "-webkit-box-shadow": "0 0 0 100px var(--primary-weak) inset",
-              "-webkit-text-fill-color": "var(--text-primary)",
-            },
+            // '&:-webkit-autofill': {
+            //   WebkitBoxShadow: '0 0 0 100px #266798 inset',
+            //   WebkitTextFillColor: '#fff',
+            // },
           },
         },
       },

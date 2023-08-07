@@ -238,7 +238,7 @@ export default function MiniDrawer({ children }) {
                         minHeight: 48,
                         justifyContent: open ? "initial" : "center",
                         px: 2.5,
-                        color: "#8b888f",
+                        color: "neutral.light",
                       }}
                     >
                       <ListItemIcon
@@ -252,7 +252,7 @@ export default function MiniDrawer({ children }) {
                       </ListItemIcon>
                       <ListItemText
                         primary={text}
-                        sx={{ opacity: open ? 1 : 0, color: "#2f4f4f" }}
+                        sx={{ opacity: open ? 1 : 0 }}
                         // sx={{ color: "#2f4f4f" }}
                       />
                     </ListItemButton>
@@ -277,7 +277,7 @@ export default function MiniDrawer({ children }) {
                         minHeight: 48,
                         justifyContent: open ? "initial" : "center",
                         px: 2.5,
-                        color: "#8b888f",
+                        color: "neutral.light",
                       }}
                       // to={`${pathname}/materials`}
                       // disable={pathname === `${pathname}/materials`}
@@ -295,7 +295,7 @@ export default function MiniDrawer({ children }) {
                       </ListItemIcon>
                       <ListItemText
                         primary={text}
-                        sx={{ opacity: open ? 1 : 0, color: "#2f4f4f" }}
+                        sx={{ opacity: open ? 1 : 0 }}
                       />
                     </ListItemButton>
                   </ListItem>
@@ -309,7 +309,7 @@ export default function MiniDrawer({ children }) {
               flexGrow: 1,
               p: theme.spacing(2),
               minWidth: "20%",
-              height: "100vh",
+              // height: "100vh",
             }}
           >
             <DrawerHeader />

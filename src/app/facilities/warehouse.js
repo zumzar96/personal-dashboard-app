@@ -174,7 +174,7 @@ const Warehouse = () => {
           >
             <MapContainer
               center={[5, 208]}
-              zoom={0}
+              zoom={1}
               maxZoom={10}
               style={{
                 width: "100%",

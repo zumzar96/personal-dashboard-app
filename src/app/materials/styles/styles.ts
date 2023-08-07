@@ -1,7 +1,13 @@
 import { SxProps } from "@mui/material";
 
 const gridItemWrapper: SxProps = {
-    height: "100%",
+    // height: "32.9rem",
+    height:{ 
+        xs: '27.9rem',
+        sm: '27.9rem',
+        md: '27.9rem',
+        lg: '44.9rem',
+        xl: '44.9rem',},
     
 };
 
