@@ -16,7 +16,7 @@ const columns = [
     // align: "center",
     renderCell: ({ row: { name } }) => {
       return (
-        <Typography variant={"h5"} color={'neutral.light'}>
+        <Typography variant={"h5"} color={"neutral.light"}>
           {name}
         </Typography>
       );
@@ -123,7 +123,7 @@ export default function MaterialsTable({
       loading={loading}
       rows={data === undefined || error ? [] : data.materials} //TODO improve error handling & implement custom no data overlay
       getRowId={(row) => row._id}
-      rowCount={data?.pages} //TODO remove ? operator
+      rowCount={data?.count} //TODO remove ? operator
       columns={columns}
       paginationModel={paginationModel}
       initialState={{
@@ -139,7 +139,6 @@ export default function MaterialsTable({
       rowSelectionModel={checkboxSelectionModel}
       paginationMode="server"
       onPaginationModelChange={setPaginationModel}
-      // pageSizeOptions={[4]}
       checkboxSelection
       keepNonExistentRowsSelected
     />

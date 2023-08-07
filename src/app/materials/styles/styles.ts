@@ -6,7 +6,7 @@ const gridItemWrapper: SxProps = {
         xs: '27.9rem',
         sm: '27.9rem',
         md: '27.9rem',
-        lg: '44.9rem',
+        lg: '41.9rem',
         xl: '44.9rem',},
     
 };

@@ -25,7 +25,7 @@ const Materials = () => {
   const [viewMaterialMode, setViewMaterialMode] = useState(false);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
-    pageSize: 1,
+    pageSize: 20,
   });
 
   const { data, isError, isFetching } = useGetMaterialsQuery({

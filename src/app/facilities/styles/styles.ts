@@ -23,7 +23,7 @@ const warehouseWrapper: SxProps = {//TODO increase height of container on sm & x
         xs: '27.9rem',
         sm: '27.9rem',
         md: '27.9rem',
-        lg: '44.9rem',
+        lg: '40.9rem',
         xl: '44.9rem',},
     justifyContent:'space-between',
     gap:'0.2rem',
