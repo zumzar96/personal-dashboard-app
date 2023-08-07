@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { productsApiSlice } from "./materialsApiSlice";
+import { materialsApiSlice } from "./materialsApiSlice";
 import { toast } from "react-toastify";
 
 const materialsSlice = createSlice({
@@ -7,37 +7,43 @@ const materialsSlice = createSlice({
   initialState: null,
   extraReducers: (builder) => {
     builder.addMatcher(
-      productsApiSlice.endpoints.createMaterial.matchFulfilled,
+      materialsApiSlice.endpoints.getMaterials.matchRejected,
+      () => {
+        toast.error("Error while loading materials");
+      }
+    );
+    builder.addMatcher(
+      materialsApiSlice.endpoints.createMaterial.matchFulfilled,
       () => {
         toast.success("Create material succes");
       }
     );
     builder.addMatcher(
-      productsApiSlice.endpoints.createMaterial.matchRejected,
+      materialsApiSlice.endpoints.createMaterial.matchRejected,
       () => {
         toast.error("Create material error");
       }
     );
     builder.addMatcher(
-      productsApiSlice.endpoints.editMaterial.matchFulfilled,
+      materialsApiSlice.endpoints.editMaterial.matchFulfilled,
       () => {
         toast.success("Edit material succes");
       }
     );
     builder.addMatcher(
-      productsApiSlice.endpoints.editMaterial.matchRejected,
+      materialsApiSlice.endpoints.editMaterial.matchRejected,
       () => {
         toast.error("Edit material error");
       }
     );
     builder.addMatcher(
-      productsApiSlice.endpoints.deleteMaterials.matchFulfilled,
+      materialsApiSlice.endpoints.deleteMaterials.matchFulfilled,
       () => {
         toast.success("Delete material success");
       }
     );
     builder.addMatcher(
-      productsApiSlice.endpoints.deleteMaterials.matchRejected,
+      materialsApiSlice.endpoints.deleteMaterials.matchRejected,
       () => {
         toast.error("Delete material error");
       }
