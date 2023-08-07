@@ -1,13 +1,11 @@
 import React from "react";
-import { useState, useRef, useMemo, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import * as sxProps from "./styles/styles.ts";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import BreadcrumbPath from "../root/components/common/breadcrumb.js";
 import { mdiTableAccount, mdiChartTimeline } from "@mdi/js";
-import CreateButton from "../root/components/common/button.js";
 import SearchInput from "../root/components/common/input.js";
-import SvgIconC from "../../assets/svg/fabric-material-svgrepo-com.svg";
 import { MapContainer } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -21,8 +19,10 @@ import {
 import Loader from "../root/components/common/loader.js";
 import { toast } from "react-toastify";
 import WarehouseMaterialsIconsBox from "./components/iconsBox.js";
+import { useTheme } from "@mui/material";
 
 const Warehouse = () => {
+  const theme = useTheme();
   const [keyword, setKeyword] = useState(""); //TODO adjust keyword param handling
   const [isMapInteractive, setIsMapInteractive] = useState(false);
   const [currentMapMaterials, setCurrentMapMaterials] = useState([]);
@@ -81,7 +81,6 @@ const Warehouse = () => {
     });
   };
 
-
   //TODO filter data in warehouseApiSlice using transform data
   useEffect(() => {
     if (werehouseMaterials) {
@@ -97,7 +96,6 @@ const Warehouse = () => {
       );
     }
   }, [warehouseMaterialsLoading]);
-
 
   //TODO
   useEffect(() => {
@@ -119,68 +117,70 @@ const Warehouse = () => {
     }
   }, [warehouseMaterialsError, setWarehouseMaterialCordinatesError]);
 
-
   return (
     <Grid
       container
-      sx={sxProps.gridContainer}
-      xs={10}
-      sm={10}
-      md={12}
-      lg={12}
-      xl={12}
+      spacing={theme.spacing(1)}
     >
-      <Grid sx={sxProps.gridItemWrapper} item>
-        <Box sx={sxProps.breadcrumbWrapper}>
-          <BreadcrumbPath
-            breadcrumbPath={[
-              {
-                pathName: "Dashboard",
-                icon: mdiTableAccount,
-              },
-              {
-                pathName: "Warehouse",
-                icon: mdiChartTimeline,
-              },
-            ]}
-          />
-        </Box>
-        <Box sx={sxProps.inputWrapper}>
-          {/* TODO add separate filter component including search' */}
-          <SearchInput
-            id={"search_input"}
-            onChange={(e) => setKeyword(e.target.value)}
-            label={"Search"}
-          />
-        </Box>
-        <Box sx={sxProps.buttonWrapper}>
-          <FormControlLabel
-            control={<Switch onClick={mapInteractiveHandler} />}
-            label={isMapInteractive ? "Lock map" : "Unlock map"}
-          />
-        </Box>
+      <Grid
+        item
+        xs={12}
+        sx={sxProps.breadcrumbWrapper}
+      >
+        <BreadcrumbPath
+          breadcrumbPath={[
+            {
+              pathName: "Dashboard",
+              icon: mdiTableAccount,
+            },
+            {
+              pathName: "Warehouse",
+              icon: mdiChartTimeline,
+            },
+          ]}
+        />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sx={sxProps.inputWrapper}
+      >
+        {/* TODO add separate filter component including search' */}
+        <SearchInput
+          id={"search_input"}
+          onChange={(e) => setKeyword(e.target.value)}
+          label={"Search"}
+        />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sx={sxProps.buttonWrapper}
+      >
+        <FormControlLabel
+          control={<Switch onClick={mapInteractiveHandler} />}
+          label={isMapInteractive ? "Lock map" : "Unlock map"}
+        />
+      </Grid>
 
-        <Box sx={sxProps.warehouseWrapper}>
+      <Grid item xs={12}>
+      <Box sx={sxProps.warehouseWrapper}>
           <Box
             sx={sxProps.mapContainerWrapper}
-            // draggable
-            // onMouseLeave={onMouseLeaveHandler}
             onDragOver={(e) => {
               e.preventDefault();
             }}
-            // draggable
             onDrop={onDropHandler}
           >
             <MapContainer
               center={[5, 208]}
-              zoom={0}
+              zoom={1}
               maxZoom={10}
               style={{
                 width: "100%",
                 height: "100%",
                 borderRadius: "4px",
               }}
-              // zoomControl={false}
             >
               {warehouseMaterialsLoading ? (
                 <Box

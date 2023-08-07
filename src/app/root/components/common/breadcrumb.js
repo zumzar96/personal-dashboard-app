@@ -16,10 +16,10 @@ const commonBreadcrumbs = ({
       {breadcrumbPath.map((bData, i, arr) => {
         return (
           <Link
-            underline="hover"
+            underline={arr.length - 1 === i ? "always" : "hover"}
             sx={{ display: "flex", alignItems: "center" }}
             key={bData.pathName}
-            color={arr.length - 1 === i ? "black" : null}//TODO ajdust color values
+            color={arr.length - 1 === i ? "neutral.light" : null}//TODO ajdust color values
           >
             <Icon path={bData.icon} size={0.7} />
             {bData.pathName}

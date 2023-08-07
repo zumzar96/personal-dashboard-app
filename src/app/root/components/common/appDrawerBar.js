@@ -30,6 +30,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../../auth/loginSlice";
 import { Navigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { ColorModeContext, tokens } from "../../../../config/themes/rootTheme";
+import { useContext } from "react";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 
 const drawerWidth = 240;
 
@@ -66,6 +70,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
+  // backgroundColor: theme.palette.primary.dark,
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
@@ -106,10 +111,10 @@ export default function MiniDrawer({ children }) {
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
   const dispatch = useDispatch();
-  const location = useLocation();
+  const colors = tokens(theme.palette.mode);
+  const colorMode = useContext(ColorModeContext);
 
-  const { pathname } = useLocation();
-
+  console.log("theme.palette.mode.primary", theme.palette.primary.dark);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -135,7 +140,7 @@ export default function MiniDrawer({ children }) {
   return (
     <>
       {isLoggedIn ? (
-        <Box sx={{ display: "flex", height: "46.6rem" }}>
+        <Box sx={{ display: "flex" }}>
           <CssBaseline />
           <AppBar position="fixed" open={open}>
             <Toolbar>
@@ -151,14 +156,14 @@ export default function MiniDrawer({ children }) {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography
+              {/* <Typography
                 sx={{ minWidth: "3rem" }}
                 variant="h6"
                 noWrap
                 component="div"
               >
                 Dashboard
-              </Typography>
+              </Typography> */}
               <Box
                 sx={{
                   display: "flex",
@@ -167,6 +172,13 @@ export default function MiniDrawer({ children }) {
                   justifyContent: "flex-end",
                 }}
               >
+                <IconButton size="large" onClick={colorMode.toggleColorMode}>
+                  {theme.palette.mode === "dark" ? (
+                    <LightModeOutlinedIcon />
+                  ) : (
+                    <DarkModeOutlinedIcon sx={{ color: "white" }} />
+                  )}
+                </IconButton>
                 <IconButton
                   size="large"
                   aria-label="account of current user"
@@ -226,7 +238,7 @@ export default function MiniDrawer({ children }) {
                         minHeight: 48,
                         justifyContent: open ? "initial" : "center",
                         px: 2.5,
-                        color: "#8b888f",
+                        color: "neutral.light",
                       }}
                     >
                       <ListItemIcon
@@ -240,7 +252,7 @@ export default function MiniDrawer({ children }) {
                       </ListItemIcon>
                       <ListItemText
                         primary={text}
-                        sx={{ opacity: open ? 1 : 0, color: "#2f4f4f" }}
+                        sx={{ opacity: open ? 1 : 0 }}
                         // sx={{ color: "#2f4f4f" }}
                       />
                     </ListItemButton>
@@ -265,7 +277,7 @@ export default function MiniDrawer({ children }) {
                         minHeight: 48,
                         justifyContent: open ? "initial" : "center",
                         px: 2.5,
-                        color: "#8b888f",
+                        color: "neutral.light",
                       }}
                       // to={`${pathname}/materials`}
                       // disable={pathname === `${pathname}/materials`}
@@ -283,7 +295,7 @@ export default function MiniDrawer({ children }) {
                       </ListItemIcon>
                       <ListItemText
                         primary={text}
-                        sx={{ opacity: open ? 1 : 0, color: "#2f4f4f" }}
+                        sx={{ opacity: open ? 1 : 0 }}
                       />
                     </ListItemButton>
                   </ListItem>
@@ -291,7 +303,18 @@ export default function MiniDrawer({ children }) {
               )}
             </List>
           </Drawer>
-          <>{children}</>
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: theme.spacing(2),
+              minWidth: "20%",
+              // height: "100vh",
+            }}
+          >
+            <DrawerHeader />
+            {children}
+          </Box>
         </Box>
       ) : (
         <>

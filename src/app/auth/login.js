@@ -24,6 +24,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTheme } from "@mui/material";
+import { useContext } from "react";
+import { ColorModeContext, tokens } from "../../config/themes/rootTheme";
 
 const Login = (props) => {
   const initialRegistData = useMemo(() => {
@@ -32,6 +35,7 @@ const Login = (props) => {
       password: "",
     };
   }, []);
+  const theme = useTheme();
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
   const [
@@ -40,6 +44,7 @@ const Login = (props) => {
   ] = useLoginMutation();
   const [registData, setRegistData] = useState(initialRegistData);
   const location = useLocation();
+  const colorMode = useContext(ColorModeContext);
 
   const passRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -78,13 +83,21 @@ const Login = (props) => {
       {loginSuccess || isLoggedIn ? (
         <Navigate to="/dashboard" replace={true} />
       ) : null}
-      <Grid container sx={sxProps.authContainer}>
-        <Grid item xs={2} sm={2} md={6} lg={6} xl={6}>
+      <Grid spacing={theme.spacing(1)} container sx={sxProps.authContainer}>
+        <Grid item md={6} lg={6} xl={6} sx={sxProps.svgWrapper}>
           <Box sx={sxProps.svgLayout}>
-            <img src={svgBackground} />
+            <img style={sxProps.svg} src={svgBackground} />
           </Box>
         </Grid>
-        <Grid item xs={10} sm={10} md={6} lg={6} xl={6}>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={6}
+          lg={6}
+          xl={6}
+          sx={sxProps.authFormWrapper}
+        >
           <Formik
             initialValues={registData}
             validationSchema={SignupSchema}
@@ -103,87 +116,79 @@ const Login = (props) => {
               handleChange,
               handleBlur,
               handleSubmit,
-            }) => (
-              <Form>
-                <Box sx={sxProps.loginFormLayout}>
-                  {loginLoading ? (
-                    <Loader />
-                  ) : (
-                    <>
-                      <Typography variant="h4">Sign in</Typography>
-                      <TextField
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.email}
-                        error={errors.email}
-                        helperText={errors.email}
-                      />
+            }) =>
+              loginLoading ? (
+                <Loader />
+              ) : (
+                <Box sx={sxProps.authForm}>
+                  <Typography variant="h4">Sign in</Typography>
+                  <TextField
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
+                    error={errors.email}
+                    helperText={errors.email}
+                  />
 
-                      {loginError && (
-                        <Alert severity="error">
-                          User data is not correct!
-                        </Alert>
-                      )}
-                      <TextField
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        id="outlined-adornment-password"
-                        placeholder="Password"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.password}
-                        error={errors.password}
-                        helperText={errors.password}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityIcon />
-                                ) : (
-                                  <VisibilityOffIcon />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      ></TextField>
-                      {loginError && (
-                        <Alert severity="error">
-                          User data is not correct!
-                        </Alert>
-                      )}
-                      {location.state?.verifyEmailMsg ? (
-                        <Alert severity="info">
-                          {location.state.verifyEmailMsg}
-                        </Alert>
-                      ) : null}
-                      <Link sx={sxProps.linkColor} href="register">
-                        Sign up
-                      </Link>
-                      <Link sx={sxProps.linkColor} href="forgot-password">
-                        Forgot password?
-                      </Link>
-                      <Button
-                        variant="contained"
-                        disabled={isSubmitting}
-                        onClick={handleSubmit}
-                      >
-                        Login
-                      </Button>
-                    </>
+                  {loginError && (
+                    <Alert severity="error">User data is not correct!</Alert>
                   )}
+                  <TextField
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    id="outlined-adornment-password"
+                    placeholder="Password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    error={errors.password}
+                    helperText={errors.password}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  ></TextField>
+                  {loginError && (
+                    <Alert severity="error">User data is not correct!</Alert>
+                  )}
+                  {location.state?.verifyEmailMsg ? (
+                    <Alert severity="info">
+                      {location.state.verifyEmailMsg}
+                    </Alert>
+                  ) : null}
+                  <Link href="register" sx={sxProps.linkColor}>
+                    <Typography variant="h5">Sign up</Typography>
+                  </Link>
+                  <Link href="forgot-password" sx={sxProps.linkColor}>
+                    <Typography variant="h5">Forgot password?</Typography>
+                  </Link>
+                  <Button
+                    variant="contained"
+                    disabled={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    Login
+                  </Button>
                 </Box>
-              </Form>
-            )}
+              )
+            }
           </Formik>
         </Grid>
       </Grid>

@@ -11,22 +11,22 @@ const columns = [
     headerName: "Name",
     type: "text",
     flex: 1,
-    minWidth: 150,
-    headerAlign: "center",
+    minWidth: 120,
+    // headerAlign: "center",
+    // align: "center",
     renderCell: ({ row: { name } }) => {
       return (
-        <Typography sx={{ fontWeight: 600, color: "dimgray" }}>
+        <Typography variant={"h5"} color={'neutral.light'}>
           {name}
         </Typography>
       );
     },
   },
-  //TODO adjust column names
   {
     field: "brand",
     headerName: "Brand",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
   },
@@ -34,7 +34,7 @@ const columns = [
     field: "category",
     headerName: "Category",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
   },
@@ -43,7 +43,7 @@ const columns = [
     headerName: "Description",
     type: "number",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
   },
@@ -52,7 +52,7 @@ const columns = [
     headerName: "Image",
     type: "file",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
     renderCell: () => {
@@ -64,7 +64,7 @@ const columns = [
     headerName: "Created",
     // type: "date",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
     valueFormatter: (params) =>
@@ -75,7 +75,7 @@ const columns = [
     headerName: "Updated",
     // type: "date",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
     valueFormatter: (params) =>
@@ -108,19 +108,6 @@ export default function MaterialsTable({
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   return (
     <DataGrid
-      sx={{
-        "& .MuiDataGrid-columnHeaders": {
-          backgroundColor: "#8e8df5",
-          color: "#ffffff",
-          borderBottom: "none",
-        },
-        "& .MuiCheckbox-root": {
-          color: `#5d6068 !important`,
-        },
-        "& .MuiDataGrid-cell:focus-within": {
-          outline: "none !important",
-        },
-      }}
       slotProps={{
         panel: {
           sx: {
