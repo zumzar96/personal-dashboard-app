@@ -110,12 +110,37 @@ export default function MaterialsTable({
       slotProps={{
         panel: {
           sx: {
+            "& .MuiPaper-root": {
+              // backgroundColor: "green",
+              minWidth: "200px",
+            },
+            "& .MuiFormControl-root": {
+              // backgroundColor: "purple",
+              ":not(:first-child)": { width: "100%" },
+            },
             "& .MuiInput-input": {
               height: "1.2rem",
+              // backgroundColor: "blue",
+
+              // width: "2rem",
             },
-            // '& .MuiDataGrid-filterForm': {
-            //   bgcolor: 'lightblue',
+            "& .MuiInputLabel-root": {
+              // backgroundColor: "red",
+              marginBottom: "0.5rem",
+            },
+            "& .MuiInputLabel-shrink": {
+              transform: "translate(-1px, 5px) scale(0.8) !important",
+            },
+            // "& .MuiInputLabel-outlined": {
+            //   transform: "translate(14px, 10px) scale(1)",
             // },
+            "& .MuiDataGrid-filterForm": {
+              display: "flex",
+              flexDirection: "column",
+              // backgroundColor: "red",
+              alignItems: "flex-end",
+              // width: "5rem",
+            },
           },
         },
       }}
