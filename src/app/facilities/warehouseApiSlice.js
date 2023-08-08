@@ -10,7 +10,7 @@ export const warehouseMaterialsApiSlice = rootApiSlice.injectEndpoints({
         params: { keyword },
       }),
       keepUnusedDataFor: 5,
-      providesTags: ["Materials"],
+      providesTags: ["Warehousematerials"],
     }),
     warehouseMaterialCordinates: builder.mutation({
       query(params) {
@@ -22,7 +22,7 @@ export const warehouseMaterialsApiSlice = rootApiSlice.injectEndpoints({
           },
         };
       },
-        invalidatesTags: ["Materials"],
+        invalidatesTags: ["Warehousematerials"],
     }),
   }),
 });
