@@ -147,7 +147,7 @@ export default function MaterialsTable({
       loading={loading}
       rows={loading || error ? [] : data.materials} //TODO mui data grid issue https://github.com/mui/mui-x/issues/3650#issuecomment-1034113913
       getRowId={(row) => row._id}
-      rowCount={loading || error ? [] : data.count} //TODO mui data grid issue https://github.com/mui/mui-x/issues/3650#issuecomment-1034113913
+      rowCount={data?.count} //TODO mui data grid issue https://github.com/mui/mui-x/issues/3650#issuecomment-1034113913
       columns={columns}
       paginationModel={paginationModel}
       initialState={{
