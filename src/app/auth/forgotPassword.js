@@ -12,7 +12,10 @@ import * as sxProps from "./styles/styles.ts";
 import { Formik, Form, Field } from "formik";
 // import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import { useForgotpassMutation } from "./authApiSlice";
+import {
+  useEmailForgotPassMutation,
+  useResetPassMutation,
+} from "./authApiSlice";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
@@ -24,45 +27,80 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Link from "../root/components/common/link";
 import { useTheme } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 const Register = (props) => {
+  let location = useLocation();
+  const hasToken = location.hash; //TODO
+  const token = hasToken.substring(1); //TODO
+
   const initialRegistData = useMemo(() => {
-    return {
-      email: "",
-      password: "",
-      confirmpassword: "",
-    };
+    return hasToken
+      ? {
+          email: "",
+          pass: "",
+        }
+      : {
+          pass: "",
+        };
   }, []);
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
   const theme = useTheme();
   const [
-    forgotenPassReset,
+    sentEmailForgotenPass,
     {
-      isLoading: forgotenPassResetLoading,
-      isError: forgotenPassResetError,
-      isSuccess: forgotenPassResetSuccess,
+      isLoading: sentEmailForgotenPassLoading,
+      isError: sentEmailForgotenPassError,
+      isSuccess: sentEmailForgotenPassSuccess,
     },
-  ] = useForgotpassMutation();
+  ] = useEmailForgotPassMutation();
+
+  const [
+    resetPass,
+    {
+      isLoading: resetPassLoading,
+      isError: resetPassError,
+      isSuccess: resetPassSuccess,
+    },
+  ] = useResetPassMutation();
 
   const [registData, setRegistData] = useState(initialRegistData);
   const navigate = useNavigate();
   const passRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  const SignupSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string()
-      .max(50, "Password is too Long!")
-      .required("Password is required")
-      .matches(
-        passRegex,
-        "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
-      ),
-    confirmpassword: Yup.string()
-      .required("Field is required")
-      .oneOf([Yup.ref("password"), null], "Passwords must match"),
-  });
+  const SignupSchema = hasToken
+    ? Yup.object().shape({
+        // email: Yup.string()
+        //   .email("Invalid email")
+        //   .required("Email is required"),
+        password: Yup.string()
+          .max(50, "Password is too Long!")
+          .required("Password is required")
+          .matches(
+            passRegex,
+            "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+          ),
+        confirmpassword: Yup.string()
+          .required("Field is required")
+          .oneOf([Yup.ref("password"), null], "Passwords must match"),
+      })
+    : Yup.object().shape({
+        email: Yup.string()
+          .email("Invalid email")
+          .required("Email is required"),
+        // password: Yup.string()
+        //   .max(50, "Password is too Long!")
+        //   .required("Password is required")
+        //   .matches(
+        //     passRegex,
+        //     "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+        //   ),
+        // confirmpassword: Yup.string()
+        //   .required("Field is required")
+        //   .oneOf([Yup.ref("password"), null], "Passwords must match"),
+      });
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -72,21 +110,38 @@ const Register = (props) => {
     event.preventDefault();
   };
 
-  const forgotPasswordFormHandler = async (em, pswd) => {
-    const verifyEmailMsg = await forgotenPassReset({
+  const sentEmailForgotenPassHandler = async (em) => {
+    const verifyEmailMsg = await sentEmailForgotenPass({
       email: em,
-      password: pswd,
     });
     try {
-      navigate("/", {
-        state: {
-          verifyEmailMsg: verifyEmailMsg.data.message,
-        },
-      });
+      // navigate("/", {
+      //   state: {
+      //     verifyEmailMsg: verifyEmailMsg.data.message,
+      //   },
+      // });
       toast.info(`${verifyEmailMsg.data.message}`);
     } catch (error) {
       console.log(error);
       toast.error(`${verifyEmailMsg.error.data.message}`);
+    }
+  };
+
+  const resetPasswordFormHandler = async (pass) => {
+    const resetPassMsg = await resetPass({
+      password: pass,
+      token: token,
+    });
+    try {
+      navigate("/", {
+        state: {
+          resetPassMsg: resetPassMsg.data.message,
+        },
+      });
+      toast.info(`${resetPassMsg.data.message}`);
+    } catch (error) {
+      console.log(error);
+      toast.error(`${resetPassMsg.error.data.message}`);
     }
   };
 
@@ -114,7 +169,9 @@ const Register = (props) => {
               initialValues={registData}
               validationSchema={SignupSchema}
               onSubmit={(values, { setSubmitting }) => {
-                forgotPasswordFormHandler(values.email, values.password);
+                hasToken
+                  ? resetPasswordFormHandler(values.password, token)
+                  : sentEmailForgotenPassHandler(values.email);
                 setSubmitting(false);
               }}
             >
@@ -130,110 +187,134 @@ const Register = (props) => {
                 handleSubmit,
               }) => (
                 <Box sx={sxProps.authForm}>
-                  {forgotenPassResetLoading ? (
+                  {sentEmailForgotenPassLoading || resetPassLoading ? (
                     <Loader />
                   ) : (
                     <>
                       <Typography variant="h4">Forgot password</Typography>
-                      <TextField
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.email}
-                        error={touched.email && errors.email}
-                        helperText={touched.email && errors.email}
-                      />
+                      {hasToken ? null : (
+                        <>
+                          <TextField
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.email}
+                            error={touched.email && errors.email}
+                            helperText={touched.email && errors.email}
+                          />
+                          {(sentEmailForgotenPassError || resetPassError) && (
+                            <Alert severity="error">
+                              User data is not correct!
+                            </Alert>
+                          )}
+                        </>
+                      )}
 
-                      {forgotenPassResetError && (
-                        <Alert severity="error">
-                          User data is not correct!
-                        </Alert>
-                      )}
-                      <TextField
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Password"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.password}
-                        error={touched.password && errors.password}
-                        helperText={touched.password && errors.password}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityIcon />
-                                ) : (
-                                  <VisibilityOffIcon />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      ></TextField>
-                      {forgotenPassResetError && (
-                        <Alert severity="error">
-                          User data is not correct!
-                        </Alert>
-                      )}
-                      <TextField
-                        name="confirmpassword"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Confirm password"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.confirmpassword}
-                        error={
-                          touched.confirmpassword && errors.confirmpassword
-                        }
-                        helperText={
-                          touched.confirmpassword && errors.confirmpassword
-                        }
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityIcon />
-                                ) : (
-                                  <VisibilityOffIcon />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      ></TextField>
-                      {forgotenPassResetError && (
-                        <Alert severity="error">
-                          User data is not correct!
-                        </Alert>
-                      )}
+                      {hasToken ? (
+                        <>
+                          <TextField
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Password"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.password}
+                            error={touched.password && errors.password}
+                            helperText={touched.password && errors.password}
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                  >
+                                    {showPassword ? (
+                                      <VisibilityIcon />
+                                    ) : (
+                                      <VisibilityOffIcon />
+                                    )}
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                            }}
+                          ></TextField>
+                          {(sentEmailForgotenPassError || resetPassError) && (
+                            <Alert severity="error">
+                              User data is not correct!
+                            </Alert>
+                          )}
+                        </>
+                      ) : null}
+
+                      {hasToken ? (
+                        <>
+                          <TextField
+                            name="confirmpassword"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Confirm password"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.confirmpassword}
+                            error={
+                              touched.confirmpassword && errors.confirmpassword
+                            }
+                            helperText={
+                              touched.confirmpassword && errors.confirmpassword
+                            }
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                  >
+                                    {showPassword ? (
+                                      <VisibilityIcon />
+                                    ) : (
+                                      <VisibilityOffIcon />
+                                    )}
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                            }}
+                          ></TextField>
+                          {(sentEmailForgotenPassError || resetPassError) && (
+                            <Alert severity="error">
+                              User data is not correct!
+                            </Alert>
+                          )}
+                        </>
+                      ) : null}
+
                       <Link href="register" sx={sxProps.linkColor}>
                         <Typography variant="h5">Sign up</Typography>
                       </Link>
                       <Link href="/" sx={sxProps.linkColor}>
                         <Typography variant="h5">Login</Typography>
                       </Link>
-                      <Button
-                        variant="contained"
-                        disabled={isSubmitting}
-                        onClick={handleSubmit}
-                      >
-                        Reset password
-                      </Button>
+                      {hasToken ? (
+                        <Button
+                          variant="contained"
+                          disabled={isSubmitting}
+                          onClick={handleSubmit}
+                        >
+                          Reset password
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          disabled={isSubmitting}
+                          onClick={handleSubmit}
+                        >
+                          Send email
+                        </Button>
+                      )}
                     </>
                   )}
                 </Box>

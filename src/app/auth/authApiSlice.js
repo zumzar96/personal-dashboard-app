@@ -27,14 +27,25 @@ export const authApi = rootApiSlice.injectEndpoints({
         };
       },
     }),
-    forgotpass: builder.mutation({
+    emailForgotPass: builder.mutation({
       query(params) {
         return {
           url: `users/forgotpass`,
           method: "POST",
           body: {
             email: params.email,
+          },
+        };
+      },
+    }),
+    resetPass: builder.mutation({
+      query(params) {
+        return {
+          url: `users/resetpass`,
+          method: "POST",
+          body: {
             password: params.password,
+            token:params.token,
           },
         };
       },
@@ -50,5 +61,9 @@ export const authApi = rootApiSlice.injectEndpoints({
 
 export default authApi;
 
-export const { useForgotpassMutation, useLoginMutation, useRegisterMutation } =
-  authApi;
+export const {
+  useResetPassMutation,
+  useEmailForgotPassMutation,
+  useLoginMutation,
+  useRegisterMutation,
+} = authApi;
