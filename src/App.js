@@ -28,7 +28,7 @@ function App() {
         <CssBaseline/>
         <ToastContainer autoClose={2000} />
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/*" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password/*" element={<ForgotPassword />} />
           <Route path="dashboard/*" element={<Dashboard />} />

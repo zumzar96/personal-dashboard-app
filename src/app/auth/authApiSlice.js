@@ -17,12 +17,23 @@ export const authApi = rootApiSlice.injectEndpoints({
     register: builder.mutation({
       query(params) {
         return {
-          url: `users/`,
+          url: `users/register`,
           method: "POST",
           body: {
             name: params.name,
             email: params.email,
             password: params.password,
+          },
+        };
+      },
+    }),
+    verifyEmailRegister: builder.mutation({
+      query(params) {
+        return {
+          url: `users/verifyemail`,
+          method: "POST",
+          body: {
+            token: params.token,
           },
         };
       },
@@ -45,7 +56,7 @@ export const authApi = rootApiSlice.injectEndpoints({
           method: "POST",
           body: {
             password: params.password,
-            token:params.token,
+            token: params.token,
           },
         };
       },
@@ -66,4 +77,5 @@ export const {
   useEmailForgotPassMutation,
   useLoginMutation,
   useRegisterMutation,
+  useVerifyEmailRegisterMutation,
 } = authApi;

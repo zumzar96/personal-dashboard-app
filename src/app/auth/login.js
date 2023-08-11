@@ -14,7 +14,10 @@ import * as sxProps from "./styles/styles.ts";
 import { Formik, Form, Field } from "formik";
 // import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import { useLoginMutation } from "./authApiSlice";
+import {
+  useLoginMutation,
+  useVerifyEmailRegisterMutation,
+} from "./authApiSlice";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
@@ -29,6 +32,9 @@ import { useContext } from "react";
 import { ColorModeContext, tokens } from "../../config/themes/rootTheme";
 
 const Login = (props) => {
+  let location = useLocation();
+  const hasToken = location.hash; //TODO
+  const token = hasToken.substring(1); //TODO
   const initialRegistData = useMemo(() => {
     return {
       email: "",
@@ -42,8 +48,15 @@ const Login = (props) => {
     login,
     { isLoading: loginLoading, isError: loginError, isSuccess: loginSuccess },
   ] = useLoginMutation();
+  const [
+    verifyEmail,
+    {
+      isLoading: verifyEmailLoading,
+      isError: verifyEmailError,
+      isSuccess: verifyEmailSuccess,
+    },
+  ] = useVerifyEmailRegisterMutation();
   const [registData, setRegistData] = useState(initialRegistData);
-  const location = useLocation();
   const colorMode = useContext(ColorModeContext);
 
   const passRegex =
@@ -77,6 +90,13 @@ const Login = (props) => {
       toast.error("User data not correct");
     }
   }, [loginError]);
+
+  useEffect(() => {
+    console.log("hoce");
+    if (hasToken) {
+      verifyEmail({ token: token });
+    }
+  }, [hasToken]);
 
   return (
     <Fragment>
@@ -117,10 +137,16 @@ const Login = (props) => {
                 handleBlur,
                 handleSubmit,
               }) =>
-                loginLoading ? (
+                loginLoading || verifyEmailLoading ? (
                   <Loader />
                 ) : (
                   <Box sx={sxProps.authForm}>
+                    {verifyEmailSuccess ? (
+                      <Alert severity="info">Email verified</Alert>
+                    ) : null}
+                    {verifyEmailError ? (
+                      <Alert severity="info">Email verified already</Alert>
+                    ) : null}
                     <Typography variant="h4">Sign in</Typography>
                     <TextField
                       name="email"
