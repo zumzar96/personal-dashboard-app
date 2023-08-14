@@ -16,7 +16,7 @@ const columns = [
     // align: "center",
     renderCell: ({ row: { name } }) => {
       return (
-        <Typography variant={"h5"} color={'neutral.light'}>
+        <Typography variant={"h5"} color={"neutral.light"}>
           {name}
         </Typography>
       );
@@ -98,32 +98,56 @@ const columns = [
 export default function MaterialsTable({
   data,
   paginationModel,
-  setPaginationModel,
+  paginationModelHandler,
   loading,
   error,
-  onRowsSelectionHandler,
+  onRowSelectionHandler,
   checkboxSelectionModel,
-  setCheckboxSelectionModel,
+  newCheckboxSelectionModelHandler,
 }) {
-  const [rowSelectionModel, setRowSelectionModel] = useState([]);
   return (
     <DataGrid
       slotProps={{
         panel: {
           sx: {
+            "& .MuiPaper-root": {
+              // backgroundColor: "green",
+              minWidth: "200px",
+            },
+            "& .MuiFormControl-root": {
+              // backgroundColor: "purple",
+              ":not(:first-child)": { width: "100%" },
+            },
             "& .MuiInput-input": {
               height: "1.2rem",
+              // backgroundColor: "blue",
+
+              // width: "2rem",
             },
-            // '& .MuiDataGrid-filterForm': {
-            //   bgcolor: 'lightblue',
+            "& .MuiInputLabel-root": {
+              // backgroundColor: "red",
+              marginBottom: "0.5rem",
+            },
+            "& .MuiInputLabel-shrink": {
+              transform: "translate(-1px, 5px) scale(0.8) !important",
+            },
+            // "& .MuiInputLabel-outlined": {
+            //   transform: "translate(14px, 10px) scale(1)",
             // },
+            "& .MuiDataGrid-filterForm": {
+              display: "flex",
+              flexDirection: "column",
+              // backgroundColor: "red",
+              alignItems: "flex-end",
+              // width: "5rem",
+            },
           },
         },
       }}
       loading={loading}
-      rows={data === undefined || error ? [] : data.materials} //TODO improve error handling & implement custom no data overlay
+      rows={loading || error ? [] : data.materials} //TODO mui data grid issue https://github.com/mui/mui-x/issues/3650#issuecomment-1034113913
       getRowId={(row) => row._id}
-      rowCount={data?.pages} //TODO remove ? operator
+      rowCount={data?.count} //TODO mui data grid issue https://github.com/mui/mui-x/issues/3650#issuecomment-1034113913
       columns={columns}
       paginationModel={paginationModel}
       initialState={{
@@ -131,15 +155,14 @@ export default function MaterialsTable({
           paginationModel,
         },
       }}
-      onRowClick={(material) => onRowsSelectionHandler(material.row._id)}
+      onRowClick={(material) => onRowSelectionHandler(material.row._id)}
       disableRowSelectionOnClick
       onRowSelectionModelChange={(newCheckboxSelectionModel) => {
-        setCheckboxSelectionModel(newCheckboxSelectionModel);
+        newCheckboxSelectionModelHandler(newCheckboxSelectionModel);
       }}
       rowSelectionModel={checkboxSelectionModel}
       paginationMode="server"
-      onPaginationModelChange={setPaginationModel}
-      // pageSizeOptions={[4]}
+      onPaginationModelChange={paginationModelHandler}
       checkboxSelection
       keepNonExistentRowsSelected
     />

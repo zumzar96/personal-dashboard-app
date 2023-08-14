@@ -34,7 +34,7 @@ const ImageMap = ({
       {currentMapMaterials.map((material) => (
         <DraggableMarker
           disabled={disabled}
-          key={material.name}
+          key={material._id}
           material={material}
           removeMaterialFromMapHandler={removeMaterialFromMapHandler}
           setWarehouseMaterialCordinates={setWarehouseMaterialCordinates}

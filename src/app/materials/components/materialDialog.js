@@ -26,9 +26,9 @@ import { useTheme } from "@mui/material";
 
 const MaterialDialog = ({
   openMaterialDialog,
-  setOpenMaterialDialog,
+  toggleMaterialModalHandler,
   viewMaterialMode,
-  setViewMaterialMode,
+  viewMaterialModeHandler,
   materialById,
 }) => {
   const initialRegistData = useMemo(() => {
@@ -99,14 +99,13 @@ const MaterialDialog = ({
     if (editMaterialMode) {
       editMaterial(params);
       // materialEditResetMuatation();
-      setOpenMaterialDialog(false);
+      toggleMaterialModalHandler();
     } else {
       createMaterial(params);
       // materialCreateResetMuatation();
-      setOpenMaterialDialog(false);
+      toggleMaterialModalHandler();
     }
     setEditMaterialMode(false);
-    setViewMaterialMode(false);
     setRegistData(initialRegistData);
     setFilename(initialRegistData.image);
   };
@@ -117,12 +116,12 @@ const MaterialDialog = ({
   };
 
   const editHandler = () => {
-    setViewMaterialMode(false);
+    viewMaterialModeHandler()
     setEditMaterialMode(true);
   };
 
   const closeDialogHandler = () => {
-    setOpenMaterialDialog(false);
+    toggleMaterialModalHandler();
     // resetForm();TODO implement reset form function
     setFilename(initialRegistData.image);
     // materialCreateResetMuatation();

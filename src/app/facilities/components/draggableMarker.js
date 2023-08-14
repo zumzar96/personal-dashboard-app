@@ -25,24 +25,28 @@ const DraggableMarker = ({
 
   const eventHandlers = useMemo(
     () => ({
-      dragend() {
+      dragend() {//TODO reasearch all eventHandlers
         const marker = markerRef.current;
         if (marker != null) {
           setPosition(marker.getLatLng());
+          setWarehouseMaterialCordinates({
+            id: material._id,
+            cordinates: marker.getLatLng(),
+          });
         }
       },
     }),
     []
   );
 
-  useEffect(() => {
-    if (position) {
-      setWarehouseMaterialCordinates({
-        id: material._id,
-        cordinates: position,
-      });
-    }
-  }, [position.lat, position.lng]);
+  // useEffect(() => {
+  //   if (position) {
+  //     setWarehouseMaterialCordinates({
+  //       id: material._id,
+  //       cordinates: position,
+  //     });
+  //   }
+  // }, [position.lat, position.lng]);
 
   return (
     <Marker

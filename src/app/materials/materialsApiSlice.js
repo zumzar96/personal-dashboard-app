@@ -1,6 +1,6 @@
 import { rootApiSlice } from "../root/rootApiSlice";
 
-export const productsApiSlice = rootApiSlice.injectEndpoints({
+export const materialsApiSlice = rootApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getMaterials: builder.query({
       query: ({ keyword, pageNumber }) => ({
@@ -70,4 +70,4 @@ export const {
   useEditMaterialMutation,
   useDeleteMaterialsMutation,
   useUploadMaterialImageMutation,
-} = productsApiSlice;
+} = materialsApiSlice;

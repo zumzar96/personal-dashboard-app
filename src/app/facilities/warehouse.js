@@ -62,6 +62,10 @@ const Warehouse = () => {
     setIconBoxMaterials(
       iconBoxMaterials.filter((item) => draggedMaterial._id !== item._id)
     );
+    setWarehouseMaterialCordinates({
+      id: draggedMaterial._id,
+      cordinates: draggedMaterial.cordinates,
+    });
     setCurrentMapMaterials([...currentMapMaterials, draggedMaterial]);
   };
 
@@ -109,13 +113,13 @@ const Warehouse = () => {
     }
   }, [werehouseMaterials]);
 
-  useEffect(() => {
-    if (warehouseMaterialsError) {
-      toast.error("Warehouse material error");
-    } else if (setWarehouseMaterialCordinatesError) {
-      toast.error("Warehouse material position error");
-    }
-  }, [warehouseMaterialsError, setWarehouseMaterialCordinatesError]);
+  // useEffect(() => {
+  //   if (warehouseMaterialsError) {
+  //     toast.error("Warehouse material error");
+  //   } else if (setWarehouseMaterialCordinatesError) {
+  //     toast.error("Warehouse material position error");
+  //   }
+  // }, [warehouseMaterialsError, setWarehouseMaterialCordinatesError]);
 
   return (
     <Grid
