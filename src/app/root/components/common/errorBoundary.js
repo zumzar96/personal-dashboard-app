@@ -12,7 +12,7 @@ const commonErrorBoundary = ({
 }) => {
   return (
     <Typography variant="h3" color={"grey"}>
-      Error 404 Page not found Error 404 Page not found
+      Error 404 Page not found
     </Typography>
   );
 };

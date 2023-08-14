@@ -3,18 +3,18 @@ import { useState, useMemo, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "../root/components/common/button";
 import { Grid } from "@mui/material";
-import Link from "../root/components/common/link";
 import Alert from "../root/components/common/alert";
 import Input from "../root/components/common/input";
 import Loader from "../root/components/common/loader";
-import Checkbox from "../root/components/common/checkbox";
 import svgBackground from "../../assets/svg/undraw_remotely_2j6y.svg";
 import Typography from "@mui/material/Typography";
 import * as sxProps from "./styles/styles.ts";
 import { Formik, Form, Field } from "formik";
 // import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import { useLoginMutation } from "./authApiSlice";
+import {
+  useResetPassMutation,
+} from "./authApiSlice";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
@@ -22,36 +22,46 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Link from "../root/components/common/link";
 import { useTheme } from "@mui/material";
-import { useContext } from "react";
-import { ColorModeContext, tokens } from "../../config/themes/rootTheme";
+import { useLocation } from "react-router-dom";
+import ErrorBoundary from "../root/components/common/errorBoundary";
 
-const Login = (props) => {
-  const location = useLocation();
+const ResPaassVerified = (props) => {
+  let location = useLocation();
+  const params1 = new URLSearchParams(location.search)
+  const token = params1.get('p')
+
+
   const initialRegistData = useMemo(() => {
     return {
-      email: "",
-      password: "",
+      pass: "",
     };
   }, []);
-  const theme = useTheme();
   const user_info = useSelector((state) => state.login.user_info);
   const isLoggedIn = user_info !== null;
+  const theme = useTheme();
+
   const [
-    login,
-    { isLoading: loginLoading, isError: loginError, isSuccess: loginSuccess },
-  ] = useLoginMutation();
+    resetPass,
+    {
+      isLoading: resetPassLoading,
+      isError: resetPassError,
+      isSuccess: resetPassSuccess,
+    },
+  ] = useResetPassMutation();
 
   const [registData, setRegistData] = useState(initialRegistData);
-  const colorMode = useContext(ColorModeContext);
-
+  const navigate = useNavigate();
   const passRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   const SignupSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Email is required"),
+    // email: Yup.string()
+    //   .email("Invalid email")
+    //   .required("Email is required"),
     password: Yup.string()
       .max(50, "Password is too Long!")
       .required("Password is required")
@@ -59,6 +69,9 @@ const Login = (props) => {
         passRegex,
         "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
       ),
+    confirmpassword: Yup.string()
+      .required("Field is required")
+      .oneOf([Yup.ref("password"), null], "Passwords must match"),
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -69,22 +82,39 @@ const Login = (props) => {
     event.preventDefault();
   };
 
-  const loginFormHandler = (em, pswd) => {
-    login({ email: em, password: pswd });
+  const resetPasswordFormHandler = async (pass) => {
+    const resetPassMsg = await resetPass({
+      password: pass,
+      token: token,
+    });
+    try {
+      toast.info(`${resetPassMsg.data.message}`);
+       navigate("/", {
+        state: {
+          verifyEmailMsg: resetPassMsg.data.message,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error(`${error}`);
+    }
   };
 
   useEffect(() => {
-    if (loginError) {
-      toast.error("User data not correct");
+    //TODO handle token check for error boundary
+    if (token) {
+      resetPass({ token: token, password: "" });
     }
-  }, [loginError]);
+  }, [token]);
 
   return (
     <Fragment>
-      {loginSuccess || isLoggedIn ? (
+      {isLoggedIn ? (
         <Navigate to="/dashboard" replace={true} />
-      ) : (
-        <Grid spacing={theme.spacing(1)} container sx={sxProps.authContainer}>
+      ) : resetPassLoading ? (
+        <Loader />
+      ) : resetPassSuccess ? (
+        <Grid sx={sxProps.authContainer} spacing={theme.spacing(1)} container>
           <Grid item md={6} lg={6} xl={6} sx={sxProps.svgWrapper}>
             <Box sx={sxProps.svgLayout}>
               <img style={sxProps.svg} src={svgBackground} />
@@ -102,9 +132,11 @@ const Login = (props) => {
             <Formik
               initialValues={registData}
               validationSchema={SignupSchema}
-              onSubmit={(values, { setSubmitting }) => {
-                loginFormHandler(values.email, values.password);
+              onSubmit={(values, { setSubmitting, resetForm }) => {
+                resetPasswordFormHandler(values.password, token);
+
                 setSubmitting(false);
+                resetForm();
               }}
             >
               {({
@@ -117,36 +149,31 @@ const Login = (props) => {
                 handleChange,
                 handleBlur,
                 handleSubmit,
-              }) =>
-                loginLoading ? (
-                  <Loader />
-                ) : (
-                  <Box sx={sxProps.authForm}>
-                    <Typography variant="h4">Sign in</Typography>
-                    <TextField
-                      name="email"
-                      type="email"
-                      placeholder="Email"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.email}
-                      error={errors.email}
-                      helperText={errors.email}
-                    />
-
-                    {loginError && (
-                      <Alert severity="error">User data is not correct!</Alert>
+              }) => (
+                <Box sx={sxProps.authForm}>
+                  <>
+                    <Typography variant="h4">Forgot password</Typography>
+                    {resetPassSuccess ? (
+                      <>
+                        <Alert severity="info">
+                          Email verified successfully, now you can change your password!
+                        </Alert>
+                      </>
+                    ) : (
+                      <>
+                        <Alert severity="error">Password change error</Alert>
+                      </>
                     )}
+
                     <TextField
                       name="password"
                       type={showPassword ? "text" : "password"}
-                      id="outlined-adornment-password"
                       placeholder="Password"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.password}
-                      error={errors.password}
-                      helperText={errors.password}
+                      error={touched.password && errors.password}
+                      helperText={touched.password && errors.password}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -166,36 +193,69 @@ const Login = (props) => {
                         ),
                       }}
                     ></TextField>
-                    {loginError && (
+                    {resetPassError && (
                       <Alert severity="error">User data is not correct!</Alert>
                     )}
-                    {location.state?.verifyEmailMsg ? (
-                      <Alert severity="info">
-                        {location.state.verifyEmailMsg}
-                      </Alert>
-                    ) : null}
+
+                    <TextField
+                      name="confirmpassword"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Confirm password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.confirmpassword}
+                      error={touched.confirmpassword && errors.confirmpassword}
+                      helperText={
+                        touched.confirmpassword && errors.confirmpassword
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? (
+                                <VisibilityIcon />
+                              ) : (
+                                <VisibilityOffIcon />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    ></TextField>
+                    {resetPassError && (
+                      <Alert severity="error">User data is not correct!</Alert>
+                    )}
+
                     <Link href="register" sx={sxProps.linkColor}>
                       <Typography variant="h5">Sign up</Typography>
                     </Link>
-                    <Link href="forgot-password" sx={sxProps.linkColor}>
-                      <Typography variant="h5">Forgot password?</Typography>
+                    <Link href="/" sx={sxProps.linkColor}>
+                      <Typography variant="h5">Login</Typography>
                     </Link>
+
                     <Button
                       variant="contained"
                       disabled={isSubmitting}
                       onClick={handleSubmit}
                     >
-                      Login
+                      Reset password
                     </Button>
-                  </Box>
-                )
-              }
+                  </>
+                </Box>
+              )}
             </Formik>
           </Grid>
         </Grid>
+      ) : (
+        <ErrorBoundary />
       )}
     </Fragment>
   );
 };
 
-export default Login;
+export default ResPaassVerified;
