@@ -20,7 +20,7 @@ import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
 
 export const rootApiSlice = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/",
+    baseUrl: process.env.REACT_APP_BASE_URL,
     prepareHeaders: (headers, { getState }) => {
       const token = getState().login.user_info?.token;//TODO remove ? operator
       if (token) {
