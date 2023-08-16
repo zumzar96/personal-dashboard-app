@@ -28,6 +28,7 @@ const Warehouse = () => {
   const [currentMapMaterials, setCurrentMapMaterials] = useState([]);
   const [iconBoxMaterials, setIconBoxMaterials] = useState([]);
   const [map, setMap] = useState();
+
   const [
     setWarehouseMaterialCordinates,
     {
@@ -85,52 +86,16 @@ const Warehouse = () => {
     });
   };
 
-  //TODO filter data in warehouseApiSlice using transform data
   useEffect(() => {
     if (werehouseMaterials) {
-      setCurrentMapMaterials(
-        werehouseMaterials.materials.filter(
-          (m) => m.cordinates && m.cordinates !== null //TODO
-        )
-      );
-      setIconBoxMaterials(
-        werehouseMaterials.materials.filter(
-          (m) => m.cordinates === null || !m.cordinates //TODO
-        )
-      );
+      setCurrentMapMaterials(werehouseMaterials.mapMaterials);
+      setIconBoxMaterials(werehouseMaterials.iconboxMaterials);
     }
   }, [warehouseMaterialsLoading]);
 
-  //TODO
-  useEffect(() => {
-    console.log("keyword", keyword);
-    if (werehouseMaterials) {
-      setIconBoxMaterials(
-        werehouseMaterials.materials.filter(
-          (m) => m.cordinates === null || !m.cordinates
-        )
-      );
-    }
-  }, [werehouseMaterials]);
-
-  // useEffect(() => {
-  //   if (warehouseMaterialsError) {
-  //     toast.error("Warehouse material error");
-  //   } else if (setWarehouseMaterialCordinatesError) {
-  //     toast.error("Warehouse material position error");
-  //   }
-  // }, [warehouseMaterialsError, setWarehouseMaterialCordinatesError]);
-
   return (
-    <Grid
-      container
-      spacing={theme.spacing(1)}
-    >
-      <Grid
-        item
-        xs={12}
-        sx={sxProps.breadcrumbWrapper}
-      >
+    <Grid container spacing={theme.spacing(1)}>
+      <Grid item xs={12} sx={sxProps.breadcrumbWrapper}>
         <BreadcrumbPath
           breadcrumbPath={[
             {
@@ -144,11 +109,7 @@ const Warehouse = () => {
           ]}
         />
       </Grid>
-      <Grid
-        item
-        xs={12}
-        sx={sxProps.inputWrapper}
-      >
+      <Grid item xs={12} sx={sxProps.inputWrapper}>
         {/* TODO add separate filter component including search' */}
         <SearchInput
           id={"search_input"}
@@ -156,11 +117,7 @@ const Warehouse = () => {
           label={"Search"}
         />
       </Grid>
-      <Grid
-        item
-        xs={12}
-        sx={sxProps.buttonWrapper}
-      >
+      <Grid item xs={12} sx={sxProps.buttonWrapper}>
         <FormControlLabel
           control={<Switch onClick={mapInteractiveHandler} />}
           label={isMapInteractive ? "Lock map" : "Unlock map"}
@@ -168,7 +125,7 @@ const Warehouse = () => {
       </Grid>
 
       <Grid item xs={12}>
-      <Box sx={sxProps.warehouseWrapper}>
+        <Box sx={sxProps.warehouseWrapper}>
           <Box
             sx={sxProps.mapContainerWrapper}
             onDragOver={(e) => {
