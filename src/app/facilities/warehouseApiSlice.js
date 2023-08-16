@@ -11,6 +11,20 @@ export const warehouseMaterialsApiSlice = rootApiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
       providesTags: ["Warehousematerials"],
+      transformResponse: (response) => {
+        const mapMaterials = [];
+        const iconboxMaterials = [];
+
+        response.materials.forEach((element) =>
+          element.cordinates === null || !element.cordinates
+            ? iconboxMaterials.push(element)
+            : mapMaterials.push(element)
+        );
+        return {
+          mapMaterials: mapMaterials,
+          iconboxMaterials: iconboxMaterials,
+        };
+      },
     }),
     warehouseMaterialCordinates: builder.mutation({
       query(params) {
@@ -22,7 +36,7 @@ export const warehouseMaterialsApiSlice = rootApiSlice.injectEndpoints({
           },
         };
       },
-        invalidatesTags: ["Warehousematerials"],
+      invalidatesTags: ["Warehousematerials"],
     }),
   }),
 });
