@@ -16,7 +16,7 @@ export const warehouseMaterialsApiSlice = rootApiSlice.injectEndpoints({
         const iconboxMaterials = [];
 
         response.materials.forEach((element) =>
-          element.cordinates === null || !element.cordinates
+          element.coordinates === null || !element.coordinates
             ? iconboxMaterials.push(element)
             : mapMaterials.push(element)
         );
@@ -32,7 +32,7 @@ export const warehouseMaterialsApiSlice = rootApiSlice.injectEndpoints({
           url: `/warehousematerials/${params.id}`,
           method: "PUT",
           body: {
-            cordinates: params.cordinates,
+            coordinates: params.coordinates,
           },
         };
       },

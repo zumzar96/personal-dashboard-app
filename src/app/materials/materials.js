@@ -25,7 +25,7 @@ const Materials = () => {
   const [checkboxSelectionModel, setCheckboxSelectionModel] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
-    pageSize: 20,
+    pageSize: 5,
   });
 
   const { data, isError, isFetching } = useGetMaterialsQuery({

@@ -60,7 +60,7 @@ const columns = [
     },
   },
   {
-    field: "createdAt",
+    field: "created_at",
     headerName: "Created",
     // type: "date",
     flex: 1,
@@ -71,7 +71,7 @@ const columns = [
       moment(params?.value).format("DD/MM/YYYY hh:mm A"),
   },
   {
-    field: "updatedAt",
+    field: "updated_at",
     headerName: "Updated",
     // type: "date",
     flex: 1,
@@ -146,7 +146,7 @@ export default function MaterialsTable({
       }}
       loading={loading}
       rows={loading || error ? [] : data.materials} //TODO mui data grid issue https://github.com/mui/mui-x/issues/3650#issuecomment-1034113913
-      getRowId={(row) => row._id}
+      getRowId={(row) => row.id}
       rowCount={data?.count} //TODO mui data grid issue https://github.com/mui/mui-x/issues/3650#issuecomment-1034113913
       columns={columns}
       paginationModel={paginationModel}
@@ -155,7 +155,7 @@ export default function MaterialsTable({
           paginationModel,
         },
       }}
-      onRowClick={(material) => onRowSelectionHandler(material.row._id)}
+      onRowClick={(material) => onRowSelectionHandler(material.row.id)}
       disableRowSelectionOnClick
       onRowSelectionModelChange={(newCheckboxSelectionModel) => {
         newCheckboxSelectionModelHandler(newCheckboxSelectionModel);

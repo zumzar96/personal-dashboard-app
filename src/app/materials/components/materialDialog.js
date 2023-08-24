@@ -37,7 +37,7 @@ const MaterialDialog = ({
       price: 0,
       image: "",
       brand: "",
-      countInStock: 0,
+      count: 0,
       category: "",
       description: "",
     };
@@ -71,7 +71,7 @@ const MaterialDialog = ({
     name: Yup.string().max(20).required("Field is required"),
     price: Yup.number().max(20).required("Field is required"),
     category: Yup.string().max(20).required("Field is required"),
-    countInStock: Yup.number().max(20).required("Field is required"),
+    count: Yup.number().max(20).required("Field is required"),
     brand: Yup.string().max(20).required("Field is required"),
     image: Yup.string().required("Field is required"),
     description: Yup.string().max(50).required("Field is required"),
@@ -140,12 +140,12 @@ const MaterialDialog = ({
       if (editMaterialMode || viewMaterialMode) {
         setRegistData((registData) => ({
           ...registData,
-          id: materialById.data._id,
+          id: materialById.data.id,
           name: materialById.data.name,
           price: materialById.data.price,
           image: materialById.data.image,
           brand: materialById.data.brand,
-          countInStock: materialById.data.countInStock,
+          count: materialById.data.count,
           category: materialById.data.category,
           description: materialById.data?.description,
         }));
@@ -333,13 +333,13 @@ const MaterialDialog = ({
                 <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                   <FormInput
                     sx={sxProps.formInputContainer}
-                    name="countInStock"
-                    value={values.countInStock}
-                    error={touched.countInStock && errors.countInStock}
+                    name="count"
+                    value={values.count}
+                    error={touched.count && errors.count}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    helperText={touched.countInStock && errors.countInStock}
-                    id="countInStock"
+                    helperText={touched.count && errors.count}
+                    id="count"
                     label="Count"
                     type="number"
                     disabled={viewMaterialMode}

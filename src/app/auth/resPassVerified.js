@@ -103,7 +103,7 @@ const ResPaassVerified = (props) => {
   useEffect(() => {
     //TODO handle token check for error boundary
     if (token) {
-      resetPass({ token: token, password: "" });
+      resetPass({ token: token });
     }
   }, [token]);
 

@@ -11,10 +11,10 @@ import { useNavigate } from "react-router-dom";
 import ErrorBoundary from "../root/components/common/errorBoundary";
 import Loader from "../root/components/common/loader";
 
-const Verified = ({}) => {
+const Verified = (props) => {
   let location = useLocation();
-  const params1 = new URLSearchParams(location.search)
-  const token = params1.get('r')
+  const params1 = new URLSearchParams(location.search);
+  const token = params1.get("r");
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -31,6 +31,7 @@ const Verified = ({}) => {
     if (token) {
       verifyEmail({ token: token });
     }
+    //Error - react strict mode
   }, [token]);
 
   return (

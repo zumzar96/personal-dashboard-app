@@ -20,7 +20,7 @@ const DraggableMarker = ({
   removeMaterialFromMapHandler,
   setWarehouseMaterialCordinates,
 }) => {
-  const [position, setPosition] = useState(material.cordinates || null);
+  const [position, setPosition] = useState(material.coordinates || null);
   const markerRef = useRef(null);
 
   const eventHandlers = useMemo(
@@ -30,8 +30,8 @@ const DraggableMarker = ({
         if (marker != null) {
           setPosition(marker.getLatLng());
           setWarehouseMaterialCordinates({
-            id: material._id,
-            cordinates: marker.getLatLng(),
+            id: material.id,
+            coordinates: marker.getLatLng(),
           });
         }
       },

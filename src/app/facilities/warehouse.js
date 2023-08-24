@@ -59,13 +59,13 @@ const Warehouse = () => {
     const coordinates = map.containerPointToLatLng(
       L.point([e.clientX - rect.left, e.clientY - rect.top])
     );
-    draggedMaterial.cordinates = coordinates;
+    draggedMaterial.coordinates = coordinates;
     setIconBoxMaterials(
-      iconBoxMaterials.filter((item) => draggedMaterial._id !== item._id)
+      iconBoxMaterials.filter((item) => draggedMaterial.id !== item.id)
     );
     setWarehouseMaterialCordinates({
-      id: draggedMaterial._id,
-      cordinates: draggedMaterial.cordinates,
+      id: draggedMaterial.id,
+      coordinates: draggedMaterial.coordinates,
     });
     setCurrentMapMaterials([...currentMapMaterials, draggedMaterial]);
   };
@@ -77,12 +77,12 @@ const Warehouse = () => {
 
   const removeMaterialFromMapHandler = (material) => {
     setCurrentMapMaterials(() => {
-      return currentMapMaterials.filter((item) => material._id !== item._id);
+      return currentMapMaterials.filter((item) => material.id !== item.id);
     });
     setIconBoxMaterials([...iconBoxMaterials, material]);
     setWarehouseMaterialCordinates({
-      id: material._id,
-      cordinates: null,
+      id: material.id,
+      coordinates: null,
     });
   };
 

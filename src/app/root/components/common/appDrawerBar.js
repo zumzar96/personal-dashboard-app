@@ -114,7 +114,7 @@ export default function MiniDrawer({ children }) {
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
-  console.log("theme.palette.mode.primary", theme.palette.primary.dark);
+  console.log("app drawer render");
 
   const handleDrawerOpen = () => {
     setOpen(true);
