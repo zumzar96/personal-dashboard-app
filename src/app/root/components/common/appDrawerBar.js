@@ -262,7 +262,7 @@ export default function MiniDrawer({ children }) {
             </List>
             <Divider />
             <List>
-              {["materials", "warehouse", "Spam", "Route"].map(
+              {["materials", "warehouse", "timeline", "Route"].map(
                 (text, index) => (
                   <ListItem
                     key={text}

@@ -11,6 +11,7 @@ import Dashboarda from "../dashboard/dashboard";
 import { useLocation } from "react-router-dom";
 import ErrorBoundary from "./components/common/errorBoundary";
 import Warehouse from "../facilities/warehouse";
+import Timeline from "../timeline/timeline";
 
 const Dashboard = () => {
   const { pathname } = useLocation();
@@ -23,6 +24,7 @@ const Dashboard = () => {
           <Route path="stats" element={<Dashboarda />} />
           <Route path="materials" element={<Materials />} />
           <Route path="warehouse" element={<Warehouse />} />
+          <Route path="timeline" element={<Timeline />} />
           <Route path={`${nonExistingRoute}`} element={<ErrorBoundary />} />
         </Routes>
       </AppDrawerBar>
