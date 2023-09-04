@@ -27,6 +27,8 @@ import { toast } from "react-toastify";
 import { useTheme } from "@mui/material";
 import { useContext } from "react";
 import { ColorModeContext, tokens } from "../../config/themes/rootTheme";
+import useFcmToken from "../../firebase/messaging";
+import { useAddDeviceTokenMutation } from "../users/usersApiSlice";
 
 const Login = (props) => {
   const location = useLocation();
@@ -43,6 +45,11 @@ const Login = (props) => {
     login,
     { isLoading: loginLoading, isError: loginError, isSuccess: loginSuccess },
   ] = useLoginMutation();
+  const { fcmToken } = useFcmToken();
+  const [
+    addDeviceToken,
+    { isLoading: addDeviceTokenLoading, reset: addDeviceTokenMuatation },
+  ] = useAddDeviceTokenMutation();
 
   const [registData, setRegistData] = useState(initialRegistData);
   const colorMode = useContext(ColorModeContext);
@@ -78,6 +85,12 @@ const Login = (props) => {
       toast.error("User data not correct");
     }
   }, [loginError]);
+
+  useEffect(() => {
+    if (loginSuccess) {
+      addDeviceToken({ deviceToken: fcmToken, userId: user_info.id });
+    }
+  }, [loginSuccess]);
 
   return (
     <Fragment>

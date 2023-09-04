@@ -11,7 +11,7 @@ import Dashboarda from "../dashboard/dashboard";
 import { useLocation } from "react-router-dom";
 import ErrorBoundary from "./components/common/errorBoundary";
 import Warehouse from "../facilities/warehouse";
-import Timeline from "../timeline/timeline";
+import Timeline from "../users/timeline/timeline";
 
 const Dashboard = () => {
   const { pathname } = useLocation();

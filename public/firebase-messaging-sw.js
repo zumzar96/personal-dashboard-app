@@ -15,31 +15,33 @@
  * limitations under the License.
  */
 
-importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js');
+importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js");
 
-const firebaseConfig = {
-    apiKey: "AIzaSyB8xMPCyes3GGvxz0-ig2jbwqdpBDKB1Rk",
-    authDomain: "expensetracker-5501a.firebaseapp.com",
-    projectId: "expensetracker-5501a",
-    storageBucket: "expensetracker-5501a.appspot.com",
-    messagingSenderId: "989666135103",
-    appId: "1:989666135103:web:a69eef7ce191eb52dffc8a",
-    measurementId: "G-YVP679EBHY"
-  };
+self.addEventListener("fetch", () => {//TODO  create pre scripts with env variables to append cra-sw
+  const urlParams = new URLSearchParams(location.search);
+  self.firebaseConfig = Object.fromEntries(urlParams);
+});
 
-firebase.initializeApp(firebaseConfig);
+const defaultConfig = {
+  apiKey: true,
+  projectId: true,
+  messagingSenderId: true,
+  appId: true,
+};
+
+
+firebase.initializeApp(self.firebaseConfig || defaultConfig);
 
 // Retrieve firebase messaging
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(payload => {
-  console.log('Received background message ', payload);
-
+messaging.onBackgroundMessage((payload) => {
+  console.log("BCKGROUND MSG");
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // self.registration.showNotification(notificationTitle, notificationOptions);
 });

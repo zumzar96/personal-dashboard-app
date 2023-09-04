@@ -13,26 +13,31 @@ import Typography from "../src/app/root/components/common/typography";
 import Materials from "../src/app/materials/materials";
 import Register from "./app/auth/register";
 import RegVerified from "./app/auth/regVerified";
-import ResPaassVerified from './app/auth/resPassVerified'
+import ResPaassVerified from "./app/auth/resPassVerified";
 import Dashboard from "./app/root/dashboard";
 import ErrorBoundary from "./app/root/components/common/errorBoundary";
 import ForgotPassword from "./app/auth/forgotPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ColorModeContext, useMode } from "./config/themes/rootTheme";
+import { foregroundMessage } from "./firebase/messaging";
 
 function App() {
   const [theme, colorMode] = useMode();
+  foregroundMessage()
 
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <CssBaseline/>
+        <CssBaseline />
         <ToastContainer autoClose={2000} />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/registration-verified/*" element={<RegVerified />} />
-          <Route path="/reset-password-verified/*" element={<ResPaassVerified />} />
+          <Route
+            path="/reset-password-verified/*"
+            element={<ResPaassVerified />}
+          />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password/" element={<ForgotPassword />} />
           <Route path="dashboard/*" element={<Dashboard />} />
