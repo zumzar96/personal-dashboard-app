@@ -59,7 +59,7 @@ const useFcmToken = () => {
 
           // Check if permission is granted before retrieving the token
           if (permission === 'granted') {
-            console.log("hoce get token")
+            // console.log("hoce get token")
             const currentToken = await getToken(msg, {
               VAPID_KEY
             });

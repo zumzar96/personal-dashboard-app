@@ -5,7 +5,11 @@ import interactionPlugin from "@fullcalendar/interaction";
 import moment from "moment";
 import { useSendPushNotificationMutation } from "../usersApiSlice";
 
+import { useSelector } from "react-redux";
+
+
 const Timeline = (props) => {
+  const user_scoket = useSelector((state) => state.login.socket);
   const [
     sendNotification,
     { isLoading: sendNotificationLoading, reset: sendNotificationMuatation },
@@ -23,16 +27,15 @@ const Timeline = (props) => {
     if (info.event.extendedProps.type) {
       alert(info.date);
     }
-    sendNotification({ userId: 1 });//TODO
+    sendNotification({ userId: 1 }); //TODO
+    // socket.emit("sendNotification", { userId: user_info.id });
+    const message = { to: 1, from: null, content: "test socket" };
+    user_scoket.emit("dm", message);
   };
 
-  const today = new Date().toISOString().slice(0, 10);
+  console.log("user_scoket timeline", user_scoket);
 
-  // console.log("today+++++", today);
 
-  const validRange = "2023-07-24";
-
-  // console.log("validRange+++++", validRange);
 
   return (
     <FullCalendar

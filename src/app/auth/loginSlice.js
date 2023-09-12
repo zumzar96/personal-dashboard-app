@@ -3,6 +3,7 @@ import authApi from "./authApiSlice";
 
 const loginSlice = createSlice({
   name: "login",
+  socket: null,
   initialState: {
     user: null,
     user_info: localStorage.getItem("user_info")
@@ -11,9 +12,11 @@ const loginSlice = createSlice({
   },
   reducers: {
     logout: (state) => {
-        localStorage.removeItem("user_info")//TODO improve logout handling
-        state.user_info = null;
-     
+      localStorage.removeItem("user_info"); //TODO improve logout handling
+      state.user_info = null;
+    },
+    addSocket: (state, action) => {
+      state.socket = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -28,7 +31,6 @@ const loginSlice = createSlice({
   },
 });
 
-export const { logout } = loginSlice.actions
-
+export const { logout, addSocket } = loginSlice.actions;
 
 export default loginSlice.reducer;
