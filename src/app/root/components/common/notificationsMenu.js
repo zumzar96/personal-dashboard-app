@@ -57,15 +57,6 @@ export default function NotificationMenu({
     user_scoket.emit("persistednn", persistednn);
   };
 
-  console.log("persistedNumberOfnotificaitons", persistedNumberOfnotificaitons);
-
-  console.log("notifications.length", notifications.length);
-
-  console.log(
-    "unreadNotificationsNumber.length",
-    unreadNotificationsNumber.length
-  );
-
   return (
     <div style={{ position: "relative" }}>
       <IconButton
