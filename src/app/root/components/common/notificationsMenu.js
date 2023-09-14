@@ -29,9 +29,14 @@ export default function NotificationMenu({
   };
 
   const unreadNumber =
-    unreadNotifications.length !== 0
+    notifications.length <= persistedNumberOfnotificaitons
       ? unreadNotificationsNumber.length
-      : notifications.length <= persistedNumberOfnotificaitons
+      : unreadNotificationsNumber.length +
+        notifications.length -
+        persistedNumberOfnotificaitons;
+
+  const unreadNumberOffline =
+    notifications.length <= persistedNumberOfnotificaitons
       ? 0
       : notifications.length - persistedNumberOfnotificaitons;
 
@@ -52,6 +57,14 @@ export default function NotificationMenu({
     user_scoket.emit("persistednn", persistednn);
   };
 
+  console.log("persistedNumberOfnotificaitons", persistedNumberOfnotificaitons);
+
+  console.log("notifications.length", notifications.length);
+
+  console.log(
+    "unreadNotificationsNumber.length",
+    unreadNotificationsNumber.length
+  );
 
   return (
     <div style={{ position: "relative" }}>
@@ -67,7 +80,7 @@ export default function NotificationMenu({
       >
         <CircleNotificationsIcon />
       </IconButton>
-      {unreadNumber !== 0 ? (
+      {unreadNumber !== 0 || unreadNumberOffline!==0 ? (
         <div
           style={{
             position: "absolute",
@@ -80,7 +93,7 @@ export default function NotificationMenu({
           }}
         >
           <div style={{ display: "flex", justifyContent: "center" }}>
-            {unreadNumber}
+            {unreadNotifications.lenght !== 0 ? unreadNumber : unreadNumberOffline}
           </div>
         </div>
       ) : null}
