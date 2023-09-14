@@ -3,12 +3,16 @@ import authApi from "./authApiSlice";
 
 const loginSlice = createSlice({
   name: "login",
-  socket: null,
   initialState: {
-    user: null,
     user_info: localStorage.getItem("user_info")
       ? JSON.parse(localStorage.getItem("user_info"))
       : null,
+    socket: null,
+    persisted_number_of_notificaitons: localStorage.getItem(
+      "persisted_number_of_notificaitons"
+    )
+      ? JSON.parse(localStorage.getItem("persisted_number_of_notificaitons"))
+      : 0,
   },
   reducers: {
     logout: (state) => {
@@ -16,7 +20,14 @@ const loginSlice = createSlice({
       state.user_info = null;
     },
     addSocket: (state, action) => {
-      state.socket = action.payload
+      state.socket = action.payload;
+    },
+    setNumberOfNotificaitons: (state, action) => {
+      localStorage.setItem(
+        "persisted_number_of_notificaitons",
+        JSON.stringify(action.payload)
+      );
+      state.persisted_number_of_notificaitons = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -31,6 +42,7 @@ const loginSlice = createSlice({
   },
 });
 
-export const { logout, addSocket } = loginSlice.actions;
+export const { logout, addSocket, setNumberOfNotificaitons } =
+  loginSlice.actions;
 
 export default loginSlice.reducer;

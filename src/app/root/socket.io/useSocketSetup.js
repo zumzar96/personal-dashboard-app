@@ -1,29 +1,31 @@
 import { useContext, useEffect } from "react";
 
-const useSocketSetup = (socket, setFriendList, setMessages) => {
-  console.log("socket hook", socket);
+const useSocketSetup = (socket, setMessages, setUnreadNotifications, setInitPersistedNotifications, setUnreadNotificationsNumber) => {
+  //TODO
   useEffect(() => {
     socket.connect();
     socket.on("friends", (friendList) => {
-      setFriendList(friendList);
+      // setFriendList(friendList);
     });
     socket.on("messages", (messages) => {
-      console.log("messages", messages);
-      // setMessages(messages);
+      setMessages(messages);
+    });
+    socket.on("persistednn", (persistetnn) => {
+      setInitPersistedNotifications(persistetnn)
     });
     socket.on("dm", (message) => {
-      console.log("mesages front hook on dm", message);
-      // setMessages(prevMsgs => [message, ...prevMsgs]);
+      setUnreadNotifications((prevMsgs) => [message, ...prevMsgs]);
+      setUnreadNotificationsNumber((prevMsgs) => [message, ...prevMsgs]);
     });
     socket.on("connected", (status, username) => {
-      setFriendList((prevFriends) => {
-        return [...prevFriends].map((friend) => {
-          if (friend.username === username) {
-            friend.connected = status;
-          }
-          return friend;
-        });
-      });
+      // setFriendList((prevFriends) => {
+      //   return [...prevFriends].map((friend) => {
+      //     if (friend.username === username) {
+      //       friend.connected = status;
+      //     }
+      //     return friend;
+      //   });
+      // });
     });
     socket.on("connect_error", () => {
       // setUser({ loggedIn: false });
@@ -35,7 +37,7 @@ const useSocketSetup = (socket, setFriendList, setMessages) => {
       socket.off("messages");
       socket.off("dm");
     };
-  }, [setFriendList, setMessages, socket]);
+  }, [setMessages, socket]);
 };
 
 export default useSocketSetup;

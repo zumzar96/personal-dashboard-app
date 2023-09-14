@@ -27,7 +27,11 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useSelector, useDispatch } from "react-redux";
-import { logout, addSocket} from "../../../auth/loginSlice";
+import {
+  logout,
+  addSocket,
+  setNumberOfNotificaitons,
+} from "../../../auth/loginSlice";
 import { Navigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { ColorModeContext, tokens } from "../../../../config/themes/rootTheme";
@@ -36,6 +40,7 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import socketCon from "../../../../socket";
 import useSocketSetup from "../../socket.io/useSocketSetup";
+import NotificaitonMenu from "../common/notificationsMenu";
 
 const drawerWidth = 240;
 
@@ -111,15 +116,21 @@ export default function MiniDrawer({ children }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const user_info = useSelector((state) => state.login.user_info);
-  const user_scoket = useSelector((state) => state.login.socket);
-
+  const persisted_number_of_notificaitons = useSelector(
+    (state) => state.login.persisted_number_of_notificaitons
+  );
+  const [initPersistedNotifications, setInitPersistedNotifications] =
+    useState();
   const isLoggedIn = user_info !== null;
   const dispatch = useDispatch();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
   const [socket, setSocket] = useState(() => socketCon(user_info));
-
-  console.log("app drawer render");
+  const [messages, setMessages] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState([]);
+  const [unreadNotificationsNumber, setUnreadNotificationsNumber] = useState(
+    []
+  );
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -131,9 +142,9 @@ export default function MiniDrawer({ children }) {
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
-    const message = { to: 1, from: null, content: "test socket" };
+    // const message = { to: 1, from: null, content: "test socket" };
 
-    socket.emit("dm", message);
+    // socket.emit("dm", message);
   };
 
   const handleClose = () => {
@@ -144,18 +155,25 @@ export default function MiniDrawer({ children }) {
     setAnchorEl(null);
     dispatch(logout());
   };
-
-  // useEffect(() => {
-  //   console.log("hoce")
-  //   setSocket(() => socketCon(user_info));
-  // }, [user_info]);
-  // console.log("socket ++++++++++++++",socket)
-  useSocketSetup(socket);
+  //TODO
+  useSocketSetup(
+    socket,
+    setMessages,
+    setUnreadNotifications,
+    setInitPersistedNotifications,
+    setUnreadNotificationsNumber
+  );
 
   dispatch(addSocket(socket));
-
-  console.log("user_scoket", user_scoket);
-
+  //TODO
+  useEffect(() => {
+    if (persisted_number_of_notificaitons === 0 && initPersistedNotifications) {
+      const numberInitPersistedNot = Number(
+        initPersistedNotifications?.[0].content
+      );
+      dispatch(setNumberOfNotificaitons(numberInitPersistedNot));
+    }
+  }, [messages, initPersistedNotifications]);
 
   return (
     <>
@@ -199,6 +217,16 @@ export default function MiniDrawer({ children }) {
                     <DarkModeOutlinedIcon sx={{ color: "white" }} />
                   )}
                 </IconButton>
+                <NotificaitonMenu
+                  setUnreadNotifications={setUnreadNotifications}
+                  unreadNotifications={unreadNotifications}
+                  notifications={messages}
+                  persistedNumberOfnotificaitons={
+                    persisted_number_of_notificaitons
+                  }
+                  setUnreadNotificationsNumber={setUnreadNotificationsNumber}
+                  unreadNotificationsNumber={unreadNotificationsNumber}
+                ></NotificaitonMenu>
                 <IconButton
                   size="large"
                   aria-label="account of current user"
